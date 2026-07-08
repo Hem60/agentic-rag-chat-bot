@@ -1,0 +1,195 @@
+# -*- coding: utf-8 -*-
+"""
+src/ingest.py
+-------------
+STEP 4 -- PDF Ingestion Pipeline
+
+This script:
+  1. Scans data/pdfs/ for all PDF files
+  2. Loads and parses each PDF using PyPDF (with pdfminer fallback)
+  3. Splits text into overlapping chunks
+  4. Embeds chunks locally using sentence-transformers (no API key needed)
+  5. Saves a FAISS vector index to disk
+
+Run with:
+    python src/ingest.py
+
+First run is slower -- it downloads the embedding model (~90 MB for all-MiniLM-L6-v2).
+Subsequent runs use the cached model and are much faster.
+"""
+
+import os
+import sys
+import io
+import time
+from pathlib import Path
+
+# Windows-safe UTF-8 output (prevents emoji encoding errors on cp1252 terminals)
+if sys.platform == "win32":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+
+from dotenv import load_dotenv
+
+# ---------------------------------------------------------------------------
+# Load configuration from .env
+# ---------------------------------------------------------------------------
+load_dotenv()
+
+PDF_DIR         = Path(os.getenv("PDF_DIR", "data/pdfs"))
+VECTORSTORE_DIR = Path(os.getenv("VECTORSTORE_DIR", "vectorstore"))
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+CHUNK_SIZE      = int(os.getenv("CHUNK_SIZE", "1000"))
+CHUNK_OVERLAP   = int(os.getenv("CHUNK_OVERLAP", "150"))
+
+
+def load_pdfs(pdf_dir: Path) -> list:
+    """
+    Load all PDFs from the given directory.
+    Uses PyPDFLoader (backed by pypdf) which handles most modern PDFs well.
+    Falls back to PDFMinerLoader for PDFs that pypdf can't parse.
+
+    Returns a list of LangChain Document objects.
+    """
+    from langchain_community.document_loaders import PyPDFLoader, PDFMinerLoader
+
+    pdf_files = sorted(pdf_dir.glob("*.pdf"))
+    if not pdf_files:
+        print(f"\n[ERROR] No PDF files found in '{pdf_dir}/'")
+        print("    Drop 3-5 PDF files into that folder, then re-run ingestion.\n")
+        sys.exit(1)
+
+    print(f"\n[INFO] Found {len(pdf_files)} PDF(s) in '{pdf_dir}/':")
+    for p in pdf_files:
+        size_kb = p.stat().st_size / 1024
+        print(f"      - {p.name}  ({size_kb:.1f} KB)")
+
+    all_docs = []
+    for pdf_path in pdf_files:
+        print(f"\n    Loading: {pdf_path.name} ...", end="", flush=True)
+        try:
+            # PyPDFLoader preserves page numbers in metadata
+            loader = PyPDFLoader(str(pdf_path))
+            docs = loader.load()
+            print(f" OK  ({len(docs)} page(s))")
+        except Exception as e:
+            print(f" [WARN] PyPDF failed ({e}), trying PDFMiner ...")
+            try:
+                loader = PDFMinerLoader(str(pdf_path))
+                docs = loader.load()
+                print(f"     PDFMiner succeeded: {len(docs)} page(s)")
+            except Exception as e2:
+                print(f"     [ERROR] PDFMiner also failed: {e2} -- skipping this file.")
+                continue
+
+        # Make sure every document carries the source filename
+        for doc in docs:
+            doc.metadata.setdefault("source", pdf_path.name)
+
+        all_docs.extend(docs)
+
+    print(f"\n    Total pages loaded: {len(all_docs)}")
+    return all_docs
+
+
+def split_documents(docs: list) -> list:
+    """
+    Split documents into chunks.
+
+    chunk_size=1000 and chunk_overlap=150 work well for most technical/research PDFs.
+    Larger chunks = more context per retrieval but slower embedding.
+    Smaller chunks = faster but may lose cross-sentence context.
+    """
+    from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+    print(f"\n[INFO] Splitting into chunks (size={CHUNK_SIZE}, overlap={CHUNK_OVERLAP}) ...")
+
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=CHUNK_SIZE,
+        chunk_overlap=CHUNK_OVERLAP,
+        # Split priority: paragraph -> newline -> sentence -> word -> character
+        separators=["\n\n", "\n", ". ", " ", ""],
+        length_function=len,
+    )
+
+    chunks = splitter.split_documents(docs)
+    print(f"    Total chunks created: {len(chunks)}")
+
+    # Show a sample chunk so you can sanity-check the split quality
+    if chunks:
+        sample = chunks[0]
+        print(f"\n    Sample chunk (chunk 0):")
+        print(f"    Source: {sample.metadata.get('source', 'unknown')}")
+        print(f"    Length: {len(sample.page_content)} chars")
+        preview = sample.page_content[:200].strip().encode("ascii", "replace").decode()
+        print(f"    Preview: {preview}...")
+
+    return chunks
+
+
+def build_vectorstore(chunks: list) -> None:
+    """
+    Embed all chunks and build a FAISS index.
+
+    The embedding model runs 100% locally -- no API key, no internet required
+    after the first download.
+    """
+    from langchain_huggingface import HuggingFaceEmbeddings
+    from langchain_community.vectorstores import FAISS
+
+    print(f"\n[INFO] Loading embedding model: {EMBEDDING_MODEL}")
+    print("    (First run downloads ~90 MB; subsequent runs use cache)")
+
+    t0 = time.time()
+
+    # model_kwargs={'device': 'cpu'} forces CPU even if CUDA is available
+    # encode_kwargs={'normalize_embeddings': True} improves cosine similarity quality
+    embeddings = HuggingFaceEmbeddings(
+        model_name=EMBEDDING_MODEL,
+        model_kwargs={"device": "cpu"},
+        encode_kwargs={"normalize_embeddings": True},
+    )
+
+    print(f"    Embedding model loaded in {time.time() - t0:.1f}s")
+    print(f"\n[INFO] Embedding {len(chunks)} chunks (this may take a minute) ...")
+
+    t1 = time.time()
+    vectorstore = FAISS.from_documents(chunks, embeddings)
+    elapsed = time.time() - t1
+    print(f"    Embedding complete in {elapsed:.1f}s ({len(chunks)/elapsed:.0f} chunks/sec)")
+
+    # Save the index to disk
+    VECTORSTORE_DIR.mkdir(parents=True, exist_ok=True)
+    vectorstore.save_local(str(VECTORSTORE_DIR))
+
+    # Verify the files were written
+    saved_files = list(VECTORSTORE_DIR.iterdir())
+    print(f"\n[SAVED] FAISS index saved to '{VECTORSTORE_DIR}/'")
+    for f in saved_files:
+        size_kb = f.stat().st_size / 1024
+        print(f"      - {f.name}  ({size_kb:.1f} KB)")
+
+
+def main():
+    print("=" * 60)
+    print("  RAG QA -- PDF Ingestion Pipeline")
+    print("=" * 60)
+
+    # Sanity check: PDF directory must exist
+    if not PDF_DIR.exists():
+        print(f"\n[ERROR] Directory '{PDF_DIR}' does not exist.")
+        print("    Run this from the project root, not from inside src/.\n")
+        sys.exit(1)
+
+    start = time.time()
+
+    docs   = load_pdfs(PDF_DIR)
+    chunks = split_documents(docs)
+    build_vectorstore(chunks)
+
+    print(f"\n[DONE] Ingestion complete in {time.time() - start:.1f}s")
+    print("    You can now run the query pipeline or start the API.\n")
+
+
+if __name__ == "__main__":
+    main()

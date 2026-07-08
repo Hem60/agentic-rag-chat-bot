@@ -1,0 +1,82 @@
+# ==============================================================================
+# docker-compose.yml — RAG QA System
+# ==============================================================================
+#
+# Usage:
+#   Start:   docker-compose up --build
+#   Stop:    docker-compose down
+#   Rebuild: docker-compose up --build --force-recreate
+#   Logs:    docker-compose logs -f rag-qa
+#
+# Volumes:
+#   ./data/pdfs   → container's data/pdfs  (your PDFs — read-only)
+#   ./vectorstore → container's vectorstore (FAISS index — persisted)
+#   model_cache   → /app/model_cache       (downloaded HF model weights)
+#
+# The model_cache is a named volume (not a bind mount) so it persists
+# across docker-compose down/up cycles, avoiding repeated downloads.
+# ==============================================================================
+
+version: "3.9"
+
+services:
+  rag-qa:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: rag-qa
+
+    # Load all env vars from .env file
+    env_file:
+      - .env
+
+    # Additional environment variables
+    environment:
+      # Tell Python not to buffer output so logs appear immediately
+      - PYTHONUNBUFFERED=1
+      # Disable HuggingFace telemetry inside the container
+      - HF_HUB_DISABLE_TELEMETRY=1
+
+    ports:
+      # Map host port 8000 to container port 8000
+      # Change left side (host) if port 8000 is busy: e.g., "8080:8000"
+      - "8000:8000"
+
+    volumes:
+      # PDF files — mount as read-only (container only reads, never writes)
+      - ./data/pdfs:/app/data/pdfs:ro
+
+      # FAISS index — bind mount so index persists on host and survives rebuilds
+      - ./vectorstore:/app/vectorstore
+
+      # Model cache — named volume so weights persist across container restarts
+      # This prevents re-downloading the embedding model every time you rebuild
+      - model_cache:/app/model_cache
+
+    # Restart policy: restart on crash but not on manual stop
+    restart: unless-stopped
+
+    # Health check (mirrors Dockerfile HEALTHCHECK for compose awareness)
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s  # Give 2 minutes for first-run model download + ingestion
+
+    # Resource limits — adjust based on your machine
+    # For CPU-only inference, 2 CPUs and 4 GB RAM is a comfortable minimum
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+
+# Named volumes
+volumes:
+  model_cache:
+    # This volume persists even after `docker-compose down`
+    # To fully clean it (force model re-download):
+    #   docker volume rm rag-qa_model_cache
+    driver: local

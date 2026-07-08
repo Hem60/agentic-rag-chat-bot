@@ -1,0 +1,8 @@
+Place your PDF files here.
+
+Supported: any standard PDF with selectable text (not scanned images).
+- 3–5 PDFs is ideal
+- Larger PDFs take longer to ingest on first run
+
+After adding PDFs, run:
+    python src/ingest.py

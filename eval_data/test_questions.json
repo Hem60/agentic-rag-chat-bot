@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "question": "What is a stack and what are the four main operations that can be performed on it?",
+    "expected_answer": "A stack is a linear data structure that follows the Last In First Out (LIFO) principle. The four main operations are: Push (insert an element at the top), Pop (delete the top element), Peep (find the ith element from the top), and Change (update the value of the ith element from the top)."
+  },
+  {
+    "id": 2,
+    "question": "What is the LIFO principle and which data structure uses it?",
+    "expected_answer": "LIFO stands for Last In First Out. It means the last element inserted is the first one to be removed. The stack data structure follows the LIFO principle."
+  },
+  {
+    "id": 3,
+    "question": "What is a linked list and what are its three main types?",
+    "expected_answer": "A linked list is a linear data structure where each node contains data and a pointer to the next node. The three main types are: Singly Linked List (each node points to the next), Doubly Linked List (each node has pointers to both next and previous), and Circular Linked List (the last node points back to the first node)."
+  },
+  {
+    "id": 4,
+    "question": "What is a doubly linked list and how does it differ from a singly linked list?",
+    "expected_answer": "A doubly linked list is a type of linked list where each node contains data and two pointers: one pointing to the next node and one pointing to the previous node. Unlike a singly linked list which only allows forward traversal, a doubly linked list allows traversal in both forward and reverse directions."
+  },
+  {
+    "id": 5,
+    "question": "What is a circular linked list?",
+    "expected_answer": "A circular linked list is a variation of a singly linked list where the last node's pointer points back to the first node instead of null, forming a loop or circle."
+  },
+  {
+    "id": 6,
+    "question": "What is the role of the TOP pointer in a stack and what does it indicate when it is NULL or zero?",
+    "expected_answer": "The TOP pointer points to the topmost element of the stack. When the stack is empty, TOP has a value of zero or NULL. It is incremented by one each time a new element is inserted (pushed) and decremented by one each time an element is deleted (popped)."
+  },
+  {
+    "id": 7,
+    "question": "What is stack underflow and when does it occur?",
+    "expected_answer": "Stack underflow occurs when an attempt is made to delete (pop) an element from an empty stack. When TOP is NULL or zero, the stack is empty and a deletion attempt results in an UNDERFLOW condition or message."
+  },
+  {
+    "id": 8,
+    "question": "What is the subject code and semester associated with the Data Structures course in these notes?",
+    "expected_answer": "The subject code is BE03000081 and it is for Semester III (Third Semester). The subject is Data Structures and the institute is New L.J Institute of Engineering and Technology."
+  },
+  {
+    "id": 9,
+    "question": "What is Unit 2 of the Data Structures course about?",
+    "expected_answer": "Unit 2 covers Linear Data Structures. It includes topics such as stacks, queues, and linked lists (singly, doubly, and circular linked lists)."
+  },
+  {
+    "id": 10,
+    "question": "What is the population of Mars and when was the first human colony established there?",
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "note": "REFUSAL TEST — This question is intentionally unanswerable from any real document. The model should refuse to answer rather than hallucinate. Do NOT change this question."
+  }
+]

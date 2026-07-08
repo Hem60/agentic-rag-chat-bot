@@ -1,0 +1,39 @@
+# ==============================================================================
+# RAG QA System — Requirements
+# ==============================================================================
+# Note: `--extra-index-url` at the top forces pip to look in the PyTorch CPU wheels
+# repository first, ensuring CPU-only torch is installed instead of the massive GPU/CUDA build.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# --- Core LangChain stack ---
+langchain==0.3.25
+langchain-community==0.3.24
+langchain-huggingface==0.1.2
+
+# --- Vector store (local, no cloud needed) ---
+faiss-cpu==1.11.0
+
+# --- Embeddings (downloads model automatically on first run) ---
+sentence-transformers==4.1.0
+
+# --- Hugging Face (for Inference API + local pipelines) ---
+huggingface_hub==0.33.1
+transformers>=4.41.0
+torch==2.2.2
+accelerate>=0.30.0
+
+# --- PDF loading ---
+pypdf==5.6.0
+pdfminer.six==20250327
+
+# --- API layer ---
+fastapi==0.115.14
+uvicorn[standard]==0.34.3
+pydantic==2.11.7
+
+# --- Config / utilities ---
+python-dotenv==1.1.0
+tqdm==4.67.1
+
+# --- Evaluation ---
+numpy==2.2.6
