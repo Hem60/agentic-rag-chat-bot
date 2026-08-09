@@ -142,7 +142,11 @@ def call_judge_inference(prompt: str) -> str:
 def judge_answer(question: str, expected_answer: str, generated_answer: str, context: str) -> dict:
     """
     Use the judge LLM to score the generated answer.
-    Returns {"score": int, "reasoning": str}
+    Returns {"score": int, "reasoning": str, "parse_failed": bool}
+
+    `parse_failed` marks answers whose score came from the regex fallback rather
+    than clean JSON. Those scores are less trustworthy, so the summary counts
+    them separately instead of blending them silently into the average.
     """
     prompt = JUDGE_PROMPT_TEMPLATE.format(
         question=question,
@@ -164,6 +168,7 @@ def judge_answer(question: str, expected_answer: str, generated_answer: str, con
         end   = raw.rindex("}") + 1
         raw   = raw[start:end]
 
+    parse_failed = False
     try:
         result = json.loads(raw)
         score = int(result.get("score", 1))
@@ -172,6 +177,7 @@ def judge_answer(question: str, expected_answer: str, generated_answer: str, con
     except (json.JSONDecodeError, ValueError):
         # Fallback if the model doesn't return valid JSON (common for 7B/9B instruct models)
         import re
+        parse_failed = True
         score = 1
         reasoning = "No reasoning provided."
 
@@ -195,7 +201,7 @@ def judge_answer(question: str, expected_answer: str, generated_answer: str, con
         if not score_match:
             reasoning = f"Could not parse judge response: {raw[:200]}"
 
-    return {"score": score, "reasoning": reasoning}
+    return {"score": score, "reasoning": reasoning, "parse_failed": parse_failed}
 
 
 
@@ -232,9 +238,14 @@ def run_evaluation():
         print(f"\n[ERROR] {e}")
         sys.exit(1)
 
-    # Run each question
+    # Run each question.
+    # `scores` holds only questions the judge actually scored; `results` holds
+    # every question including pipeline errors. Keep the two apart -- averaging
+    # over `scores` while reporting len(results) is what made an earlier report
+    # claim 10 questions at 3.5/5 when only 6 had been scored.
     results = []
     scores  = []
+    errors  = []
 
     for i, q in enumerate(questions, 1):
         qid      = q.get("id", i)
@@ -257,6 +268,8 @@ def run_evaluation():
             judgment = judge_answer(question, expected, generated, context)
             score    = judgment["score"]
             scores.append(score)
+            if judgment["parse_failed"]:
+                print("    [WARN] Judge response was not valid JSON; score recovered by regex.")
 
             status = "[OK]" if score >= 4 else ("[PARTIAL]" if score == 3 else "[FAIL]")
             print(f"    {status}  Score: {score}/5 | Time: {elapsed:.1f}s | Sources: {sources}")
@@ -269,19 +282,24 @@ def run_evaluation():
                 "generated_answer": generated,
                 "sources":          sources,
                 "score":            score,
+                "judge_parse_failed": judgment["parse_failed"],
                 "reasoning":        judgment["reasoning"],
                 "latency_s":        round(elapsed, 2),
             })
 
         except Exception as e:
             print(f"    [ERROR] {e}")
+            errors.append(qid)
             results.append({
                 "id":               qid,
                 "question":         question,
                 "expected_answer":  expected,
                 "generated_answer": f"ERROR: {str(e)}",
                 "sources":          [],
-                "score":            0,
+                # null, not 0 -- this question was never scored, and a 0 here
+                # reads as "the judge gave it zero", which is a different claim.
+                "score":            None,
+                "judge_parse_failed": False,
                 "reasoning":        f"Pipeline error: {str(e)}",
                 "latency_s":        0,
             })
@@ -291,21 +309,40 @@ def run_evaluation():
     # ---------------------------------------------------------------------------
     # Summary
     # ---------------------------------------------------------------------------
-    avg_score = sum(scores) / len(scores) if scores else 0
+    avg_score  = sum(scores) / len(scores) if scores else 0
     score_dist = {i: scores.count(i) for i in range(1, 6)}
+    parse_fails = sum(1 for r in results if r.get("judge_parse_failed"))
+
+    # Two averages, because they answer different questions. `avg_score` is
+    # "how good were the answers we managed to score". `avg_penalised` treats
+    # every pipeline error as a 1 -- a question the system failed to answer at
+    # all is a failure of the system, not a question that doesn't count.
+    penalised     = scores + [1] * len(errors)
+    avg_penalised = sum(penalised) / len(penalised) if penalised else 0
 
     print("=" * 65)
     print("  EVALUATION SUMMARY")
     print("=" * 65)
-    print(f"  Questions evaluated : {len(results)}")
-    print(f"  Average score       : {avg_score:.2f} / 5.00")
-    print(f"  Score distribution  : {score_dist}")
+    print(f"  Questions attempted : {len(results)}")
+    print(f"  Questions scored    : {len(scores)}")
+    print(f"  Pipeline errors     : {len(errors)}" + (f"  (Q{', Q'.join(str(e) for e in errors)})" if errors else ""))
+    print(f"  Judge parse fallback: {parse_fails}")
+    print(f"  Average (scored)    : {avg_score:.2f} / 5.00  over {len(scores)} question(s)")
+    print(f"  Average (errors=1)  : {avg_penalised:.2f} / 5.00  over {len(results)} question(s)")
+    print(f"  Score distribution  : {score_dist}  (sums to {sum(score_dist.values())})")
     print(f"  Score breakdown     :")
     print(f"    5/5 (perfect)     : {score_dist.get(5, 0)}")
     print(f"    4/5 (good)        : {score_dist.get(4, 0)}")
     print(f"    3/5 (partial)     : {score_dist.get(3, 0)}")
     print(f"    2/5 (poor)        : {score_dist.get(2, 0)}")
     print(f"    1/5 (fail)        : {score_dist.get(1, 0)}")
+    print(f"    unscored (error)  : {len(errors)}")
+
+    if errors:
+        print()
+        print(f"  [WARN] {len(errors)} of {len(results)} question(s) never reached the judge.")
+        print("         Quote the average as 'X/5 over N scored questions', not as a")
+        print("         result for the full set.")
 
     # Interpret scores
     print()
@@ -332,7 +369,17 @@ def run_evaluation():
     report = {
         "timestamp":    datetime.now().isoformat(),
         "judge_model":  JUDGE_MODEL,
-        "average_score": round(avg_score, 3),
+        "questions_attempted": len(results),
+        "questions_scored":    len(scores),
+        "questions_errored":   len(errors),
+        "errored_ids":         errors,
+        "judge_parse_fallbacks": parse_fails,
+        # Average over scored questions only. Read alongside questions_scored --
+        # it is not a result for the full question set unless the two match.
+        "average_score":            round(avg_score, 3),
+        "average_score_basis":      "scored questions only",
+        # Same run, with each pipeline error counted as a 1.
+        "average_score_penalised":  round(avg_penalised, 3),
         "score_distribution": score_dist,
         "results":      results,
     }

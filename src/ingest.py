@@ -21,7 +21,9 @@ Subsequent runs use the cached model and are much faster.
 import os
 import sys
 import io
+import re
 import time
+import unicodedata
 from pathlib import Path
 
 # Windows-safe UTF-8 output (prevents emoji encoding errors on cp1252 terminals)
@@ -41,6 +43,57 @@ VECTORSTORE_DIR = Path(os.getenv("VECTORSTORE_DIR", "vectorstore"))
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 CHUNK_SIZE      = int(os.getenv("CHUNK_SIZE", "1000"))
 CHUNK_OVERLAP   = int(os.getenv("CHUNK_OVERLAP", "150"))
+
+
+# ---------------------------------------------------------------------------
+# Text normalisation
+# ---------------------------------------------------------------------------
+# PDFs that use Symbol/Wingdings for bullets encode them in the Unicode Private
+# Use Area (U+E000-U+F8FF). pypdf passes those codepoints through verbatim, so
+# chunks end up holding glyphs like U+F0B7 that mean nothing to the embedding
+# model and leak into the context we hand the LLM. Map the common ones to their
+# obvious ASCII equivalent and drop whatever is left.
+PUA_REPLACEMENTS = {
+    "": "- ",   # Symbol font bullet
+    "": "- ",   # Wingdings square bullet
+    "": "- ",   # Wingdings check mark
+    "": "- ",   # Wingdings arrowhead bullet
+    "": "-",    # Symbol font hyphen
+    "": "->",   # Wingdings right arrow
+}
+
+_PUA_RE        = re.compile(r"[-]")
+_BLANK_LINE_RE = re.compile(r"\n{3,}")
+_TRAIL_WS_RE   = re.compile(r"[ \t]+(?=\n)")
+_SPACES_RE     = re.compile(r"[ \t]{2,}")
+
+
+def clean_text(text: str) -> str:
+    """
+    Normalise raw PDF text before chunking.
+
+    1. Replace known Private Use Area bullet glyphs with ASCII equivalents.
+    2. Strip any remaining PUA codepoints (unmapped Symbol/Wingdings glyphs).
+    3. NFKC-normalise, which folds PDF ligatures (fi, fl) back into plain
+       letters so retrieval matches the words a user actually types.
+    4. Collapse runs of whitespace introduced by the PDF's column layout.
+    """
+    for glyph, replacement in PUA_REPLACEMENTS.items():
+        text = text.replace(glyph, replacement)
+
+    text = _PUA_RE.sub("", text)
+    text = unicodedata.normalize("NFKC", text)
+
+    text = _TRAIL_WS_RE.sub("", text)
+    text = _SPACES_RE.sub(" ", text)
+    text = _BLANK_LINE_RE.sub("\n\n", text)
+
+    return text.strip()
+
+
+def count_pua(text: str) -> int:
+    """Number of Private Use Area codepoints in a string (for reporting)."""
+    return len(_PUA_RE.findall(text))
 
 
 def load_pdfs(pdf_dir: Path) -> list:
@@ -65,6 +118,7 @@ def load_pdfs(pdf_dir: Path) -> list:
         print(f"      - {p.name}  ({size_kb:.1f} KB)")
 
     all_docs = []
+    pua_found = 0
     for pdf_path in pdf_files:
         print(f"\n    Loading: {pdf_path.name} ...", end="", flush=True)
         try:
@@ -82,13 +136,18 @@ def load_pdfs(pdf_dir: Path) -> list:
                 print(f"     [ERROR] PDFMiner also failed: {e2} -- skipping this file.")
                 continue
 
-        # Make sure every document carries the source filename
+        # Make sure every document carries the source filename, and normalise
+        # the extracted text before it ever reaches the splitter.
         for doc in docs:
             doc.metadata.setdefault("source", pdf_path.name)
+            pua_found += count_pua(doc.page_content)
+            doc.page_content = clean_text(doc.page_content)
 
         all_docs.extend(docs)
 
     print(f"\n    Total pages loaded: {len(all_docs)}")
+    if pua_found:
+        print(f"    Normalised {pua_found} Private Use Area glyph(s) (Symbol/Wingdings bullets)")
     return all_docs
 
 
@@ -121,7 +180,9 @@ def split_documents(docs: list) -> list:
         print(f"\n    Sample chunk (chunk 0):")
         print(f"    Source: {sample.metadata.get('source', 'unknown')}")
         print(f"    Length: {len(sample.page_content)} chars")
-        preview = sample.page_content[:200].strip().encode("ascii", "replace").decode()
+        # stdout is already wrapped as UTF-8 above, so print the real text --
+        # the old ascii/replace coercion was hiding bad glyphs behind '?'.
+        preview = sample.page_content[:200].strip()
         print(f"    Preview: {preview}...")
 
     return chunks

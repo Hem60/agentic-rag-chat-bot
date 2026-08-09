@@ -1,7 +1,19 @@
 {
   "timestamp": "2026-07-08T17:32:35.106322",
   "judge_model": "google/gemma-2-9b-it",
+  "questions_attempted": 10,
+  "questions_scored": 6,
+  "questions_errored": 4,
+  "errored_ids": [
+    7,
+    8,
+    9,
+    10
+  ],
+  "judge_parse_fallbacks": 0,
   "average_score": 3.5,
+  "average_score_basis": "scored questions only",
+  "average_score_penalised": 2.5,
   "score_distribution": {
     "1": 0,
     "2": 1,
@@ -20,7 +32,8 @@
       ],
       "score": 3,
       "reasoning": "The answer correctly identifies the LIFO principle and lists four operations. However, some phrasing is vague (e.g., 'come out first') and lacks the precision of the expected answer.",
-      "latency_s": 6.13
+      "latency_s": 6.13,
+      "judge_parse_failed": false
     },
     {
       "id": 2,
@@ -32,7 +45,8 @@
       ],
       "score": 4,
       "reasoning": "No reasoning provided.",
-      "latency_s": 2.41
+      "latency_s": 2.41,
+      "judge_parse_failed": false
     },
     {
       "id": 3,
@@ -44,7 +58,8 @@
       ],
       "score": 2,
       "reasoning": "The answer contains some true statements about linked lists but incorrectly states that insertions and deletions can be done in constant time. It also hallucinates the types of linked lists.",
-      "latency_s": 8.42
+      "latency_s": 8.42,
+      "judge_parse_failed": false
     },
     {
       "id": 4,
@@ -56,7 +71,8 @@
       ],
       "score": 4,
       "reasoning": "The answer correctly describes the structure of a doubly linked list and contrasts it with a singly linked list. However, it lacks the detail about bidirectional traversal.",
-      "latency_s": 7.44
+      "latency_s": 7.44,
+      "judge_parse_failed": false
     },
     {
       "id": 5,
@@ -68,7 +84,8 @@
       ],
       "score": 4,
       "reasoning": "The answer accurately describes a circular linked list but uses vague phrasing like 'replace NULL pointer' instead of more precise language.",
-      "latency_s": 6.73
+      "latency_s": 6.73,
+      "judge_parse_failed": false
     },
     {
       "id": 6,
@@ -81,7 +98,8 @@
       ],
       "score": 4,
       "reasoning": "The answer is mostly accurate and directly supported by the context. However, it lacks the detail about TOP being incremented/decremented during push/pop operations.",
-      "latency_s": 8.97
+      "latency_s": 8.97,
+      "judge_parse_failed": false
     },
     {
       "id": 7,
@@ -89,9 +107,10 @@
       "expected_answer": "Stack underflow occurs when an attempt is made to delete (pop) an element from an empty stack. When TOP is NULL or zero, the stack is empty and a deletion attempt results in an UNDERFLOW condition or message.",
       "generated_answer": "ERROR: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-0b120a3e2903cbfa1101858a;30ad65f0-9623-4c3f-b756-07468b01a4df)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
       "sources": [],
-      "score": 0,
+      "score": null,
       "reasoning": "Pipeline error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-0b120a3e2903cbfa1101858a;30ad65f0-9623-4c3f-b756-07468b01a4df)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "latency_s": 0
+      "latency_s": 0,
+      "judge_parse_failed": false
     },
     {
       "id": 8,
@@ -99,9 +118,10 @@
       "expected_answer": "The subject code is BE03000081 and it is for Semester III (Third Semester). The subject is Data Structures and the institute is New L.J Institute of Engineering and Technology.",
       "generated_answer": "ERROR: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-73aba1c943c1b6a5794b2f2a;56505c50-dffc-4c56-a621-efe556547c93)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
       "sources": [],
-      "score": 0,
+      "score": null,
       "reasoning": "Pipeline error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-73aba1c943c1b6a5794b2f2a;56505c50-dffc-4c56-a621-efe556547c93)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "latency_s": 0
+      "latency_s": 0,
+      "judge_parse_failed": false
     },
     {
       "id": 9,
@@ -109,9 +129,10 @@
       "expected_answer": "Unit 2 covers Linear Data Structures. It includes topics such as stacks, queues, and linked lists (singly, doubly, and circular linked lists).",
       "generated_answer": "ERROR: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-52f88e524caa66271a8bb495;7534052d-cb22-46aa-851f-1e325ec77d7a)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
       "sources": [],
-      "score": 0,
+      "score": null,
       "reasoning": "Pipeline error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-52f88e524caa66271a8bb495;7534052d-cb22-46aa-851f-1e325ec77d7a)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "latency_s": 0
+      "latency_s": 0,
+      "judge_parse_failed": false
     },
     {
       "id": 10,
@@ -119,9 +140,10 @@
       "expected_answer": "I don't have enough information in the provided documents to answer this question.",
       "generated_answer": "ERROR: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5b-27f17afa44f7ad8c14321881;14d0bb99-5d2a-4e92-aa49-c86ec38602e5)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
       "sources": [],
-      "score": 0,
+      "score": null,
       "reasoning": "Pipeline error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5b-27f17afa44f7ad8c14321881;14d0bb99-5d2a-4e92-aa49-c86ec38602e5)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "latency_s": 0
+      "latency_s": 0,
+      "judge_parse_failed": false
     }
   ]
 }

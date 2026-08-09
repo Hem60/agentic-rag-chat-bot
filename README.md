@@ -113,6 +113,25 @@ python -m src.evaluate
 
 The script saves a JSON report to `eval_data/eval_report.json` with per-question scores, reasoning, and latency stats.
 
+### Reading the report honestly
+
+A question can fail before it ever reaches the judge (HF rate limits, timeouts). Those are recorded with `"score": null` and counted separately, so the report always reconciles:
+
+```
+questions_attempted  = questions_scored + questions_errored
+score_distribution   sums to questions_scored
+```
+
+Two averages are reported because they answer different questions:
+
+| Field | Meaning |
+|---|---|
+| `average_score` | Mean over **scored questions only**. Quote it as *"X/5 over N scored questions."* |
+| `average_score_penalised` | Same run with every pipeline error counted as a 1 — the end-to-end view. |
+| `judge_parse_fallbacks` | Scores recovered by regex because the judge returned malformed JSON. Less trustworthy. |
+
+The committed report is a real run: **10 attempted, 6 scored, 4 errored** — `average_score` 3.5 over those 6, `average_score_penalised` 2.5 over all 10. Earlier versions of this harness reported only the 3.5 next to a count of 10, which read as a result for the whole set.
+
 ---
 
 ## 🐳 Docker Deployment
