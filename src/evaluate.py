@@ -39,15 +39,13 @@ import time
 from pathlib import Path
 from datetime import datetime
 
-from dotenv import load_dotenv
+from src import config, llm
 
 # ---------------------------------------------------------------------------
 # Load configuration
 # ---------------------------------------------------------------------------
-load_dotenv()
-
-JUDGE_MODEL      = os.getenv("JUDGE_MODEL", os.getenv("GENERATION_MODEL", "google/gemma-2-9b-it"))
-HF_TOKEN         = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
+JUDGE_MODEL      = config.JUDGE_MODEL
+HF_TOKEN         = config.HF_TOKEN
 EVAL_DATA_PATH   = Path("eval_data/test_questions.json")
 REPORT_PATH      = Path("eval_data/eval_report.json")
 
@@ -120,29 +118,27 @@ def load_test_questions() -> list:
 
 
 def call_judge_inference(prompt: str) -> str:
-    """
-    Call the HF Inference API for the judge LLM using chat_completion.
-    Uses provider='hf-inference' (HF's own free Serverless Inference API).
-    """
-    from huggingface_hub import InferenceClient
-
-    client = InferenceClient(token=HF_TOKEN)  # auto-routes to working provider
-    response = client.chat_completion(
-        model=JUDGE_MODEL,
-        messages=[
+    """Call the judge model through src.llm (retry + backoff). No fallback model:
+    silently switching judges mid-run would make scores incomparable."""
+    return llm.chat(
+        [
             {"role": "system", "content": "You are an expert RAG evaluator. Respond only with valid JSON."},
             {"role": "user",   "content": prompt},
         ],
+        model=JUDGE_MODEL,
         max_tokens=256,
         temperature=0.01,
+        fallback_model="",
     )
-    return response.choices[0].message.content
 
 
 def judge_answer(question: str, expected_answer: str, generated_answer: str, context: str) -> dict:
     """
     Use the judge LLM to score the generated answer.
-    Returns {"score": int, "reasoning": str, "parse_failed": bool}
+    Returns {"score": int | None, "reasoning": str, "parse_failed": bool}
+
+    `score` is None when the judge reply contained no usable score at all. Such
+    a question is reported as unscored instead of being silently given a 1.
 
     `parse_failed` marks answers whose score came from the regex fallback rather
     than clean JSON. Those scores are less trustworthy, so the summary counts
@@ -163,29 +159,25 @@ def judge_answer(question: str, expected_answer: str, generated_answer: str, con
         raw = raw.split("```")[1].split("```")[0].strip()
 
     # Find the JSON object if the model added extra text
-    if "{" in raw:
-        start = raw.index("{")
-        end   = raw.rindex("}") + 1
-        raw   = raw[start:end]
+    if "{" in raw and "}" in raw:
+        raw = raw[raw.index("{"): raw.rindex("}") + 1]
 
     parse_failed = False
     try:
         result = json.loads(raw)
-        score = int(result.get("score", 1))
-        score = max(1, min(5, score))   # Clamp to 1-5
+        score = max(1, min(5, int(result["score"])))   # Clamp to 1-5
         reasoning = result.get("reasoning", "No reasoning provided.")
-    except (json.JSONDecodeError, ValueError):
+    except (json.JSONDecodeError, ValueError, KeyError, TypeError):
         # Fallback if the model doesn't return valid JSON (common for 7B/9B instruct models)
         import re
         parse_failed = True
-        score = 1
+        score = None
         reasoning = "No reasoning provided."
 
         # Search for score key and value (flexible with quotes)
         score_match = re.search(r'"?score"?\s*:\s*(\d)', raw, re.IGNORECASE)
         if score_match:
-            score = int(score_match.group(1))
-            score = max(1, min(5, score))
+            score = max(1, min(5, int(score_match.group(1))))
 
         # Search for reasoning key and value (flexible with quotes)
         reasoning_match = re.search(r'"?reasoning"?\s*:\s*"([^"\\]*(?:\\.[^"\\]*)*)"', raw, re.IGNORECASE)
@@ -267,6 +259,8 @@ def run_evaluation():
             # Judge the answer
             judgment = judge_answer(question, expected, generated, context)
             score    = judgment["score"]
+            if score is None:
+                raise ValueError(f"Judge returned no usable score: {judgment['reasoning']}")
             scores.append(score)
             if judgment["parse_failed"]:
                 print("    [WARN] Judge response was not valid JSON; score recovered by regex.")

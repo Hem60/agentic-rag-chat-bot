@@ -1,0 +1,122 @@
+[
+  {
+    "question": "What is an array and how is it initialized?",
+    "answerable": true
+  },
+  {
+    "question": "How is a two-dimensional array stored in memory using row-major order?",
+    "answerable": true
+  },
+  {
+    "question": "What is a sparse matrix and how is it represented efficiently?",
+    "answerable": true
+  },
+  {
+    "question": "What is a stack and what are its main operations?",
+    "answerable": true
+  },
+  {
+    "question": "What is the LIFO principle?",
+    "answerable": true
+  },
+  {
+    "question": "What is stack underflow and when does it occur?",
+    "answerable": true
+  },
+  {
+    "question": "What is the role of the TOP pointer in a stack?",
+    "answerable": true
+  },
+  {
+    "question": "How do you convert an infix expression to postfix using a stack?",
+    "answerable": true
+  },
+  {
+    "question": "How is a postfix expression evaluated?",
+    "answerable": true
+  },
+  {
+    "question": "What is recursion and why is a base case needed?",
+    "answerable": true
+  },
+  {
+    "question": "How does the Tower of Hanoi problem work?",
+    "answerable": true
+  },
+  {
+    "question": "How can the Fibonacci series be computed using recursion?",
+    "answerable": true
+  },
+  {
+    "question": "What is a queue and what do enqueue and dequeue do?",
+    "answerable": true
+  },
+  {
+    "question": "What is a circular queue?",
+    "answerable": true
+  },
+  {
+    "question": "What is a linked list and what are its types?",
+    "answerable": true
+  },
+  {
+    "question": "What are the differences between linked lists and arrays?",
+    "answerable": true
+  },
+  {
+    "question": "How does a doubly linked list differ from a singly linked list?",
+    "answerable": true
+  },
+  {
+    "question": "What is a circular linked list and what are its disadvantages?",
+    "answerable": true
+  },
+  {
+    "question": "How do you insert a node at the beginning of a singly linked list?",
+    "answerable": true
+  },
+  {
+    "question": "How is a stack implemented using a linked list?",
+    "answerable": true
+  },
+  {
+    "question": "What is the population of Mars?",
+    "answerable": false
+  },
+  {
+    "question": "Who won the FIFA World Cup in 2018?",
+    "answerable": false
+  },
+  {
+    "question": "How do I bake a chocolate cake?",
+    "answerable": false
+  },
+  {
+    "question": "What is the capital of Australia?",
+    "answerable": false
+  },
+  {
+    "question": "Explain how photosynthesis works in plants.",
+    "answerable": false
+  },
+  {
+    "question": "What is the current price of Bitcoin?",
+    "answerable": false
+  },
+  {
+    "question": "Who wrote the novel Pride and Prejudice?",
+    "answerable": false
+  },
+  {
+    "question": "How does the TCP three-way handshake work?",
+    "answerable": false
+  },
+  {
+    "question": "What are the symptoms of the common cold?",
+    "answerable": false
+  },
+  {
+    "question": "What is the boiling point of mercury?",
+    "answerable": false
+  }
+]

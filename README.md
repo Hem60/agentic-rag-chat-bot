@@ -1,13 +1,13 @@
 # 🤖 RAG QA Chatbot — Data Structures Study Assistant
 
-A fully local **Retrieval-Augmented Generation (RAG)** question-answering system designed to parse, index, and answer questions from technical PDF documents (e.g., Data Structures lecture notes). 
+A **Retrieval-Augmented Generation (RAG)** question-answering system designed to parse, index, and answer questions from technical PDF documents (e.g., Data Structures lecture notes). 
 
-This system uses a **local embedding model** running on your CPU, a **FAISS vector store** for fast semantic search, and calls the **Hugging Face Serverless Inference API** using open-weights models for high-quality, factual generation on the free tier.
+Embeddings and retrieval run locally; only answer generation is hosted. This system uses a **local embedding model** running on your CPU, a **FAISS vector store** for fast semantic search, and calls the **Hugging Face Serverless Inference API** using open-weights models for high-quality, factual generation on the free tier.
 
 ---
 
 ## ✨ Features
-* **100% Free Tier Stack:** No OpenAI, Gemini, or Pinecone API keys needed.
+* **Free Tier Stack:** No OpenAI, Gemini, or Pinecone keys. A free Hugging Face token is required for generation (hosted); embeddings and retrieval are local.
 * **Local Embeddings:** Text chunks are embedded locally on CPU using `sentence-transformers/all-MiniLM-L6-v2`.
 * **Direct Vector Storage:** Persists a FAISS index to disk so ingestion only needs to run once.
 * **Structured Generation:** Uses `google/gemma-2-9b-it` via Hugging Face chat completion endpoints for accurate, grounded generation.
@@ -54,7 +54,7 @@ venv\Scripts\activate
 # Activate (Mac/Linux)
 source venv/bin/activate
 
-# Install requirements
+# Install requirements (torch pinned to 2.7.1 CPU, matches numpy 2.x)
 pip install -r requirements.txt
 ```
 
@@ -89,7 +89,7 @@ python src/ingest.py
 ### Step 5: Test the Pipeline
 Run a standalone query to verify the retrieval and HF inference work correctly:
 ```bash
-python src/query.py
+python -m src.query
 ```
 
 ### Step 6: Start the FastAPI Server

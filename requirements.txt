@@ -10,6 +10,12 @@ langchain==0.3.25
 langchain-community==0.3.24
 langchain-huggingface==0.1.2
 
+# --- Agent + keyword search + UI + tests (Phases 2-4) ---
+langgraph==0.4.8   # newer releases pull langchain-core 1.x and break langchain-huggingface 0.1.2
+rank_bm25
+gradio
+pytest
+
 # --- Vector store (local, no cloud needed) ---
 faiss-cpu==1.11.0
 
@@ -19,7 +25,7 @@ sentence-transformers==4.1.0
 # --- Hugging Face (for Inference API + local pipelines) ---
 huggingface_hub==0.33.1
 transformers>=4.41.0
-torch==2.2.2
+torch==2.7.1   # matches the installed venv; 2.2.2 was built for numpy 1.x and has no Python 3.13 wheel
 accelerate>=0.30.0
 
 # --- PDF loading ---

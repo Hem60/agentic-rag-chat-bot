@@ -21,6 +21,7 @@ Subsequent runs use the cached model and are much faster.
 import os
 import sys
 import io
+import json
 import re
 import time
 import unicodedata
@@ -229,6 +230,15 @@ def build_vectorstore(chunks: list) -> None:
     for f in saved_files:
         size_kb = f.stat().st_size / 1024
         print(f"      - {f.name}  ({size_kb:.1f} KB)")
+
+
+def save_chunks(chunks: list) -> None:
+    """Save chunk text + metadata so BM25 can be rebuilt at startup without re-reading PDFs."""
+    VECTORSTORE_DIR.mkdir(parents=True, exist_ok=True)
+    path = VECTORSTORE_DIR / "chunks.json"
+    data = [{"text": c.page_content, "metadata": c.metadata} for c in chunks]
+    path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
+    print(f"[SAVED] {len(data)} chunks for BM25 -> {path}")
 
 
 def main():

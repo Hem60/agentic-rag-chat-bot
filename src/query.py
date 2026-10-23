@@ -28,18 +28,13 @@ if sys.platform == "win32":
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
-from dotenv import load_dotenv
+from src import config, llm
 
-# ---------------------------------------------------------------------------
-# Load configuration
-# ---------------------------------------------------------------------------
-load_dotenv()
-
-VECTORSTORE_DIR  = Path(os.getenv("VECTORSTORE_DIR", "vectorstore"))
-EMBEDDING_MODEL  = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
-GENERATION_MODEL = os.getenv("GENERATION_MODEL", "google/gemma-2-9b-it")
-HF_TOKEN         = os.getenv("HUGGINGFACEHUB_API_TOKEN", "")
-TOP_K            = int(os.getenv("TOP_K", "4"))
+VECTORSTORE_DIR  = config.VECTORSTORE_DIR
+EMBEDDING_MODEL  = config.EMBEDDING_MODEL
+GENERATION_MODEL = config.GENERATION_MODEL
+HF_TOKEN         = config.HF_TOKEN
+TOP_K            = config.TOP_K
 
 
 # ---------------------------------------------------------------------------
@@ -161,47 +156,27 @@ def extract_sources(docs: list) -> list:
     return sources
 
 
+SYSTEM_PROMPT = (
+    "You answer questions using ONLY the provided document context. "
+    "If the answer is not in the context, say: "
+    f"'{config.REFUSAL_SENTENCE}'"
+)
+
+
 def call_hf_inference(prompt: str) -> str:
-    """
-    Call the Hugging Face Inference API using chat_completion.
+    """Generate an answer via src.llm (retry, backoff, fallback model)."""
+    return llm.chat([
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": prompt},
+    ])
 
-    Why chat_completion with provider='hf-inference':
-      - Modern instruct models (Mistral, Qwen, Zephyr) are chat-optimized
-      - provider='hf-inference' forces HF's own free Serverless Inference API
-        instead of auto-selected third-party providers (novita, together, etc.)
-        which have different task routing and may not support text-generation
-      - chat_completion is the stable, universal interface for instruct models
 
-    The RAG context+question prompt is sent as the 'user' message.
-    A system message reinforces the grounding rules.
-    """
-    from huggingface_hub import InferenceClient
-
-    client = InferenceClient(token=HF_TOKEN)  # auto-routes to working provider
-
-    response = client.chat_completion(
-        model=GENERATION_MODEL,
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "You answer questions using ONLY the provided document context. "
-                    "If the answer is not in the context, say: "
-                    "'I don't have enough information in the provided documents to answer this question.'"
-                ),
-            },
-            {
-                "role": "user",
-                "content": prompt,
-            },
-        ],
-        max_tokens=512,
-        temperature=0.1,
-        top_p=0.9,
-    )
-
-    # Extract the assistant's reply text
-    return response.choices[0].message.content
+def clean_answer(raw: str) -> str:
+    """Strip whitespace and a leading 'Answer:' label if the model echoed one."""
+    answer = (raw or "").strip()
+    if answer[:7].lower() == "answer:":
+        answer = answer[7:].strip()
+    return answer
 
 
 def answer_question(question: str, vectorstore=None, llm=None) -> dict:
@@ -217,7 +192,7 @@ def answer_question(question: str, vectorstore=None, llm=None) -> dict:
         {
             "answer": "...",
             "sources": ["file1.pdf", "file2.pdf"],
-            "retrieved_chunks": [{"source": ..., "page": ..., "text": ...}]
+            "retrieved_chunks": [{"source", "page", "text", "preview"}]
         }
     """
     # Load vectorstore if not already provided
@@ -237,9 +212,7 @@ def answer_question(question: str, vectorstore=None, llm=None) -> dict:
     raw_answer = call_hf_inference(full_prompt)
 
     # Step 5: Clean up the answer (some models echo parts of the prompt)
-    answer = raw_answer.strip()
-    if "Answer:" in answer:
-        answer = answer.split("Answer:")[-1].strip()
+    answer = clean_answer(raw_answer)
 
     # Step 6: Extract sources
     sources = extract_sources(retrieved_docs)
@@ -252,7 +225,8 @@ def answer_question(question: str, vectorstore=None, llm=None) -> dict:
             {
                 "source": doc.metadata.get("source", "unknown"),
                 "page":   doc.metadata.get("page", "?"),
-                "text":   doc.page_content[:300] + "..."  # preview only
+                "text":    doc.page_content,                   # full text (judge needs it)
+                "preview": doc.page_content[:300],             # short text for UIs
             }
             for doc in retrieved_docs
         ],
