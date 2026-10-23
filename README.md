@@ -92,13 +92,14 @@ Run a standalone query to verify the retrieval and HF inference work correctly:
 python -m src.query
 ```
 
-### Step 6: Start the FastAPI Server
-Launch the API server locally:
+### Step 6: Start the server (API + chat page)
 ```bash
 uvicorn src.api:app --port 8000
 ```
-* Access Swagger API Documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-* Health Status Endpoint: [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
+* Chat page (Gradio, with sources and an agent-trace panel): [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+* `POST /chat` with `{"question": "...", "history": [...]}` returns the answer, sources with pages, chunk previews, agent trace and latency. Swagger: [/docs](http://127.0.0.1:8000/docs)
+* `GET /health` reports the model, whether the index and reranker are loaded.
+* Optional `.env` settings: `CORS_ORIGINS` (comma-separated), `RATE_LIMIT_PER_MIN` (default 20), `APP_PASSWORD` (enables a login, user `demo`).
 
 ---
 

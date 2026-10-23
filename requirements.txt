@@ -13,8 +13,9 @@ langchain-huggingface==0.1.2
 # --- Agent + keyword search + UI + tests (Phases 2-4) ---
 langgraph==0.4.8   # newer releases pull langchain-core 1.x and break langchain-huggingface 0.1.2
 rank_bm25
-gradio
+gradio==5.34.2   # 6.x pulls huggingface_hub 2.x and breaks transformers 4.52
 pytest
+httpx   # FastAPI TestClient
 
 # --- Vector store (local, no cloud needed) ---
 faiss-cpu==1.11.0

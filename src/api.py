@@ -1,211 +1,210 @@
 """
 src/api.py
 ----------
-STEP 6 — FastAPI Application
+FastAPI app: chat API plus the Gradio chat page on one port.
 
 Endpoints:
-  GET  /health   → returns {"status": "ok", "model": "...", "index_loaded": true/false}
-  POST /ask      → accepts {"question": "..."}, returns {"answer": "...", "sources": [...]}
+  GET  /health   model name, index loaded, reranker loaded
+  POST /chat     {question, history?} -> answer, sources (with pages), chunk previews,
+                 agent trace, latency
+  /              Gradio chat page (app.py), mounted when gradio is installed
 
-Run locally (no Docker) with:
-    uvicorn src.api:app --reload --port 8000
-
-Then test with:
-    curl http://localhost:8000/health
-    curl -X POST http://localhost:8000/ask \
-         -H "Content-Type: application/json" \
-         -d '{"question": "What are the main topics in the documents?"}'
+Run locally:
+    uvicorn src.api:app --port 8000
 """
 
-import os
 import logging
-from pathlib import Path
+import os
+import threading
+import time
+from collections import defaultdict, deque
 from contextlib import asynccontextmanager
+from typing import Literal, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-from dotenv import load_dotenv
 
-# ---------------------------------------------------------------------------
-# Load configuration
-# ---------------------------------------------------------------------------
-load_dotenv()
+from src import config, llm
 
-GENERATION_MODEL = os.getenv("GENERATION_MODEL", "google/gemma-2-9b-it")
-VECTORSTORE_DIR  = Path(os.getenv("VECTORSTORE_DIR", "vectorstore"))
+logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)-8s | %(message)s",
+                    datefmt="%H:%M:%S")
+logger = logging.getLogger("rag.api")
 
-# ---------------------------------------------------------------------------
-# Logging
-# ---------------------------------------------------------------------------
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)-8s | %(message)s",
-    datefmt="%H:%M:%S",
-)
-logger = logging.getLogger(__name__)
+CORS_ORIGINS = [o.strip() for o in os.getenv(
+    "CORS_ORIGINS", "http://localhost:8000,http://127.0.0.1:8000").split(",") if o.strip()]
+RATE_LIMIT_PER_MIN = int(os.getenv("RATE_LIMIT_PER_MIN", "20"))
+MAX_HISTORY_MESSAGES = 8
 
-# ---------------------------------------------------------------------------
-# Global state — loaded once at startup, reused across requests
-# This avoids reloading the embedding model on every request (very slow)
-# ---------------------------------------------------------------------------
-app_state = {
-    "vectorstore": None,
-    "index_loaded": False,
-    # Note: no llm object -- generation now uses InferenceClient per-request
-}
+# Loaded once at startup, reused by every request.
+app_state = {"agent": None, "retriever": None, "index_loaded": False, "reranker_loaded": False}
 
 
 # ---------------------------------------------------------------------------
-# Lifespan: runs at startup and shutdown
+# Rate limiting: sliding window per client IP
+# ---------------------------------------------------------------------------
+class RateLimiter:
+    def __init__(self, limit: int, window_s: float = 60.0, clock=time.monotonic):
+        self.limit, self.window, self.clock = limit, window_s, clock
+        self.hits = defaultdict(deque)
+        self.lock = threading.Lock()
+
+    def allow(self, key: str) -> bool:
+        now = self.clock()
+        with self.lock:
+            q = self.hits[key]
+            while q and now - q[0] > self.window:
+                q.popleft()
+            if len(q) >= self.limit:
+                return False
+            q.append(now)
+            return True
+
+
+limiter = RateLimiter(RATE_LIMIT_PER_MIN)
+
+
+# ---------------------------------------------------------------------------
+# Startup
 # ---------------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Load the vectorstore (embedding model) once at startup for fast retrieval.
-    Generation uses InferenceClient called per-request -- no LLM to pre-load.
-    """
-    logger.info("Starting RAG QA API...")
-    logger.info(f"Generation model: {GENERATION_MODEL}")
-
-    index_file = VECTORSTORE_DIR / "index.faiss"
-    if not index_file.exists():
-        logger.warning(
-            f"FAISS index not found at '{VECTORSTORE_DIR}/'. "
-            "The /ask endpoint will return an error until you run ingestion."
-        )
-        app_state["index_loaded"] = False
-    else:
-        try:
-            from src.query import load_vectorstore
-            logger.info("Loading FAISS vectorstore + embedding model...")
-            app_state["vectorstore"] = load_vectorstore()
-            app_state["index_loaded"] = True
-            logger.info("RAG pipeline ready!")
-        except Exception as e:
-            logger.error(f"Failed to load RAG pipeline: {e}")
-            app_state["index_loaded"] = False
-
-    yield  # Server runs here
-
-    logger.info("Shutting down RAG QA API.")
+    logger.info("Starting RAG QA API (generation model: %s)", config.GENERATION_MODEL)
+    try:
+        from src.agent import build_agent
+        from src.retriever import HybridRetriever
+        retriever = HybridRetriever.from_disk()
+        app_state.update(retriever=retriever, agent=build_agent(retriever),
+                         index_loaded=True, reranker_loaded=retriever.reranker is not None)
+        logger.info("Retriever and agent ready")
+    except Exception:
+        logger.exception("Failed to load the RAG pipeline")
+    yield
+    logger.info("Shutting down")
 
 
-# ---------------------------------------------------------------------------
-# FastAPI app
-# ---------------------------------------------------------------------------
-app = FastAPI(
-    title="RAG QA System",
-    description=(
-        "A Retrieval-Augmented Generation question-answering API. "
-        "Uses local FAISS vector search + Hugging Face Inference API for generation."
-    ),
-    version="1.0.0",
+api = FastAPI(
+    title="Agentic RAG Chatbot",
+    description="Hybrid retrieval (BM25 + FAISS + RRF), BGE reranking and a LangGraph agent.",
+    version="2.0.0",
     lifespan=lifespan,
 )
-
-# Allow CORS so you can call this from a browser-based front-end if needed
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["GET", "POST"],
-    allow_headers=["*"],
-)
+api.add_middleware(CORSMiddleware, allow_origins=CORS_ORIGINS,
+                   allow_methods=["GET", "POST"], allow_headers=["Content-Type"])
 
 
 # ---------------------------------------------------------------------------
-# Request / Response models
+# Models
 # ---------------------------------------------------------------------------
-class QuestionRequest(BaseModel):
-    question: str = Field(
-        ...,
-        min_length=3,
-        max_length=1000,
-        description="The question to answer using the ingested documents",
-        examples=["What is the main contribution of the paper?"],
-    )
+class Message(BaseModel):
+    role: Literal["user", "assistant"]
+    content: str = Field(..., max_length=2000)
 
 
-class AnswerResponse(BaseModel):
+class ChatRequest(BaseModel):
+    question: str = Field(..., min_length=2, max_length=1000)
+    history: list[Message] = Field(default_factory=list, max_length=MAX_HISTORY_MESSAGES * 4)
+
+
+class SourceOut(BaseModel):
+    source: str
+    page: Optional[int] = None
+    score: float
+
+
+class ChunkOut(BaseModel):
+    source: str
+    page: Optional[int] = None
+    score: float
+    preview: str
+
+
+class ChatResponse(BaseModel):
     answer: str
-    sources: list[str]
-    model_used: str
+    sources: list[SourceOut]
+    chunks: list[ChunkOut]
+    trace: list[dict]
+    best_score: float
+    llm_calls: int
+    latency_s: float
 
 
 class HealthResponse(BaseModel):
     status: str
     model: str
     index_loaded: bool
-    vectorstore_path: str
+    reranker_loaded: bool
 
 
 # ---------------------------------------------------------------------------
-# Endpoints
+# Core logic (shared with the Gradio page)
 # ---------------------------------------------------------------------------
-@app.get("/health", response_model=HealthResponse, summary="Health check")
-async def health():
-    """
-    Returns the API status and whether the FAISS index is loaded.
-    If index_loaded is false, run ingestion before using /ask.
-    """
-    return HealthResponse(
-        status="ok",
-        model=GENERATION_MODEL,
-        index_loaded=app_state["index_loaded"],
-        vectorstore_path=str(VECTORSTORE_DIR),
-    )
-
-
-@app.post("/ask", response_model=AnswerResponse, summary="Ask a question")
-async def ask(request: QuestionRequest):
-    """
-    Retrieve relevant document chunks and generate an answer using the RAG pipeline.
-
-    - If the answer is in the documents, returns it with source filenames.
-    - If not, the model will say it doesn't have enough information.
-    """
-    if not app_state["index_loaded"]:
-        raise HTTPException(
-            status_code=503,
-            detail=(
-                "FAISS index is not loaded. Please run ingestion first:\n\n"
-                "    python src/ingest.py\n\n"
-                "Then restart the API server."
-            ),
-        )
-
-    logger.info(f"Question received: {request.question[:80]}...")
-
-    try:
-        from src.query import answer_question
-        result = answer_question(
-            question=request.question,
-            vectorstore=app_state["vectorstore"],
-        )
-        logger.info(f"Answer generated. Sources: {result['sources']}")
-
-        return AnswerResponse(
-            answer=result["answer"],
-            sources=result["sources"],
-            model_used=GENERATION_MODEL,
-        )
-
-    except Exception as e:
-        logger.error(f"Error generating answer: {e}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Generation failed: {str(e)}",
-        )
-
-
-# ---------------------------------------------------------------------------
-# Root redirect
-# ---------------------------------------------------------------------------
-@app.get("/", include_in_schema=False)
-async def root():
-    return {
-        "message": "RAG QA API is running!",
-        "docs": "/docs",
-        "health": "/health",
-        "ask": "POST /ask",
+def run_chat(question: str, history: Optional[list] = None) -> dict:
+    """Run one agent turn. Raises RuntimeError if the pipeline is not loaded."""
+    from src.agent import run_agent
+    if app_state["agent"] is None:
+        raise RuntimeError("pipeline not loaded")
+    t0 = time.time()
+    trimmed = (history or [])[-config.HISTORY_TURNS:]
+    state = run_agent(app_state["agent"], question, trimmed)
+    latency = round(time.time() - t0, 2)
+    chunks = state.get("chunks") or []
+    out = {
+        "answer": state["answer"],
+        "sources": state.get("sources", []),
+        "chunks": [{"source": c["source"], "page": c["page"], "score": round(c["score"], 4),
+                    "preview": c["text"][:300]} for c in chunks],
+        "trace": state.get("trace", []),
+        "best_score": round(state.get("best_score", 0.0), 4),
+        "llm_calls": state.get("llm_calls", 0),
+        "latency_s": latency,
     }
+    # Log metrics only -- never the question text or answer (may be personal).
+    logger.info("chat done latency=%.2fs attempts=%s llm_calls=%s best_score=%.3f",
+                latency, state.get("attempts", 0), out["llm_calls"], out["best_score"])
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Endpoints (plain `def`: the work is blocking, so FastAPI runs it in a thread pool)
+# ---------------------------------------------------------------------------
+@api.get("/health", response_model=HealthResponse, summary="Health check")
+def health():
+    return HealthResponse(status="ok", model=config.GENERATION_MODEL,
+                          index_loaded=app_state["index_loaded"],
+                          reranker_loaded=app_state["reranker_loaded"])
+
+
+@api.post("/chat", response_model=ChatResponse, summary="Ask a question")
+def chat(request: ChatRequest, http_request: Request):
+    client = http_request.client.host if http_request.client else "unknown"
+    if not limiter.allow(client):
+        raise HTTPException(status_code=429, detail="Too many requests. Please wait a minute.")
+    if not app_state["index_loaded"]:
+        raise HTTPException(status_code=503,
+                            detail="The knowledge base is not loaded yet. Try again shortly.")
+    try:
+        return run_chat(request.question, [m.model_dump() for m in request.history])
+    except llm.LLMError as e:
+        logger.warning("LLM unavailable: %s", e)
+        raise HTTPException(status_code=503,
+                            detail="The answer service is temporarily unavailable. Please try again later.")
+    except Exception:
+        logger.exception("Unhandled error in /chat")  # details stay in the log
+        raise HTTPException(status_code=500, detail="Something went wrong. Please try again.")
+
+
+# ---------------------------------------------------------------------------
+# Gradio chat page on the same port. `app` is what uvicorn serves; `api` is the
+# bare FastAPI app (used by tests). Without gradio, `app` is just `api`.
+# ---------------------------------------------------------------------------
+app = api
+try:
+    import gradio as gr
+    from app import build_ui
+
+    _password = os.getenv("APP_PASSWORD")
+    app = gr.mount_gradio_app(api, build_ui(), path="/",
+                              auth=("demo", _password) if _password else None)
+except ImportError:  # pragma: no cover
+    logger.warning("gradio not installed; serving the API only")
