@@ -1,149 +1,2088 @@
 {
-  "timestamp": "2026-07-08T17:32:35.106322",
-  "judge_model": "google/gemma-2-9b-it",
-  "questions_attempted": 10,
-  "questions_scored": 6,
-  "questions_errored": 4,
-  "errored_ids": [
-    7,
-    8,
-    9,
-    10
-  ],
-  "judge_parse_fallbacks": 0,
-  "average_score": 3.5,
-  "average_score_basis": "scored questions only",
-  "average_score_penalised": 2.5,
-  "score_distribution": {
-    "1": 0,
-    "2": 1,
-    "3": 1,
-    "4": 4,
-    "5": 0
-  },
-  "results": [
-    {
-      "id": 1,
-      "question": "What is a stack and what are the four main operations that can be performed on it?",
-      "expected_answer": "A stack is a linear data structure that follows the Last In First Out (LIFO) principle. The four main operations are: Push (insert an element at the top), Pop (delete the top element), Peep (find the ith element from the top), and Change (update the value of the ith element from the top).",
-      "generated_answer": "A stack is a data structure where the element which is inserted last, that will be come out first.  There are four operations which we can perform on stack. \n Push (Insert): Which insert an element at TOP of the stack. \n Pop(Delete): Which Remove the most recently added elements from the TOP of the stack. \n Peep (Search): To find ith element from TOP of the stack. \n Change (Update): Changes the valuef the ith element from the TOP of the stack.",
-      "sources": [
-        "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf"
-      ],
-      "score": 3,
-      "reasoning": "The answer correctly identifies the LIFO principle and lists four operations. However, some phrasing is vague (e.g., 'come out first') and lacks the precision of the expected answer.",
-      "latency_s": 6.13,
-      "judge_parse_failed": false
+  "timestamp": "2026-10-23T12:52:33.294428",
+  "mode": "retrieval_only",
+  "generation_model": "google/gemma-2-9b-it",
+  "judge_model": null,
+  "rerank_threshold": 0.05,
+  "n_questions": 30,
+  "n_answerable": 21,
+  "n_unanswerable": 9,
+  "summary": {
+    "A": {
+      "questions": 30,
+      "errors": 0,
+      "hit_at_4": 0.952,
+      "hit_at_4_n": 21,
+      "mrr": 0.813,
+      "faithfulness": null,
+      "faithfulness_n": 0,
+      "refusal_correct": null,
+      "refusal_correct_n": 0,
+      "wrong_refusals": 0,
+      "wrong_refusals_n": 0,
+      "avg_latency_s": 0.011,
+      "avg_llm_calls": 0.0
     },
-    {
-      "id": 2,
-      "question": "What is the LIFO principle and which data structure uses it?",
-      "expected_answer": "LIFO stands for Last In First Out. It means the last element inserted is the first one to be removed. The stack data structure follows the LIFO principle.",
-      "generated_answer": "It follows the Last In, First Out (LIFO) principle. It means that the last inserted element gets deleted at first.  It is used in a Stack.  (Excerpt 1)",
-      "sources": [
-        "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf"
-      ],
-      "score": 4,
-      "reasoning": "No reasoning provided.",
-      "latency_s": 2.41,
-      "judge_parse_failed": false
-    },
-    {
-      "id": 3,
-      "question": "What is a linked list and what are its three main types?",
-      "expected_answer": "A linked list is a linear data structure where each node contains data and a pointer to the next node. The three main types are: Singly Linked List (each node points to the next), Doubly Linked List (each node has pointers to both next and previous), and Circular Linked List (the last node points back to the first node).",
-      "generated_answer": "Both arrays and linked lists are a linear collection of data elements. But unlike an array, a linked list does not store its nodes in consecutive memory locations.  A linked list does not allow random access of data.  Nodes in a linked list can be accessed only in a sequential manner.  But like an array, insertions and deletions can be done at any point in the list in a constant time. Another advantage of a linked list over an array is that we can add any number of elements in the list. This is not possible in case of an array. \nThere are three main types of linked lists: Singly Linked List, Circular Linked List, and Doubly Linked List.",
-      "sources": [
-        "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf"
-      ],
-      "score": 2,
-      "reasoning": "The answer contains some true statements about linked lists but incorrectly states that insertions and deletions can be done in constant time. It also hallucinates the types of linked lists.",
-      "latency_s": 8.42,
-      "judge_parse_failed": false
-    },
-    {
-      "id": 4,
-      "question": "What is a doubly linked list and how does it differ from a singly linked list?",
-      "expected_answer": "A doubly linked list is a type of linked list where each node contains data and two pointers: one pointing to the next node and one pointing to the previous node. Unlike a singly linked list which only allows forward traversal, a doubly linked list allows traversal in both forward and reverse directions.",
-      "generated_answer": "A doubly linked list is a list where each node contains two link fields instead of one.  The links are used to denote the predecessor and successor of a node. The link denoting its predecessor is called a Left Link, and the link denoting its successor is called a Right Link. A list containing this type of node is called a doubly linked list or two way chain.  \n\nA singly linked list only has one link field, which points to the next node in the list.",
-      "sources": [
-        "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf"
-      ],
-      "score": 4,
-      "reasoning": "The answer correctly describes the structure of a doubly linked list and contrasts it with a singly linked list. However, it lacks the detail about bidirectional traversal.",
-      "latency_s": 7.44,
-      "judge_parse_failed": false
-    },
-    {
-      "id": 5,
-      "question": "What is a circular linked list?",
-      "expected_answer": "A circular linked list is a variation of a singly linked list where the last node's pointer points back to the first node instead of null, forming a loop or circle.",
-      "generated_answer": "If we replace NULL pointer of the last node of Singly Linked Linear List with the address of its first node, that list becomes circularly linked linear list or Circular List.  \n FIRST is the address of first node of Circular List \n LAST is the address of the last node of Circular List",
-      "sources": [
-        "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf"
-      ],
-      "score": 4,
-      "reasoning": "The answer accurately describes a circular linked list but uses vague phrasing like 'replace NULL pointer' instead of more precise language.",
-      "latency_s": 6.73,
-      "judge_parse_failed": false
-    },
-    {
-      "id": 6,
-      "question": "What is the role of the TOP pointer in a stack and what does it indicate when it is NULL or zero?",
-      "expected_answer": "The TOP pointer points to the topmost element of the stack. When the stack is empty, TOP has a value of zero or NULL. It is incremented by one each time a new element is inserted (pushed) and decremented by one each time an element is deleted (popped).",
-      "generated_answer": " TOP is a pointer that points to the top element of stack. \n Initially when the Stacks Empty, TOP has a value of “Zero”.",
-      "sources": [
-        "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-        "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf"
-      ],
-      "score": 4,
-      "reasoning": "The answer is mostly accurate and directly supported by the context. However, it lacks the detail about TOP being incremented/decremented during push/pop operations.",
-      "latency_s": 8.97,
-      "judge_parse_failed": false
-    },
-    {
-      "id": 7,
-      "question": "What is stack underflow and when does it occur?",
-      "expected_answer": "Stack underflow occurs when an attempt is made to delete (pop) an element from an empty stack. When TOP is NULL or zero, the stack is empty and a deletion attempt results in an UNDERFLOW condition or message.",
-      "generated_answer": "ERROR: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-0b120a3e2903cbfa1101858a;30ad65f0-9623-4c3f-b756-07468b01a4df)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "sources": [],
-      "score": null,
-      "reasoning": "Pipeline error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-0b120a3e2903cbfa1101858a;30ad65f0-9623-4c3f-b756-07468b01a4df)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "latency_s": 0,
-      "judge_parse_failed": false
-    },
-    {
-      "id": 8,
-      "question": "What is the subject code and semester associated with the Data Structures course in these notes?",
-      "expected_answer": "The subject code is BE03000081 and it is for Semester III (Third Semester). The subject is Data Structures and the institute is New L.J Institute of Engineering and Technology.",
-      "generated_answer": "ERROR: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-73aba1c943c1b6a5794b2f2a;56505c50-dffc-4c56-a621-efe556547c93)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "sources": [],
-      "score": null,
-      "reasoning": "Pipeline error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-73aba1c943c1b6a5794b2f2a;56505c50-dffc-4c56-a621-efe556547c93)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "latency_s": 0,
-      "judge_parse_failed": false
-    },
-    {
-      "id": 9,
-      "question": "What is Unit 2 of the Data Structures course about?",
-      "expected_answer": "Unit 2 covers Linear Data Structures. It includes topics such as stacks, queues, and linked lists (singly, doubly, and circular linked lists).",
-      "generated_answer": "ERROR: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-52f88e524caa66271a8bb495;7534052d-cb22-46aa-851f-1e325ec77d7a)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "sources": [],
-      "score": null,
-      "reasoning": "Pipeline error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5a-52f88e524caa66271a8bb495;7534052d-cb22-46aa-851f-1e325ec77d7a)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "latency_s": 0,
-      "judge_parse_failed": false
-    },
-    {
-      "id": 10,
-      "question": "What is the population of Mars and when was the first human colony established there?",
-      "expected_answer": "I don't have enough information in the provided documents to answer this question.",
-      "generated_answer": "ERROR: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5b-27f17afa44f7ad8c14321881;14d0bb99-5d2a-4e92-aa49-c86ec38602e5)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "sources": [],
-      "score": null,
-      "reasoning": "Pipeline error: 402 Client Error: Payment Required for url: https://router.huggingface.co/featherless-ai/v1/chat/completions (Request ID: Root=1-6a4e3c5b-27f17afa44f7ad8c14321881;14d0bb99-5d2a-4e92-aa49-c86ec38602e5)\n\nYou have depleted your monthly included credits. Purchase pre-paid credits to continue using Inference Providers. Alternatively, subscribe to PRO to get 20x more included usage.",
-      "latency_s": 0,
-      "judge_parse_failed": false
+    "B": {
+      "questions": 30,
+      "errors": 0,
+      "hit_at_4": 1.0,
+      "hit_at_4_n": 21,
+      "mrr": 0.929,
+      "faithfulness": null,
+      "faithfulness_n": 0,
+      "refusal_correct": null,
+      "refusal_correct_n": 0,
+      "wrong_refusals": 0,
+      "wrong_refusals_n": 0,
+      "avg_latency_s": 8.01,
+      "avg_llm_calls": 0.0
     }
-  ]
+  },
+  "results": {
+    "A": [
+      {
+        "id": 1,
+        "question": "What is a stack and what are the four main operations that can be performed on it?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 10
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          }
+        ],
+        "latency_s": 0.04,
+        "llm_calls": 0
+      },
+      {
+        "id": 2,
+        "question": "What is the LIFO principle and which data structure uses it?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.5,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 10
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 41
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          }
+        ],
+        "latency_s": 0.02,
+        "llm_calls": 0
+      },
+      {
+        "id": 3,
+        "question": "What is the role of the TOP pointer in a stack and what is its value when the stack is empty?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.25,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 4,
+        "question": "What does the stack underflow check do in the PEEP and POP procedures?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": false,
+        "rr": 0.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 21
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 19
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 5,
+        "question": "What is an array?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 2
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 2
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 6,
+        "question": "What is a sparse matrix and why is it stored differently?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 10
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 7,
+        "question": "What are the two algorithms for converting an infix expression to postfix?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 15
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 20
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 23
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 14
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 8,
+        "question": "How does the Evaluate_Postfix algorithm evaluate a postfix expression?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.5,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 20
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 19
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 14
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 56
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 9,
+        "question": "What is recursion?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 10,
+        "question": "Why does a recursive function need a base case?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 11,
+        "question": "What is the Tower of Hanoi problem?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 12,
+        "question": "How can the Fibonacci series be generated using recursion?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 13,
+        "question": "What is a queue and what do front and rear mean?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.3333333333333333,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 35
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 46
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 27
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 29
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 14,
+        "question": "What is a circular queue and why is it used?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 30
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 57
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 32
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 27
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 15,
+        "question": "What are the differences between linked lists and arrays?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 16,
+        "question": "What are the types of linked lists and what is a singly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 17,
+        "question": "What is a doubly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 41
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 18,
+        "question": "What is a circular linked list and what are its advantages?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 14
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 19,
+        "question": "How is a stack implemented using a linked list in C?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 20,
+        "question": "What operations does it support?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 21,
+        "question": "How does it differ from a singly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.5,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 22,
+        "question": "What is the average-case time complexity of quicksort?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 32
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 53
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 33
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 23,
+        "question": "How does a B-tree split a full node during insertion?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 21
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 14
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 33
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 24,
+        "question": "How does Dijkstra's algorithm find the shortest path?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 13
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 25,
+        "question": "What is the difference between TCP and UDP?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 35
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 34
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 26,
+        "question": "What is database normalization?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 4
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 10
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 27,
+        "question": "What is the capital of Japan?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 8
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 5
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 7
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 56
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 28,
+        "question": "When did the Roman Empire fall?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 34
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 44
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 29,
+        "question": "Which Python library is commonly used for plotting graphs?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 2
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 17
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      },
+      {
+        "id": 30,
+        "question": "Who invented the linked list data structure and in what year?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          }
+        ],
+        "latency_s": 0.01,
+        "llm_calls": 0
+      }
+    ],
+    "B": [
+      {
+        "id": 1,
+        "question": "What is a stack and what are the four main operations that can be performed on it?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 10
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 55
+          }
+        ],
+        "latency_s": 9.21,
+        "llm_calls": 0
+      },
+      {
+        "id": 2,
+        "question": "What is the LIFO principle and which data structure uses it?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.5,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 10
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 30
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          }
+        ],
+        "latency_s": 8.72,
+        "llm_calls": 0
+      },
+      {
+        "id": 3,
+        "question": "What is the role of the TOP pointer in a stack and what is its value when the stack is empty?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 19
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          }
+        ],
+        "latency_s": 8.66,
+        "llm_calls": 0
+      },
+      {
+        "id": 4,
+        "question": "What does the stack underflow check do in the PEEP and POP procedures?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 12
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          }
+        ],
+        "latency_s": 7.89,
+        "llm_calls": 0
+      },
+      {
+        "id": 5,
+        "question": "What is an array?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 5
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 6
+          }
+        ],
+        "latency_s": 7.5,
+        "llm_calls": 0
+      },
+      {
+        "id": 6,
+        "question": "What is a sparse matrix and why is it stored differently?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 53
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          }
+        ],
+        "latency_s": 8.08,
+        "llm_calls": 0
+      },
+      {
+        "id": 7,
+        "question": "What are the two algorithms for converting an infix expression to postfix?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 15
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 15
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 19
+          }
+        ],
+        "latency_s": 6.37,
+        "llm_calls": 0
+      },
+      {
+        "id": 8,
+        "question": "How does the Evaluate_Postfix algorithm evaluate a postfix expression?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 19
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 20
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 56
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 23
+          }
+        ],
+        "latency_s": 6.19,
+        "llm_calls": 0
+      },
+      {
+        "id": 9,
+        "question": "What is recursion?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          }
+        ],
+        "latency_s": 8.12,
+        "llm_calls": 0
+      },
+      {
+        "id": 10,
+        "question": "Why does a recursive function need a base case?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 5
+          }
+        ],
+        "latency_s": 8.61,
+        "llm_calls": 0
+      },
+      {
+        "id": 11,
+        "question": "What is the Tower of Hanoi problem?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 53
+          }
+        ],
+        "latency_s": 6.8,
+        "llm_calls": 0
+      },
+      {
+        "id": 12,
+        "question": "How can the Fibonacci series be generated using recursion?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 13
+          }
+        ],
+        "latency_s": 8.77,
+        "llm_calls": 0
+      },
+      {
+        "id": 13,
+        "question": "What is a queue and what do front and rear mean?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 27
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 35
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          }
+        ],
+        "latency_s": 6.94,
+        "llm_calls": 0
+      },
+      {
+        "id": 14,
+        "question": "What is a circular queue and why is it used?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 30
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 57
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          }
+        ],
+        "latency_s": 7.96,
+        "llm_calls": 0
+      },
+      {
+        "id": 15,
+        "question": "What are the differences between linked lists and arrays?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          }
+        ],
+        "latency_s": 6.82,
+        "llm_calls": 0
+      },
+      {
+        "id": 16,
+        "question": "What are the types of linked lists and what is a singly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          }
+        ],
+        "latency_s": 6.57,
+        "llm_calls": 0
+      },
+      {
+        "id": 17,
+        "question": "What is a doubly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 41
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 10
+          }
+        ],
+        "latency_s": 6.66,
+        "llm_calls": 0
+      },
+      {
+        "id": 18,
+        "question": "What is a circular linked list and what are its advantages?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          }
+        ],
+        "latency_s": 7.0,
+        "llm_calls": 0
+      },
+      {
+        "id": 19,
+        "question": "How is a stack implemented using a linked list in C?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.5,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 35
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 42
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          }
+        ],
+        "latency_s": 8.71,
+        "llm_calls": 0
+      },
+      {
+        "id": 20,
+        "question": "What operations does it support?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 13
+          }
+        ],
+        "latency_s": 9.06,
+        "llm_calls": 0
+      },
+      {
+        "id": 21,
+        "question": "How does it differ from a singly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.5,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          }
+        ],
+        "latency_s": 6.39,
+        "llm_calls": 0
+      },
+      {
+        "id": 22,
+        "question": "What is the average-case time complexity of quicksort?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 5
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 6
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 6
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          }
+        ],
+        "latency_s": 8.7,
+        "llm_calls": 0
+      },
+      {
+        "id": 23,
+        "question": "How does a B-tree split a full node during insertion?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 10
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 10
+          }
+        ],
+        "latency_s": 8.38,
+        "llm_calls": 0
+      },
+      {
+        "id": 24,
+        "question": "How does Dijkstra's algorithm find the shortest path?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 5
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 21
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 8
+          }
+        ],
+        "latency_s": 9.14,
+        "llm_calls": 0
+      },
+      {
+        "id": 25,
+        "question": "What is the difference between TCP and UDP?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          }
+        ],
+        "latency_s": 8.06,
+        "llm_calls": 0
+      },
+      {
+        "id": 26,
+        "question": "What is database normalization?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 21
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 4
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 52
+          }
+        ],
+        "latency_s": 9.66,
+        "llm_calls": 0
+      },
+      {
+        "id": 27,
+        "question": "What is the capital of Japan?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 8
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 7
+          }
+        ],
+        "latency_s": 9.25,
+        "llm_calls": 0
+      },
+      {
+        "id": 28,
+        "question": "When did the Roman Empire fall?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          }
+        ],
+        "latency_s": 9.4,
+        "llm_calls": 0
+      },
+      {
+        "id": 29,
+        "question": "Which Python library is commonly used for plotting graphs?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 35
+          }
+        ],
+        "latency_s": 9.3,
+        "llm_calls": 0
+      },
+      {
+        "id": 30,
+        "question": "Who invented the linked list data structure and in what year?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": null,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": null,
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 6
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 42
+          }
+        ],
+        "latency_s": 7.37,
+        "llm_calls": 0
+      }
+    ]
+  }
 }

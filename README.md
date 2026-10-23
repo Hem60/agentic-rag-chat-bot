@@ -103,35 +103,34 @@ uvicorn src.api:app --port 8000
 
 ---
 
-## ⚖️ Evaluation (LLM-as-Judge)
+## ⚖️ Evaluation
 
-The project includes a verification script (`src/evaluate.py`) that tests 10 questions from `eval_data/test_questions.json` (including an out-of-context refusal test). It passes them through the RAG pipeline and uses `google/gemma-2-9b-it` as an independent judge to score the answers **1 to 5** for faithfulness.
+`eval_data/test_questions.json` holds 30 questions: 21 answerable (19 standalone, 2 follow-ups with chat history, each with the gold PDF page(s)) and 9 the PDFs cannot answer (refusal tests). Three variants run on the same questions:
 
-Run evaluation using:
-```bash
-python -m src.evaluate
-```
-
-The script saves a JSON report to `eval_data/eval_report.json` with per-question scores, reasoning, and latency stats.
-
-### Reading the report honestly
-
-A question can fail before it ever reaches the judge (HF rate limits, timeouts). Those are recorded with `"score": null` and counted separately, so the report always reconciles:
-
-```
-questions_attempted  = questions_scored + questions_errored
-score_distribution   sums to questions_scored
-```
-
-Two averages are reported because they answer different questions:
-
-| Field | Meaning |
+| Variant | What it is |
 |---|---|
-| `average_score` | Mean over **scored questions only**. Quote it as *"X/5 over N scored questions."* |
-| `average_score_penalised` | Same run with every pipeline error counted as a 1 — the end-to-end view. |
-| `judge_parse_fallbacks` | Scores recovered by regex because the judge returned malformed JSON. Less trustworthy. |
+| A: Naive | Vector search only, top 4, straight to the LLM (the original system) |
+| B: Hybrid + rerank | BM25 + vector + RRF + BGE reranker, top 4, straight to the LLM |
+| C: Agentic | LangGraph agent: rewrite, grade by reranker score, retry, refuse |
 
-The committed report is a real run: **10 attempted, 6 scored, 4 errored** — `average_score` 3.5 over those 6, `average_score_penalised` 2.5 over all 10. Earlier versions of this harness reported only the 3.5 next to a count of 10, which read as a result for the whole set.
+```bash
+python -m src.evaluate                    # all variants, with LLM judge (needs HF credits)
+python -m src.evaluate --retrieval-only   # hit@4 and MRR for A and B, no LLM calls
+python -m src.evaluate --variants A,B --no-judge
+```
+
+Metrics: hit@4 and MRR (is a gold page among the final 4 chunks), faithfulness (1-5, judge model must differ from the generator), refusal accuracy, wrong refusals, errors, latency and LLM calls. Every average is printed with the number of questions behind it; a pipeline error is counted as an error, never dropped or scored as a 1. Judge scores are directional only; spot-check about 10 answers by hand.
+
+### Results so far
+
+Retrieval only (no LLM; 21 answerable questions, pages 0-indexed as in pypdf):
+
+| Variant | Hit@4 | MRR |
+|---|---|---|
+| A: Naive | 95% (20/21) | 0.81 |
+| B: Hybrid + rerank | 100% (21/21) | 0.93 |
+
+The generation-side metrics (faithfulness, refusal accuracy, variant C) have not been run yet because the Hugging Face free credits were exhausted (HTTP 402). They will be added to this table from a real run. Caveats: 21 questions is small, the questions were written from the same PDFs, and both variants are near the ceiling, so the MRR gap is the more informative number. Hybrid + rerank costs about 8 s per query on CPU against about 0.01 s for plain vector search.
 
 ---
 

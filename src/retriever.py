@@ -90,6 +90,16 @@ class HybridRetriever:
         vec_ids = self.vector_search(query, self.k_each)
         return rrf_fuse([bm25_ids, vec_ids], self.weights)
 
+    def _hit(self, i: int, score: float, rank: int) -> dict:
+        meta = self.chunks[i]["metadata"]
+        return {"text": self.chunks[i]["text"], "source": meta.get("source", "unknown"),
+                "page": meta.get("page"), "score": score, "rank": rank}
+
+    def vector_only(self, query: str, k: Optional[int] = None) -> list:
+        """Plain vector search, no BM25 / rerank. Used as the naive baseline in evaluation."""
+        ids = self.vector_search(query, k or self.top_n)
+        return [self._hit(i, 0.0, r) for r, i in enumerate(ids, start=1)]
+
     # -- full search ---------------------------------------------------------
     def search(self, query: str) -> list:
         ids = self.candidates(query)
@@ -104,17 +114,8 @@ class HybridRetriever:
             # No reranker: keep fusion order; score is not comparable across queries.
             ranked = [(0.0, i) for i in ids]
 
-        hits = []
-        for rank, (score, i) in enumerate(ranked[: self.top_n], start=1):
-            meta = self.chunks[i]["metadata"]
-            hits.append({
-                "text": self.chunks[i]["text"],
-                "source": meta.get("source", "unknown"),
-                "page": meta.get("page"),
-                "score": score,
-                "rank": rank,
-            })
-        return hits
+        return [self._hit(i, score, rank)
+                for rank, (score, i) in enumerate(ranked[: self.top_n], start=1)]
 
     # -- construction from the saved index -------------------------------------
     @classmethod

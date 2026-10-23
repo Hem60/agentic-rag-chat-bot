@@ -2,52 +2,383 @@
   {
     "id": 1,
     "question": "What is a stack and what are the four main operations that can be performed on it?",
-    "expected_answer": "A stack is a linear data structure that follows the Last In First Out (LIFO) principle. The four main operations are: Push (insert an element at the top), Pop (delete the top element), Peep (find the ith element from the top), and Change (update the value of the ith element from the top)."
+    "answerable": true,
+    "expected_answer": "A stack is a linear structure where the element inserted last comes out first (LIFO). Its four operations are Push (insert at TOP), Pop (remove from TOP), Peep (find the ith element from TOP) and Change (update the ith element from TOP).",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          11
+        ]
+      }
+    ]
   },
   {
     "id": 2,
     "question": "What is the LIFO principle and which data structure uses it?",
-    "expected_answer": "LIFO stands for Last In First Out. It means the last element inserted is the first one to be removed. The stack data structure follows the LIFO principle."
+    "answerable": true,
+    "expected_answer": "LIFO means Last In First Out: the most recently inserted element is removed first. The stack follows it.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          10,
+          11
+        ]
+      }
+    ]
   },
   {
     "id": 3,
-    "question": "What is a linked list and what are its three main types?",
-    "expected_answer": "A linked list is a linear data structure where each node contains data and a pointer to the next node. The three main types are: Singly Linked List (each node points to the next), Doubly Linked List (each node has pointers to both next and previous), and Circular Linked List (the last node points back to the first node)."
+    "question": "What is the role of the TOP pointer in a stack and what is its value when the stack is empty?",
+    "answerable": true,
+    "expected_answer": "TOP points to the topmost element of the stack. It is zero when the stack is empty, is incremented by one on each insertion and decremented by one on each deletion.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          11
+        ]
+      }
+    ]
   },
   {
     "id": 4,
-    "question": "What is a doubly linked list and how does it differ from a singly linked list?",
-    "expected_answer": "A doubly linked list is a type of linked list where each node contains data and two pointers: one pointing to the next node and one pointing to the previous node. Unlike a singly linked list which only allows forward traversal, a doubly linked list allows traversal in both forward and reverse directions."
+    "question": "What does the stack underflow check do in the PEEP and POP procedures?",
+    "answerable": true,
+    "expected_answer": "It checks whether the stack has too few elements (e.g. Top - I + 1 <= 0 for PEEP) and writes a 'Stack Underflow' message and exits instead of reading or deleting an element.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          12,
+          13
+        ]
+      }
+    ]
   },
   {
     "id": 5,
-    "question": "What is a circular linked list?",
-    "expected_answer": "A circular linked list is a variation of a singly linked list where the last node's pointer points back to the first node instead of null, forming a loop or circle."
+    "question": "What is an array?",
+    "answerable": true,
+    "expected_answer": "An array is a data structure holding a group of elements, typically of the same data type, accessed using an index.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          0
+        ]
+      }
+    ]
   },
   {
     "id": 6,
-    "question": "What is the role of the TOP pointer in a stack and what does it indicate when it is NULL or zero?",
-    "expected_answer": "The TOP pointer points to the topmost element of the stack. When the stack is empty, TOP has a value of zero or NULL. It is incremented by one each time a new element is inserted (pushed) and decremented by one each time an element is deleted (popped)."
+    "question": "What is a sparse matrix and why is it stored differently?",
+    "answerable": true,
+    "expected_answer": "A sparse matrix has very few non-zero elements; most values are zero and wasted. It is stored efficiently by keeping only the non-zero values with their positions (triplet representation).",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          9,
+          10
+        ]
+      }
+    ]
   },
   {
     "id": 7,
-    "question": "What is stack underflow and when does it occur?",
-    "expected_answer": "Stack underflow occurs when an attempt is made to delete (pop) an element from an empty stack. When TOP is NULL or zero, the stack is empty and a deletion attempt results in an UNDERFLOW condition or message."
+    "question": "What are the two algorithms for converting an infix expression to postfix?",
+    "answerable": true,
+    "expected_answer": "UNPARENTHESIZED_SUFFIX for expressions without brackets (e.g. a + b * c - d / e) and REVPOL for expressions with brackets (e.g. a * (b + c) - d).",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          15
+        ]
+      }
+    ]
   },
   {
     "id": 8,
-    "question": "What is the subject code and semester associated with the Data Structures course in these notes?",
-    "expected_answer": "The subject code is BE03000081 and it is for Semester III (Third Semester). The subject is Data Structures and the institute is New L.J Institute of Engineering and Technology."
+    "question": "How does the Evaluate_Postfix algorithm evaluate a postfix expression?",
+    "answerable": true,
+    "expected_answer": "It scans the POSTFIX string using a stack: operands are pushed, and each operator pops operands, applies the operation and pushes the result; the final result is stored in Answer.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          19
+        ]
+      }
+    ]
   },
   {
     "id": 9,
-    "question": "What is Unit 2 of the Data Structures course about?",
-    "expected_answer": "Unit 2 covers Linear Data Structures. It includes topics such as stacks, queues, and linked lists (singly, doubly, and circular linked lists)."
+    "question": "What is recursion?",
+    "answerable": true,
+    "expected_answer": "Recursion is the process in which a function calls itself directly or indirectly; the function is called a recursive function. It takes one step toward the solution and calls itself for the rest.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          24
+        ]
+      }
+    ]
   },
   {
     "id": 10,
-    "question": "What is the population of Mars and when was the first human colony established there?",
+    "question": "Why does a recursive function need a base case?",
+    "answerable": true,
+    "expected_answer": "Without a base case the function would call itself infinitely, leading to a stack overflow.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          24,
+          25
+        ]
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "question": "What is the Tower of Hanoi problem?",
+    "answerable": true,
+    "expected_answer": "Tower of Hanoi is a mathematical puzzle of moving disks between rods that is solved naturally with recursion.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          26
+        ]
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "question": "How can the Fibonacci series be generated using recursion?",
+    "answerable": true,
+    "expected_answer": "A recursive function returns 0 for n == 0, 1 for n == 1, and otherwise fibonacci(n-1) + fibonacci(n-2).",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          40
+        ]
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "question": "What is a queue and what do front and rear mean?",
+    "answerable": true,
+    "expected_answer": "A queue is a linear list where deletion happens at one end (front) and insertion at the other (rear), processed in FIFO order.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          27
+        ]
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "question": "What is a circular queue and why is it used?",
+    "answerable": true,
+    "expected_answer": "A circular queue is a linear structure following FIFO in which the elements are arranged in a circle so the last position is followed by the first, preventing excessive use of memory.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          30
+        ]
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "question": "What are the differences between linked lists and arrays?",
+    "answerable": true,
+    "expected_answer": "Unlike an array, a linked list does not store nodes in consecutive memory locations and does not allow random access; nodes can only be accessed sequentially.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part2.pdf",
+        "pages": [
+          0
+        ]
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "question": "What are the types of linked lists and what is a singly linked list?",
+    "answerable": true,
+    "expected_answer": "Types are singly, circular and doubly linked lists. A singly linked list is the basic type: each node has data and a pointer to the next node, the last node's pointer is null, and it can only be traversed in one direction.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part2.pdf",
+        "pages": [
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "question": "What is a doubly linked list?",
+    "answerable": true,
+    "expected_answer": "A doubly linked list lets a list be traversed in both forward and reverse directions because each node has pointers to both the next and the previous node.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part2.pdf",
+        "pages": [
+          9
+        ]
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "question": "What is a circular linked list and what are its advantages?",
+    "answerable": true,
+    "expected_answer": "Replacing the NULL pointer of the last node of a singly linked list with the address of its first node makes a circular list; every node is accessible from any given node.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part2.pdf",
+        "pages": [
+          13
+        ]
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "question": "How is a stack implemented using a linked list in C?",
+    "answerable": true,
+    "expected_answer": "A node structure with an info field and a next pointer is used; push and pop operate on the top node of the list, with a global top pointer.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part2.pdf",
+        "pages": [
+          33
+        ]
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "question": "What operations does it support?",
+    "answerable": true,
+    "expected_answer": "A stack supports Push, Pop, Peep and Change.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part1.pdf",
+        "pages": [
+          11
+        ]
+      }
+    ],
+    "history": [
+      {
+        "role": "user",
+        "content": "What is a stack?"
+      },
+      {
+        "role": "assistant",
+        "content": "A stack is a linear data structure in which the last element inserted is the first one removed (LIFO)."
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "question": "How does it differ from a singly linked list?",
+    "answerable": true,
+    "expected_answer": "A doubly linked list has two pointers per node (next and previous) and can be traversed in both directions, while a singly linked list only goes forward.",
+    "gold": [
+      {
+        "source": "BE03000081_DS_Unit_2_Part2.pdf",
+        "pages": [
+          1,
+          9
+        ]
+      }
+    ],
+    "history": [
+      {
+        "role": "user",
+        "content": "What is a doubly linked list?"
+      },
+      {
+        "role": "assistant",
+        "content": "A linked list in which each node points to both its next and previous node."
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "question": "What is the average-case time complexity of quicksort?",
+    "answerable": false,
     "expected_answer": "I don't have enough information in the provided documents to answer this question.",
-    "note": "REFUSAL TEST — This question is intentionally unanswerable from any real document. The model should refuse to answer rather than hallucinate. Do NOT change this question."
+    "gold": []
+  },
+  {
+    "id": 23,
+    "question": "How does a B-tree split a full node during insertion?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 24,
+    "question": "How does Dijkstra's algorithm find the shortest path?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 25,
+    "question": "What is the difference between TCP and UDP?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 26,
+    "question": "What is database normalization?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 27,
+    "question": "What is the capital of Japan?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 28,
+    "question": "When did the Roman Empire fall?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 29,
+    "question": "Which Python library is commonly used for plotting graphs?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 30,
+    "question": "Who invented the linked list data structure and in what year?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
   }
 ]
