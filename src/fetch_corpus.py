@@ -26,7 +26,7 @@ import httpx
 CORPUS_DIR = Path("data/corpus")
 API = "https://en.wikipedia.org/w/api.php"
 # Wikimedia asks API clients to identify themselves.
-USER_AGENT = "RAG-QA-StudyBot/1.0 (https://github.com/Hem60/RAG-CHAT-BOT; educational RAG project)"
+USER_AGENT = "RAG-QA-StudyBot/1.0 (https://github.com/Hem60/agentic-rag-chat-bot; educational RAG project)"
 
 TOPICS = [
     # basics
