@@ -45,8 +45,8 @@ def test_chat_returns_sources_with_pages_and_chunks(client):
     body = r.json()
     assert r.status_code == 200
     assert body["answer"] == "A stack is LIFO."
-    assert body["sources"] == [{"source": "ds.pdf", "page": 3, "score": 0.9}]
-    assert body["chunks"][0]["page"] == 3 and len(body["chunks"][0]["preview"]) <= 300
+    assert body["sources"] == [{"source": "ds.pdf", "page": 4, "score": 0.9}]  # 0-indexed 3 shown as page 4
+    assert body["chunks"][0]["page"] == 4 and len(body["chunks"][0]["preview"]) <= 300
     assert body["trace"] and body["llm_calls"] == 1 and "latency_s" in body
 
 

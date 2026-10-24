@@ -21,6 +21,11 @@ JUDGE_MODEL       = os.getenv("JUDGE_MODEL", "")
 EMBEDDING_MODEL   = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 RERANKER_MODEL    = os.getenv("RERANKER_MODEL", "BAAI/bge-reranker-base")
 
+# Optional: any OpenAI-compatible chat endpoint (Groq, Gemini, OpenRouter, ...).
+# When LLM_BASE_URL is set it is used instead of the Hugging Face Inference API.
+LLM_BASE_URL      = os.getenv("LLM_BASE_URL", "").rstrip("/")
+LLM_API_KEY       = os.getenv("LLM_API_KEY", "")
+
 # --- Paths ---
 PDF_DIR           = Path(os.getenv("PDF_DIR", "data/pdfs"))
 VECTORSTORE_DIR   = Path(os.getenv("VECTORSTORE_DIR", "vectorstore"))
@@ -50,4 +55,7 @@ REFUSAL_SENTENCE = (
 
 
 def token_is_set() -> bool:
+    """True when the credentials for the active generation backend are present."""
+    if LLM_BASE_URL:
+        return bool(LLM_API_KEY)
     return bool(HF_TOKEN) and HF_TOKEN != "hf_YOUR_TOKEN_HERE"

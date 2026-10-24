@@ -98,7 +98,9 @@ def call_judge_inference(prompt: str) -> str:
             {"role": "user", "content": prompt},
         ],
         model=JUDGE_MODEL,
-        max_tokens=256,
+        # Generous: reasoning-style judge models spend tokens thinking before they
+        # emit the JSON, and an empty reply would be recorded as unscored.
+        max_tokens=1024,
         temperature=0.01,
         fallback_model="",
     )

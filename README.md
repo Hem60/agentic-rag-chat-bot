@@ -95,6 +95,7 @@ All variables are optional except the token. See `.env.example` for comments.
 |---|---|---|
 | `HUGGINGFACEHUB_API_TOKEN` | – | HF Inference API access |
 | `GENERATION_MODEL` / `FALLBACK_MODEL` | gemma-2-9b-it / – | answer model; fallback used when it is not served |
+| `LLM_BASE_URL` / `LLM_API_KEY` | – | optional: use any OpenAI-compatible provider (Groq, Gemini, OpenRouter...) instead of Hugging Face, e.g. when HF credits run out (HTTP 402). The model variables then name that provider's models |
 | `JUDGE_MODEL` | – | evaluation judge, must differ from the generator |
 | `EMBEDDING_MODEL` | all-MiniLM-L6-v2 | local embeddings |
 | `RERANKER_MODEL` | BAAI/bge-reranker-base | cross-encoder |

@@ -108,3 +108,8 @@ def test_best_threshold_overlap_picks_best_compromise():
     from src.calibrate import best_threshold
     r = best_threshold([0.1, 0.7, 0.8, 0.9], [0.0, 0.02, 0.05, 0.75])
     assert r["answerable_pass_rate"] >= 0.75 and r["unanswerable_refusal_rate"] >= 0.75
+
+
+def test_excerpt_headers_use_one_indexed_pages():
+    ctx = agent.format_context([{"source": "ds.pdf", "page": 13, "text": "x", "score": 1.0}])
+    assert "p. 14" in ctx and "p. 13" not in ctx

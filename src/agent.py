@@ -65,7 +65,7 @@ ANSWER_PROMPT = """You answer questions strictly from the numbered excerpts belo
 
 Rules:
 - Use ONLY the excerpts. Never invent facts, numbers or definitions.
-- Cite the source file and page, e.g. (file.pdf, p. 3).
+- Cite sources using the file name and page exactly as shown in the excerpt headers.
 - If the excerpts do not contain the answer, reply with exactly:
   "{refusal}"
 - Be concise.
@@ -120,9 +120,14 @@ def _format_history(history: list, turns: int) -> str:
     return "\n".join(f"{m['role']}: {m['content']}" for m in recent)
 
 
+def display_page(page):
+    """Chunk metadata is 0-indexed (pypdf); users see 1-indexed PDF viewer pages."""
+    return page + 1 if isinstance(page, int) else page
+
+
 def format_context(chunks: list) -> str:
     return "\n\n---\n\n".join(
-        f"[Excerpt {i} -- {c['source']}, p. {c['page']}]\n{c['text'].strip()}"
+        f"[Excerpt {i} -- {c['source']}, p. {display_page(c['page'])}]\n{c['text'].strip()}"
         for i, c in enumerate(chunks, 1)
     )
 

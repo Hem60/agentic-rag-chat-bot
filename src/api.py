@@ -142,7 +142,7 @@ class HealthResponse(BaseModel):
 # ---------------------------------------------------------------------------
 def run_chat(question: str, history: Optional[list] = None) -> dict:
     """Run one agent turn. Raises RuntimeError if the pipeline is not loaded."""
-    from src.agent import run_agent
+    from src.agent import display_page, run_agent
     if app_state["agent"] is None:
         raise RuntimeError("pipeline not loaded")
     t0 = time.time()
@@ -152,8 +152,9 @@ def run_chat(question: str, history: Optional[list] = None) -> dict:
     chunks = state.get("chunks") or []
     out = {
         "answer": state["answer"],
-        "sources": state.get("sources", []),
-        "chunks": [{"source": c["source"], "page": c["page"], "score": round(c["score"], 4),
+        # Pages shown to users are 1-indexed (PDF viewer numbering); internally 0-indexed.
+        "sources": [{**x, "page": display_page(x["page"])} for x in state.get("sources", [])],
+        "chunks": [{"source": c["source"], "page": display_page(c["page"]), "score": round(c["score"], 4),
                     "preview": c["text"][:300]} for c in chunks],
         "trace": state.get("trace", []),
         "best_score": round(state.get("best_score", 0.0), 4),

@@ -102,16 +102,12 @@ def get_llm():
     which is compatible with huggingface_hub >= 0.33.
     Returns None — the llm parameter in answer_question() is no longer used.
     """
-    if not HF_TOKEN or HF_TOKEN == "hf_YOUR_TOKEN_HERE":
+    if not config.token_is_set():
         raise ValueError(
-            "HUGGINGFACEHUB_API_TOKEN is not set in your .env file.\n"
-            "Get a free token at: https://huggingface.co/settings/tokens\n"
-            "Then set it in .env: HUGGINGFACEHUB_API_TOKEN=hf_xxxx"
+            "No generation credentials in .env. Set HUGGINGFACEHUB_API_TOKEN "
+            "(https://huggingface.co/settings/tokens), or LLM_BASE_URL + LLM_API_KEY "
+            "for an OpenAI-compatible provider."
         )
-    # Validate token by making a quick check
-    from huggingface_hub import InferenceClient
-    # Just instantiate to confirm credentials — no API call yet
-    _ = InferenceClient(model=GENERATION_MODEL, token=HF_TOKEN)
     return None   # actual calls use call_hf_inference()
 
 

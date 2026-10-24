@@ -66,3 +66,57 @@ def test_account_errors_fail_fast(status):
         _run(client, sleeps, fallback_model="backup")
     assert client.models == ["main"] and sleeps == []
     assert str(status) in str(exc.value)
+
+
+# ---- OpenAI-compatible backend -------------------------------------------------
+import json
+
+import httpx
+
+
+def _compat_client(handler):
+    return llm.OpenAICompatClient("https://api.example.test/v1", "sk-test",
+                                  transport=httpx.MockTransport(handler))
+
+
+def test_compat_client_posts_chat_completion_and_parses_reply():
+    seen = {}
+
+    def handler(request):
+        seen["url"], seen["auth"] = str(request.url), request.headers["authorization"]
+        seen["body"] = json.loads(request.content)
+        return httpx.Response(200, json={"choices": [{"message": {"content": "hi there"}}]})
+
+    out = llm.chat([{"role": "user", "content": "yo"}], model="m1", fallback_model="",
+                   client_factory=lambda: _compat_client(handler), sleep=lambda s: None)
+    assert out == "hi there"
+    assert seen["url"] == "https://api.example.test/v1/chat/completions"
+    assert seen["auth"] == "Bearer sk-test"
+    assert seen["body"]["model"] == "m1" and seen["body"]["messages"][0]["content"] == "yo"
+
+
+def test_compat_client_402_fails_fast_and_429_retries():
+    sleeps, calls = [], []
+
+    def handler(request):
+        calls.append(1)
+        return httpx.Response(429 if len(calls) == 1 else 200,
+                              json={"choices": [{"message": {"content": "ok"}}]})
+
+    assert llm.chat([{"role": "user", "content": "x"}], model="m", fallback_model="",
+                    client_factory=lambda: _compat_client(handler), sleep=sleeps.append) == "ok"
+    assert sleeps == [2]
+
+    with pytest.raises(llm.LLMError):
+        llm.chat([{"role": "user", "content": "x"}], model="m", fallback_model="",
+                 client_factory=lambda: _compat_client(lambda r: httpx.Response(402)),
+                 sleep=sleeps.append)
+
+
+def test_token_is_set_follows_active_backend(monkeypatch):
+    monkeypatch.setattr(config, "HF_TOKEN", "")
+    monkeypatch.setattr(config, "LLM_BASE_URL", "https://x/v1")
+    monkeypatch.setattr(config, "LLM_API_KEY", "")
+    assert not config.token_is_set()
+    monkeypatch.setattr(config, "LLM_API_KEY", "k")
+    assert config.token_is_set()

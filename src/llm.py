@@ -2,8 +2,9 @@
 """
 src/llm.py
 ----------
-Hugging Face chat-completion wrapper with retry, exponential backoff and a
-fallback model.
+Chat-completion wrapper with retry, exponential backoff and a fallback model.
+Uses the Hugging Face Inference API, or any OpenAI-compatible endpoint when
+LLM_BASE_URL is set.
 
 Failure handling:
   * 429 / 5xx / timeouts / connection errors  -> retry (waits 2, 4, 8 s)
@@ -36,7 +37,35 @@ def _status_of(exc: Exception) -> Optional[int]:
     return getattr(resp, "status_code", None)
 
 
+class OpenAICompatClient:
+    """Minimal client for OpenAI-compatible /chat/completions endpoints.
+
+    Exposes the same `chat_completion(...)` shape as huggingface_hub's
+    InferenceClient, and raises httpx.HTTPStatusError (which carries
+    `.response.status_code`) so chat() classifies failures the same way.
+    """
+
+    def __init__(self, base_url: str, api_key: str, timeout: float = 60, transport=None):
+        import httpx
+        self._http = httpx.Client(
+            base_url=base_url, timeout=timeout, transport=transport,
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+        )
+
+    def chat_completion(self, model, messages, max_tokens, temperature):
+        from types import SimpleNamespace
+        r = self._http.post("/chat/completions", json={
+            "model": model, "messages": messages,
+            "max_tokens": max_tokens, "temperature": temperature,
+        })
+        r.raise_for_status()
+        content = r.json()["choices"][0]["message"].get("content")
+        return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=content))])
+
+
 def _default_client_factory():
+    if config.LLM_BASE_URL:
+        return OpenAICompatClient(config.LLM_BASE_URL, config.LLM_API_KEY)
     from huggingface_hub import InferenceClient
     return InferenceClient(token=config.HF_TOKEN, timeout=60)
 
@@ -57,7 +86,7 @@ def chat(
     temperature = config.LLM_TEMPERATURE if temperature is None else temperature
 
     if not config.token_is_set():
-        raise LLMError("HUGGINGFACEHUB_API_TOKEN is not set.")
+        raise LLMError("No LLM credentials set (HUGGINGFACEHUB_API_TOKEN, or LLM_BASE_URL + LLM_API_KEY).")
 
     client = client_factory()
     candidates = [model] + ([fallback] if fallback and fallback != model else [])
@@ -81,7 +110,7 @@ def chat(
                     log.error("LLM fatal HTTP %s for %s", status, current)
                     raise LLMError(
                         f"Generation service refused the request (HTTP {status}). "
-                        "Check the Hugging Face token and remaining free credits."
+                        "Check the API key and remaining credits for the generation provider."
                     ) from e
                 if status in _MODEL_STATUS:
                     log.warning("Model %s not served (HTTP %s); trying fallback", current, status)
