@@ -19,14 +19,15 @@ Or imported by the FastAPI app (src/api.py).
 
 import os
 import sys
-import io
 from pathlib import Path
 from typing import Optional
 
 # Windows-safe UTF-8 output
-if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+# reconfigure() edits the streams in place and is skipped when they don't support it
+# (e.g. under pytest capture); replacing sys.stdout at import time broke test runs.
+for _stream in (sys.stdout, sys.stderr):
+    if sys.platform == "win32" and hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 
 from src import config, llm
 

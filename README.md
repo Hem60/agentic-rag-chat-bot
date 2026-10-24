@@ -1,153 +1,176 @@
-# 🤖 RAG QA Chatbot — Data Structures Study Assistant
+# Agentic RAG Chatbot — Study Notes Assistant
 
-A **Retrieval-Augmented Generation (RAG)** question-answering system designed to parse, index, and answer questions from technical PDF documents (e.g., Data Structures lecture notes). 
+A chatbot that answers questions from technical PDFs (here: Data Structures lecture notes). It combines **hybrid retrieval** (BM25 keyword search + FAISS vector search, merged with Reciprocal Rank Fusion), a **BGE cross-encoder reranker**, and a **LangGraph agent** that rewrites questions, checks result quality, retries with a new query, and refuses when the notes do not contain the answer. Every answer lists its sources with file name and page number.
 
-Embeddings and retrieval run locally; only answer generation is hosted. This system uses a **local embedding model** running on your CPU, a **FAISS vector store** for fast semantic search, and calls the **Hugging Face Serverless Inference API** using open-weights models for high-quality, factual generation on the free tier.
+**What runs where.** Embeddings, retrieval and reranking run locally on CPU. Only answer generation is hosted: it calls the Hugging Face Inference API with a model you choose in `.env`. A free Hugging Face token is required; there is no OpenAI or Pinecone dependency.
 
----
-
-## ✨ Features
-* **Free Tier Stack:** No OpenAI, Gemini, or Pinecone keys. A free Hugging Face token is required for generation (hosted); embeddings and retrieval are local.
-* **Local Embeddings:** Text chunks are embedded locally on CPU using `sentence-transformers/all-MiniLM-L6-v2`.
-* **Direct Vector Storage:** Persists a FAISS index to disk so ingestion only needs to run once.
-* **Structured Generation:** Uses `google/gemma-2-9b-it` via Hugging Face chat completion endpoints for accurate, grounded generation.
-* **Refusal Grounding:** Built-in prompt constraints force the model to answer *only* from retrieved document excerpts or refuse with: `"I don't have enough information in the provided documents to answer this question."`
-* **Evaluation Harness:** Built-in LLM-as-judge scoring script to evaluate faithfulness (1-5 scale) using a robust regex JSON parser.
+> **Status.** Code, API, chat UI, tests and Dockerfile are in place. The generation-side evaluation (faithfulness, refusal accuracy, the agent variant) has **not been run yet** because the Hugging Face free credits were exhausted, so those cells are empty below instead of guessed. Azure deployment is planned, not done.
 
 ---
 
-## 📁 Project Structure
+## Architecture
 
-```
-RAG QA/
-├── data/pdfs/               ← Place your study PDFs here (e.g. Unit 2 notes)
-├── vectorstore/             ← Persisted FAISS index files (auto-generated)
-├── src/
-│   ├── __init__.py          ← Package initialization
-│   ├── ingest.py            ← PDF text extraction, chunking, and FAISS indexing
-│   ├── query.py             ← RAG query pipeline (retrieval + chat completion)
-│   ├── api.py               ← FastAPI REST API exposing health & query endpoints
-│   └── evaluate.py          ← LLM-as-Judge evaluation harness
-├── eval_data/
-│   ├── test_questions.json  ← 10 evaluation test questions (with Mars refusal test)
-│   └── eval_report.json     ← Generated evaluation faithfulness scores & reasoning
-├── scripts/
-│   └── test_hf_token.py     ← Setup verification helper
-├── requirements.txt         ← CPU-only optimized Python dependencies
-├── .env                     ← Project configuration and HF token (git-ignored)
-└── README.md                ← This file
+```mermaid
+flowchart TD
+    Q[User question + last chat messages] --> R{route}
+    R -- greeting / thanks --> S[canned reply, no LLM]
+    R -- document question --> W[rewrite: standalone query<br/>skipped on first try with no history]
+    W --> RET[retrieve]
+    subgraph RET_BOX [Hybrid retriever, runs locally]
+      B[BM25 top 20] --> F[RRF fusion]
+      V[FAISS vector top 20] --> F
+      F --> X[BGE cross-encoder rerank, keep top 4]
+    end
+    RET --> B
+    RET --> V
+    X --> G{grade: best rerank score >= threshold?}
+    G -- yes --> GEN[generate grounded answer with sources + pages]
+    G -- no, attempts < 3 --> W
+    G -- no, attempts exhausted --> REF[refuse with the fixed sentence]
 ```
 
----
+Grading uses the reranker score, not another LLM call, which keeps free-tier usage low: 1 LLM call for a clear question, 2 for a follow-up, about 4 in the worst retry case.
 
-## 🚀 Setup & Execution Guide
+Offline (run once per set of PDFs): PDF text extraction (pypdf, pdfminer fallback) → text cleaning → chunking → local embeddings → FAISS index + `chunks.json` for BM25, saved in `vectorstore/`.
 
-### Step 1: Environment Setup
-Create a virtual environment and install the CPU-optimized requirements:
+## Project layout
+
+```
+app.py                  Gradio chat page (mounted into FastAPI)
+src/
+  config.py             all settings read from .env
+  ingest.py             load, clean, chunk, embed, save index + chunks.json
+  retriever.py          BM25 + vector + RRF + BGE reranker
+  llm.py                HF chat call with retry, backoff, fallback model
+  agent.py              LangGraph agent (route, rewrite, retrieve, grade, generate, refuse)
+  api.py                FastAPI: /chat, /health, plus the chat page
+  calibrate.py          picks RERANK_THRESHOLD from data
+  evaluate.py           3-variant evaluation + LLM judge
+  metrics.py            hit@k, MRR, refusal and summary helpers
+  query.py              the original naive pipeline (evaluation baseline A)
+tests/                  pytest suite (no network or models needed)
+eval_data/              30 test questions with gold pages, calibration set, reports
+data/pdfs/              the PDFs to index
+Dockerfile, .dockerignore, docker-compose.yml
+```
+
+## Setup
+
 ```bash
-# Create virtual environment
 python -m venv venv
-
-# Activate (Windows)
-venv\Scripts\activate
-
-# Activate (Mac/Linux)
-source venv/bin/activate
-
-# Install requirements (torch pinned to 2.7.1 CPU, matches numpy 2.x)
-pip install -r requirements.txt
+venv\Scripts\activate            # Windows   (Mac/Linux: source venv/bin/activate)
+pip install -r requirements.txt  # CPU-only PyTorch via the extra index in the file
+copy .env.example .env           # Windows   (Mac/Linux: cp .env.example .env)
 ```
 
-### Step 2: Hugging Face Configuration
-1. Get a free API Token (Read access) at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens).
-2. Copy `.env.example` to `.env`:
-   ```bash
-   copy .env.example .env   (Windows)
-   cp .env.example .env     (Mac/Linux)
-   ```
-3. Set your token and make sure `GENERATION_MODEL` and `JUDGE_MODEL` are set to Gemma:
-   ```env
-   HUGGINGFACEHUB_API_TOKEN=hf_your_token_here
-   GENERATION_MODEL=google/gemma-2-9b-it
-   JUDGE_MODEL=google/gemma-2-9b-it
-   ```
-4. Verify your credentials using the helper script:
-   ```bash
-   python scripts/test_hf_token.py
-   ```
+Edit `.env`: set `HUGGINGFACEHUB_API_TOKEN` (free "Read" token from huggingface.co/settings/tokens), `GENERATION_MODEL`, an optional `FALLBACK_MODEL`, and a `JUDGE_MODEL` that is **different** from the generator. Then check the token and build the index:
 
-### Step 3: Add PDFs
-Drop your study PDFs (e.g. Data Structures slides or notes) into the `data/pdfs/` directory.
-
-### Step 4: Run Ingestion
-Load, chunk, and index your PDF contents into FAISS:
 ```bash
-python src/ingest.py
-```
-*Outputs `index.faiss` and `index.pkl` in the `vectorstore/` directory.*
-
-### Step 5: Test the Pipeline
-Run a standalone query to verify the retrieval and HF inference work correctly:
-```bash
-python -m src.query
+python scripts/test_hf_token.py
+python src/ingest.py             # writes vectorstore/index.faiss, index.pkl, chunks.json
 ```
 
-### Step 6: Start the server (API + chat page)
+## Run
+
 ```bash
 uvicorn src.api:app --port 8000
 ```
-* Chat page (Gradio, with sources and an agent-trace panel): [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-* `POST /chat` with `{"question": "...", "history": [...]}` returns the answer, sources with pages, chunk previews, agent trace and latency. Swagger: [/docs](http://127.0.0.1:8000/docs)
-* `GET /health` reports the model, whether the index and reranker are loaded.
-* Optional `.env` settings: `CORS_ORIGINS` (comma-separated), `RATE_LIMIT_PER_MIN` (default 20), `APP_PASSWORD` (enables a login, user `demo`).
 
----
+| URL | What |
+|---|---|
+| `http://127.0.0.1:8000/` | Chat page: sources under each answer, collapsible agent trace |
+| `POST /chat` | `{"question": "...", "history": [{"role": "user", "content": "..."}]}` → answer, sources with pages, chunk previews, trace, latency |
+| `GET /health` | model name, index loaded, reranker loaded |
+| `/docs` | Swagger UI |
 
-## ⚖️ Evaluation
+The first start loads FAISS, BM25 and the reranker (tens of seconds on CPU). Each retrieval reranks up to 40 candidates on CPU, about 6–10 s per query on the development laptop.
 
-`eval_data/test_questions.json` holds 30 questions: 21 answerable (19 standalone, 2 follow-ups with chat history, each with the gold PDF page(s)) and 9 the PDFs cannot answer (refusal tests). Three variants run on the same questions:
+Safety knobs in `.env`: `CORS_ORIGINS` (comma-separated, default localhost only), `RATE_LIMIT_PER_MIN` (default 20 per IP on `/chat`), `APP_PASSWORD` (enables a login for the chat page, user `demo`). Errors return generic messages; details go to the server log, and question text is never logged.
+
+## Configuration
+
+All variables are optional except the token. See `.env.example` for comments.
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `HUGGINGFACEHUB_API_TOKEN` | – | HF Inference API access |
+| `GENERATION_MODEL` / `FALLBACK_MODEL` | gemma-2-9b-it / – | answer model; fallback used when it is not served |
+| `JUDGE_MODEL` | – | evaluation judge, must differ from the generator |
+| `EMBEDDING_MODEL` | all-MiniLM-L6-v2 | local embeddings |
+| `RERANKER_MODEL` | BAAI/bge-reranker-base | cross-encoder |
+| `CHUNK_SIZE` / `CHUNK_OVERLAP` | 1000 / 150 | chunking |
+| `K_EACH` / `TOP_N` | 20 / 4 | candidates per retriever / final chunks |
+| `BM25_WEIGHT` / `VECTOR_WEIGHT` | 0.5 / 0.5 | fusion weights |
+| `RERANK_THRESHOLD` | 0.0 (`.env.example`: 0.05) | below this the agent retries, then refuses |
+| `MAX_ATTEMPTS` / `HISTORY_TURNS` | 3 / 4 | searches per question / messages the agent sees |
+
+### Calibrating the threshold
+
+`RERANK_THRESHOLD` should come from your data, not a guess:
+
+```bash
+python -m src.calibrate
+```
+
+It scores 20 answerable and 10 unanswerable questions (`eval_data/calibration_questions.json`) and suggests a value (0.05 on the shipped PDFs: 100% of answerable questions pass, 90% of unanswerable are refused). One unanswerable question (a TCP question) still scored 0.96 and would be answered, so a single threshold cannot catch everything.
+
+## Evaluation
+
+`eval_data/test_questions.json` has 30 questions: 21 answerable (19 standalone, 2 follow-ups with chat history, each with its gold PDF page) and 9 the PDFs cannot answer. Three variants run on the same questions:
 
 | Variant | What it is |
 |---|---|
-| A: Naive | Vector search only, top 4, straight to the LLM (the original system) |
+| A: Naive | vector search only, top 4, straight to the LLM (the original system) |
 | B: Hybrid + rerank | BM25 + vector + RRF + BGE reranker, top 4, straight to the LLM |
-| C: Agentic | LangGraph agent: rewrite, grade by reranker score, retry, refuse |
+| C: Agentic | the full LangGraph agent |
 
 ```bash
-python -m src.evaluate                    # all variants, with LLM judge (needs HF credits)
+python -m src.evaluate                    # all variants + judge (needs HF credits)
 python -m src.evaluate --retrieval-only   # hit@4 and MRR for A and B, no LLM calls
 python -m src.evaluate --variants A,B --no-judge
 ```
 
-Metrics: hit@4 and MRR (is a gold page among the final 4 chunks), faithfulness (1-5, judge model must differ from the generator), refusal accuracy, wrong refusals, errors, latency and LLM calls. Every average is printed with the number of questions behind it; a pipeline error is counted as an error, never dropped or scored as a 1. Judge scores are directional only; spot-check about 10 answers by hand.
+Metrics: hit@4 and MRR (is a gold page among the final 4 chunks), faithfulness (1–5 from an LLM judge), refusal accuracy, wrong refusals, errors, latency and LLM calls. Each average is shown with the number of questions behind it; a pipeline error is counted as an error, never dropped or scored as a 1. Judge scores are directional only — spot-check about 10 answers by hand.
 
-### Results so far
+### Results
 
-Retrieval only (no LLM; 21 answerable questions, pages 0-indexed as in pypdf):
+| Variant | Hit@4 | MRR | Faithfulness | Refusal correct | Wrong refusals | Errors |
+|---|---|---|---|---|---|---|
+| A: Naive | 95% (20/21) | 0.81 | not run | not run | not run | not run |
+| B: Hybrid + rerank | 100% (21/21) | 0.93 | not run | not run | not run | not run |
+| C: Agentic | not run | not run | not run | not run | not run | not run |
 
-| Variant | Hit@4 | MRR |
-|---|---|---|
-| A: Naive | 95% (20/21) | 0.81 |
-| B: Hybrid + rerank | 100% (21/21) | 0.93 |
+Hit@4 and MRR are from a real retrieval-only run. Limits: 21 answerable questions is small, the questions were written from the same PDFs, and both variants are near the ceiling, so the MRR gap is the more informative number. Hybrid + rerank costs about 8 s per query on CPU against about 0.01 s for plain vector search. The "not run" cells will be replaced by numbers from a real `python -m src.evaluate` run.
 
-The generation-side metrics (faithfulness, refusal accuracy, variant C) have not been run yet because the Hugging Face free credits were exhausted (HTTP 402). They will be added to this table from a real run. Caveats: 21 questions is small, the questions were written from the same PDFs, and both variants are near the ceiling, so the MRR gap is the more informative number. Hybrid + rerank costs about 8 s per query on CPU against about 0.01 s for plain vector search.
+## Tests
 
----
+```bash
+python -m pytest -q
+```
 
-## 🐳 Docker Deployment
+53 tests, no network or model downloads: text cleaning, retrieval and fusion logic, agent routing (greeting, retry, refusal after 3 weak searches, fallback query), the LLM wrapper's retry/backoff/fallback with a mocked client, API behaviour (sources with pages, safe errors, rate limit, CORS), judge parsing and metrics.
 
-The project is fully prepared for containerized deployment. 
+## Docker
 
-### Why CPU-only is enforced:
-The `requirements.txt` is configured with `--extra-index-url https://download.pytorch.org/whl/cpu` to ensure the container downloads only the **lightweight CPU-only PyTorch build** (~180MB) instead of the standard GPU/CUDA builds (~2.5GB). This prevents out-of-memory (OOM) crashes on local Docker Desktop setups.
+```bash
+docker build -t rag-qa .
+docker run --rm -p 8000:8000 --env-file .env rag-qa
+curl http://localhost:8000/health
+```
 
-### Running with Docker Compose:
-1. Rebuild the container:
-   ```bash
-   docker build -t rag-qa .
-   ```
-2. Start the service:
-   ```bash
-   docker-compose up
-   ```
-The server will start on port `8000`, mounting `data/pdfs/` and `vectorstore/` as persistent volumes.
+The image installs CPU-only PyTorch, downloads the embedding model and the BGE reranker at **build** time, copies `data/pdfs/` and runs `src/ingest.py` during the build, so the index is baked in and containers start without downloads. It runs as a non-root user, keeps `.env` out of the image (`.dockerignore`), and takes the token only at runtime. `PORT` (default 8000) sets the listening port. Expect an image of roughly 2 GB. Only build with PDFs you are allowed to publish.
+
+`docker compose up --build` does the same with `.env` loaded; it deliberately mounts no volumes, since a mounted `vectorstore/` would hide the baked-in index.
+
+> The Dockerfile has not been built or run on this machine yet (the Docker daemon was not running), so treat it as untested until `docker build` and a `/health` check pass.
+
+## Planned next
+
+Azure Container Apps deployment with GitHub Actions CI/CD (scale-to-zero, secrets in Container Apps, budget alert), the full evaluation run above, and the ablations (chunk size, k, BM25 weight, embedding model).
+
+## Limits
+
+- Answers depend on a small hosted model; faithfulness scores come from another small model and are directional.
+- Retrieval quality was measured on 21 questions from one document set.
+- The reranker is slow on CPU and overconfident on some out-of-scope questions (see calibration).
+- Scanned PDFs without a text layer are not supported (no OCR).

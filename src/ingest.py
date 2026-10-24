@@ -20,7 +20,6 @@ Subsequent runs use the cached model and are much faster.
 
 import os
 import sys
-import io
 import json
 import re
 import time
@@ -28,9 +27,11 @@ import unicodedata
 from pathlib import Path
 
 # Windows-safe UTF-8 output (prevents emoji encoding errors on cp1252 terminals)
-if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+# reconfigure() edits the streams in place and is skipped when they don't support it
+# (e.g. under pytest capture); replacing sys.stdout at import time broke test runs.
+for _stream in (sys.stdout, sys.stderr):
+    if sys.platform == "win32" and hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 
 from dotenv import load_dotenv
 

@@ -1,0 +1,34 @@
+# Secrets and local config -- never bake into the image
+.env
+.env.*
+!.env.example
+
+# Environments and VCS
+venv/
+.venv/
+.git/
+.gitignore
+.github/
+
+# Caches and build output
+__pycache__/
+*.pyc
+.pytest_cache/
+model_cache/
+
+# The index is rebuilt inside the image by src/ingest.py
+vectorstore/
+vectorstore.bak/
+
+# Not needed at runtime
+tests/
+scripts/
+eval_data/
+*.log
+*.bak
+*.pdf
+!data/pdfs/*.pdf
+Dockerfile
+docker-compose.yml
+README.md
+project_structure.md

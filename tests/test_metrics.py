@@ -9,7 +9,7 @@ def ch(source, page):
 
 
 def test_gold_rank_matches_source_and_page_ignoring_dirs():
-    chunks = [ch("data\pdfs\b.pdf", 3), ch("data\pdfs\a.pdf", 9), ch("data/pdfs/a.pdf", 4)]
+    chunks = [ch(r"data\pdfs\b.pdf", 3), ch(r"data\pdfs\a.pdf", 9), ch("data/pdfs/a.pdf", 4)]
     assert gold_rank(chunks, GOLD) == 3          # b.pdf p.3 is the wrong file
 
 
