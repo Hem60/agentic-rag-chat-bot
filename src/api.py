@@ -7,7 +7,8 @@ Endpoints:
   GET  /health   model name, index loaded, reranker loaded
   POST /chat     {question, history?} -> answer, sources (with pages), chunk previews,
                  agent trace, latency
-  /              Gradio chat page (app.py), mounted when gradio is installed
+  /ui            Gradio chat page (app.py), mounted when gradio is installed
+  /              redirects to /ui
 
 Run locally:
     uvicorn src.api:app --port 8000
@@ -204,7 +205,13 @@ try:
     from app import build_ui
 
     _password = os.getenv("APP_PASSWORD")
-    app = gr.mount_gradio_app(api, build_ui(), path="/",
+    app = gr.mount_gradio_app(api, build_ui(), path="/ui",
                               auth=("demo", _password) if _password else None)
+
+    from fastapi.responses import RedirectResponse
+
+    @api.get("/", include_in_schema=False)
+    def root():
+        return RedirectResponse(url="/ui")
 except ImportError:  # pragma: no cover
     logger.warning("gradio not installed; serving the API only")

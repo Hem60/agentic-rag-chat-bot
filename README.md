@@ -78,7 +78,7 @@ uvicorn src.api:app --port 8000
 
 | URL | What |
 |---|---|
-| `http://127.0.0.1:8000/` | Chat page: sources under each answer, collapsible agent trace |
+| `http://127.0.0.1:8000/` (redirects to `/ui`) | Chat page: sources under each answer, collapsible agent trace |
 | `POST /chat` | `{"question": "...", "history": [{"role": "user", "content": "..."}]}` → answer, sources with pages, chunk previews, trace, latency |
 | `GET /health` | model name, index loaded, reranker loaded |
 | `/docs` | Swagger UI |

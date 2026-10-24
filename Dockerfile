@@ -17,6 +17,7 @@
 # Check:  curl http://localhost:8000/health
 # ==============================================================================
 
+# syntax=docker/dockerfile:1
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -34,7 +35,9 @@ WORKDIR /app
 
 # Dependencies first: this layer is cached until requirements.txt changes.
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# The pip cache mount keeps finished downloads between build attempts, so a flaky
+# network only costs the wheel that timed out, not the whole install.
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
 
 # Bake the models into the image (HF_HOME points at /app/model_cache).
 ARG EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
