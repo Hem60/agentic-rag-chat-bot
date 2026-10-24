@@ -52,6 +52,7 @@ CrossEncoder(os.environ['RERANKER_MODEL'])"
 COPY src/ ./src/
 COPY app.py ./app.py
 COPY data/pdfs ./data/pdfs
+COPY data/corpus ./data/corpus
 RUN python src/ingest.py
 
 # Drop root. The app only needs to read /app, but HF may touch the cache dir.

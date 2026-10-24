@@ -53,3 +53,9 @@ def test_summarize_counts_denominators_and_errors():
 def test_summarize_retrieval_only_has_no_generation_metrics():
     s = summarize([_row(hit=True, rr=0.5), _row(answerable=False)])
     assert s["refusal_correct"] is None and s["faithfulness"] is None
+
+
+def test_gold_without_pages_matches_any_page_of_that_source():
+    gold = [{"source": "Wikipedia: Quicksort", "pages": None}]
+    assert gold_rank([ch("Wikipedia: Merge sort", None), ch("Wikipedia: Quicksort", None)], gold) == 2
+    assert gold_rank([ch("Wikipedia: Merge sort", None)], gold) is None

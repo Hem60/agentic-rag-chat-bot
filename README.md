@@ -1,10 +1,10 @@
-# Agentic RAG Chatbot — Study Notes Assistant
+# Agentic RAG Chatbot — Data Structures & Algorithms Assistant
 
-A chatbot that answers questions from technical PDFs (here: Data Structures lecture notes). It combines **hybrid retrieval** (BM25 keyword search + FAISS vector search, merged with Reciprocal Rank Fusion), a **BGE cross-encoder reranker**, and a **LangGraph agent** that rewrites questions, checks result quality, retries with a new query, and refuses when the notes do not contain the answer. Every answer lists its sources with file name and page number.
+A chatbot that answers **Data Structures and Algorithms** questions from a knowledge base made of your own lecture-note PDFs plus 72 Wikipedia articles on the subject (fetched automatically, so nothing has to be uploaded). Answers always come from retrieved text; questions on other topics are politely declined. It combines **hybrid retrieval** (BM25 keyword search + FAISS vector search, merged with Reciprocal Rank Fusion), a **BGE cross-encoder reranker**, and a **LangGraph agent** that rewrites questions, checks result quality, retries with a new query, and refuses when the knowledge base does not contain the answer. Every answer lists its sources (PDF file and page, or the Wikipedia article).
 
-**What runs where.** Embeddings, retrieval and reranking run locally on CPU. Only answer generation is hosted: it calls the Hugging Face Inference API with a model you choose in `.env`. A free Hugging Face token is required; there is no OpenAI or Pinecone dependency.
+**What runs where.** Embeddings, retrieval and reranking run locally on CPU. Only answer generation is hosted: it calls the Hugging Face Inference API (or any OpenAI-compatible provider, see Configuration) with a model you choose in `.env`. There is no OpenAI or Pinecone dependency.
 
-> **Status.** Code, API, chat UI, tests and Dockerfile are in place. The generation-side evaluation (faithfulness, refusal accuracy, the agent variant) has **not been run yet** because the Hugging Face free credits were exhausted, so those cells are empty below instead of guessed. Azure deployment is planned, not done.
+> **Status.** Code, API, chat UI, tests and a Dockerfile are in place. The evaluation is being re-run on the expanded knowledge base (see Results); the Dockerfile has not been built successfully on the development machine yet, and no cloud deployment has been done.
 
 ---
 
@@ -39,7 +39,8 @@ Offline (run once per set of PDFs): PDF text extraction (pypdf, pdfminer fallbac
 app.py                  Gradio chat page (mounted into FastAPI)
 src/
   config.py             all settings read from .env
-  ingest.py             load, clean, chunk, embed, save index + chunks.json
+  fetch_corpus.py       downloads the Wikipedia DS/Algorithms articles into data/corpus/
+  ingest.py             load PDFs + corpus, clean, chunk, embed, save index + chunks.json
   retriever.py          BM25 + vector + RRF + BGE reranker
   llm.py                HF chat call with retry, backoff, fallback model
   agent.py              LangGraph agent (route, rewrite, retrieve, grade, generate, refuse)
@@ -49,8 +50,9 @@ src/
   metrics.py            hit@k, MRR, refusal and summary helpers
   query.py              the original naive pipeline (evaluation baseline A)
 tests/                  pytest suite (no network or models needed)
-eval_data/              30 test questions with gold pages, calibration set, reports
-data/pdfs/              the PDFs to index
+eval_data/              42 test questions with gold sources, calibration set, reports
+data/pdfs/              your lecture-note PDFs
+data/corpus/            Wikipedia articles as .txt (CC BY-SA, see data/corpus/README.md)
 Dockerfile, .dockerignore, docker-compose.yml
 ```
 
@@ -67,8 +69,11 @@ Edit `.env`: set `HUGGINGFACEHUB_API_TOKEN` (free "Read" token from huggingface.
 
 ```bash
 python scripts/test_hf_token.py
+python -m src.fetch_corpus       # optional: re-download the Wikipedia articles (already in data/corpus/)
 python src/ingest.py             # writes vectorstore/index.faiss, index.pkl, chunks.json
 ```
+
+Add your own PDFs to `data/pdfs/` and re-run `ingest.py` to include them; the corpus articles are indexed alongside.
 
 ## Run
 
@@ -102,7 +107,7 @@ All variables are optional except the token. See `.env.example` for comments.
 | `CHUNK_SIZE` / `CHUNK_OVERLAP` | 1000 / 150 | chunking |
 | `K_EACH` / `TOP_N` | 20 / 4 | candidates per retriever / final chunks |
 | `BM25_WEIGHT` / `VECTOR_WEIGHT` | 0.5 / 0.5 | fusion weights |
-| `RERANK_THRESHOLD` | 0.0 (`.env.example`: 0.05) | below this the agent retries, then refuses |
+| `RERANK_THRESHOLD` | 0.0 (`.env.example`: 0.3) | below this the agent retries, then refuses; a score below a tenth of it refuses at once |
 | `MAX_ATTEMPTS` / `HISTORY_TURNS` | 3 / 4 | searches per question / messages the agent sees |
 
 ### Calibrating the threshold
@@ -113,11 +118,11 @@ All variables are optional except the token. See `.env.example` for comments.
 python -m src.calibrate
 ```
 
-It scores 20 answerable and 10 unanswerable questions (`eval_data/calibration_questions.json`) and suggests a value (0.05 on the shipped PDFs: 100% of answerable questions pass, 90% of unanswerable are refused). One unanswerable question (a TCP question) still scored 0.96 and would be answered, so a single threshold cannot catch everything.
+It scores 32 answerable and 15 unanswerable questions (`eval_data/calibration_questions.json`) and suggests a value. On the current knowledge base it suggested 0.64 (answerable scores were all at least 0.675), but two off-topic questions scored high (a TCP question 0.998, a boiling-point question 0.607), so no threshold separates everything. I set 0.3 instead: a lower value avoids wrongly refusing real Data Structures questions, and the answer prompt also refuses off-topic questions as a second guard. That is a judgement call, not a measured optimum.
 
 ## Evaluation
 
-`eval_data/test_questions.json` has 30 questions: 21 answerable (19 standalone, 2 follow-ups with chat history, each with its gold PDF page) and 9 the PDFs cannot answer. Three variants run on the same questions:
+`eval_data/test_questions.json` has 42 questions: 33 answerable and 9 off-topic. 21 answerable questions come from the lecture notes (19 standalone, 2 follow-ups with chat history; gold = the right PDF page or the matching Wikipedia article) and 12 are general Data Structures questions answered only by the Wikipedia corpus (gold = that article). Three variants run on the same questions:
 
 | Variant | What it is |
 |---|---|
@@ -135,13 +140,29 @@ Metrics: hit@4 and MRR (is a gold page among the final 4 chunks), faithfulness (
 
 ### Results
 
-| Variant | Hit@4 | MRR | Faithfulness | Refusal correct | Wrong refusals | Errors |
-|---|---|---|---|---|---|---|
-| A: Naive | 95% (20/21) | 0.81 | not run | not run | not run | not run |
-| B: Hybrid + rerank | 100% (21/21) | 0.93 | not run | not run | not run | not run |
-| C: Agentic | not run | not run | not run | not run | not run | not run |
+**The 42-question run on the current knowledge base (notes + Wikipedia) is in progress; its numbers will be added here from the real run.** Until then, the table below is an *earlier* run: the notes-only index and the earlier 30-question set (21 answerable, 9 unanswerable), before the Wikipedia corpus, the scope prompt and the 0.3 threshold existed. Those numbers do not describe the current system. Generator `qwen/qwen3.8-27b`, judge `openai/gpt-oss-120b` (a different model), both via Groq. 0 pipeline errors in every variant.
 
-Hit@4 and MRR are from a real retrieval-only run. Limits: 21 answerable questions is small, the questions were written from the same PDFs, and both variants are near the ceiling, so the MRR gap is the more informative number. Hybrid + rerank costs about 8 s per query on CPU against about 0.01 s for plain vector search. The "not run" cells will be replaced by numbers from a real `python -m src.evaluate` run.
+| Variant | Hit@4 | MRR | Faithfulness (1-5) | Refusal correct | Wrong refusals | Errors | Avg latency | Avg LLM calls |
+|---|---|---|---|---|---|---|---|---|
+| A: Naive | 95% (20/21) | 0.81 | 4.81 (n=21) | 100% (9/9) | 0/21 | 0/30 | 8.6 s | 1.00 |
+| B: Hybrid + rerank | 100% (21/21) | 0.93 | 5.00 (n=19) | 100% (9/9) | 2/21 | 0/30 | 12.0 s | 1.00 |
+| C: Agentic | 100% (21/21) | 0.95 | 5.00 (n=21) | 100% (9/9) | 0/21 | 0/30 | 16.3 s | 1.23 |
+
+Faithfulness is judged only for answers a variant actually gave (B's n=19 because it refused two answerable questions).
+
+**What the numbers say**
+
+- **Retrieval:** hybrid search plus reranking lifts MRR from 0.81 to 0.93 (hit@4 from 95% to 100%); the agent adds a little more (0.95).
+- **Follow-up questions are where the agent matters.** B has no query rewriting, so it refused both follow-ups ("What operations does it support?", "How does it differ from a singly linked list?") even though it retrieved the right page. A, with the same problem, answered the first one about the wrong structure (linked list instead of stack) and the judge gave it a 1. That single answer is the whole reason A's faithfulness is 4.81 instead of 5.0. C rewrites the question from the chat history and answered both correctly.
+- **Refusal:** all three variants refused all 9 out-of-scope questions, so on this set the reranker-score gate did not improve refusal accuracy; the prompt alone was enough for this generator. The gate's benefit here is skipping the answer call (1.23 average LLM calls for C).
+- **Cost:** the agent is the slowest. Refused questions take about 21 s for C because it runs 3 searches.
+
+**Limits, stated plainly**
+
+- 21 answerable and 9 unanswerable questions is small, and I wrote them from the same PDFs. Most are easy, so faithfulness sits at the ceiling and the differences between variants are small except on follow-ups, of which there are only 2.
+- Judge scores come from one small model and are directional. I spot-checked the follow-up answers and the one low score by hand; the rest were not individually read.
+- Latencies are noisy: the evaluation shared the machine with a running web server, browser tests and an earlier Docker build, and the CPU reranker dominates. Treat them as ordering, not benchmarks.
+- Retrieval is scored by gold page (pypdf 0-indexed in the eval files; the app shows 1-indexed PDF pages).
 
 ## Tests
 
@@ -149,7 +170,7 @@ Hit@4 and MRR are from a real retrieval-only run. Limits: 21 answerable question
 python -m pytest -q
 ```
 
-53 tests, no network or model downloads: text cleaning, retrieval and fusion logic, agent routing (greeting, retry, refusal after 3 weak searches, fallback query), the LLM wrapper's retry/backoff/fallback with a mocked client, API behaviour (sources with pages, safe errors, rate limit, CORS), judge parsing and metrics.
+67 tests, no network or model downloads: text cleaning, retrieval and fusion logic, agent routing (greeting, retry, refusal after 3 weak searches, fallback query), the LLM wrapper's retry/backoff/fallback with a mocked client, API behaviour (sources with pages, safe errors, rate limit, CORS), judge parsing and metrics.
 
 ## Docker
 
@@ -159,15 +180,15 @@ docker run --rm -p 8000:8000 --env-file .env rag-qa
 curl http://localhost:8000/health
 ```
 
-The image installs CPU-only PyTorch, downloads the embedding model and the BGE reranker at **build** time, copies `data/pdfs/` and runs `src/ingest.py` during the build, so the index is baked in and containers start without downloads. It runs as a non-root user, keeps `.env` out of the image (`.dockerignore`), and takes the token only at runtime. `PORT` (default 8000) sets the listening port. Expect an image of roughly 2 GB. Only build with PDFs you are allowed to publish.
+The image installs CPU-only PyTorch, downloads the embedding model and the BGE reranker at **build** time, copies `data/pdfs/` and `data/corpus/` and runs `src/ingest.py` during the build, so the index is baked in and containers start without downloads. It runs as a non-root user, keeps `.env` out of the image (`.dockerignore`), and takes the token only at runtime. `PORT` (default 8000) sets the listening port. Expect an image of roughly 2 GB. Only build with PDFs you are allowed to publish.
 
 `docker compose up --build` does the same with `.env` loaded; it deliberately mounts no volumes, since a mounted `vectorstore/` would hide the baked-in index.
 
-> The Dockerfile has not been built or run on this machine yet (the Docker daemon was not running), so treat it as untested until `docker build` and a `/health` check pass.
+> The Dockerfile has not been built successfully on the development machine yet: three attempts failed while downloading Python packages (PyPI read timeouts), before any of the project's own build steps ran. Treat it as untested until `docker build` and a `/health` check pass.
 
 ## Planned next
 
-Azure Container Apps deployment with GitHub Actions CI/CD (scale-to-zero, secrets in Container Apps, budget alert), the full evaluation run above, and the ablations (chunk size, k, BM25 weight, embedding model).
+Cloud deployment (Render or Hugging Face Spaces; the earlier Azure plan was dropped), faster reranking (fewer candidates or a smaller reranker), a larger and harder test set, and the ablations (chunk size, k, BM25 weight, embedding model).
 
 ## Limits
 

@@ -3,7 +3,8 @@ import pytest
 from src import agent, llm
 
 GOOD = [{"text": "A stack is LIFO.", "source": "ds.pdf", "page": 3, "score": 0.9, "rank": 1}]
-WEAK = [{"text": "unrelated", "source": "ds.pdf", "page": 9, "score": 0.01, "rank": 1}]
+WEAK = [{"text": "borderline", "source": "ds.pdf", "page": 9, "score": 0.2, "rank": 1}]   # below threshold 0.5 but not hopeless
+HOPELESS = [{"text": "unrelated", "source": "ds.pdf", "page": 9, "score": 0.01, "rank": 1}]  # < 0.5 * 0.1
 
 
 class FakeRetriever:
@@ -63,7 +64,7 @@ def test_three_weak_attempts_end_in_refusal_without_generating():
     c = FakeChat("query two", "query three")
     out = run(r, c)
     assert len(r.queries) == 3
-    assert out["answer"] == agent.REFUSAL and out["sources"] == []
+    assert out["answer"] == agent.REFUSAL_WITH_SCOPE and out["sources"] == []
     assert out["llm_calls"] == 2           # two rewrites, no generation call
     assert out["trace"][-1]["step"] == "refuse"
 
@@ -113,3 +114,46 @@ def test_best_threshold_overlap_picks_best_compromise():
 def test_excerpt_headers_use_one_indexed_pages():
     ctx = agent.format_context([{"source": "ds.pdf", "page": 13, "text": "x", "score": 1.0}])
     assert "p. 14" in ctx and "p. 13" not in ctx
+
+
+def test_refusal_carries_scope_hint_and_still_counts_as_refusal():
+    from src.metrics import is_refusal
+    r, c = FakeRetriever(WEAK), FakeChat("q2", "q3")
+    out = run(r, c)
+    assert agent.SCOPE_HINT in out["answer"] and is_refusal(out["answer"])
+
+
+def test_source_without_page_has_no_page_in_excerpt_header_or_sources():
+    chunk = {"text": "Quicksort picks a pivot.", "source": "Wikipedia: Quicksort", "page": None, "score": 0.9, "rank": 1}
+    assert "p." not in agent.format_context([chunk])
+    r, c = FakeRetriever([chunk]), FakeChat("It picks a pivot.")
+    out = run(r, c, "How does quicksort work?")
+    assert out["sources"] == [{"source": "Wikipedia: Quicksort", "page": None, "score": 0.9}]
+
+
+def test_sources_drop_weak_chunks_but_keep_the_top_one():
+    chunks = [{"text": "a", "source": "A", "page": None, "score": 0.9},
+              {"text": "b", "source": "B", "page": None, "score": 0.1},
+              {"text": "c", "source": "C", "page": None, "score": 0.7}]
+    assert [s["source"] for s in agent.unique_sources(chunks, 0.5)] == ["A", "C"]
+    assert [s["source"] for s in agent.unique_sources([chunks[1]], 0.5)] == ["B"]
+
+
+def test_clean_answer_strips_model_written_sources_line_and_answer_prefix():
+    raw = "Answer: Dijkstra uses a priority queue.\n\nSources: Excerpt 2 and Excerpt 4.\n"
+    assert agent.clean_answer(raw) == "Dijkstra uses a priority queue."
+    assert agent.clean_answer("**Sources:** a, b") == ""
+    assert agent.clean_answer("Mentions sources of error in text.") == "Mentions sources of error in text."
+
+
+def test_excerpt_headers_name_the_source_not_a_number():
+    ctx = agent.format_context([{"source": "Wikipedia: Quicksort", "page": None, "text": "x", "score": 1.0}])
+    assert ctx.startswith("[Source: Wikipedia: Quicksort]") and "Excerpt" not in ctx
+
+
+def test_near_zero_score_refuses_immediately_without_retries():
+    r, c = FakeRetriever(HOPELESS), FakeChat()
+    out = run(r, c, "Who won the cricket world cup?")
+    assert len(r.queries) == 1 and out["attempts"] == 1
+    assert out["llm_calls"] == 0                      # no rewrite, no generation
+    assert out["answer"] == agent.REFUSAL_WITH_SCOPE

@@ -32,6 +32,10 @@ from src import config, llm
 log = logging.getLogger("rag.agent")
 
 REFUSAL = config.REFUSAL_SENTENCE
+SCOPE_HINT = ("I can only answer Data Structures and Algorithms questions, such as arrays, "
+              "stacks, queues, linked lists, trees, graphs, hashing, sorting and complexity.")
+REFUSAL_WITH_SCOPE = f"{REFUSAL} {SCOPE_HINT}"
+HOPELESS_RATIO = 0.1   # best score below threshold * this => refuse without retrying
 
 _GREETING_RE = re.compile(
     r"^\s*(hi|hii+|hello|hey|yo|good\s+(morning|afternoon|evening)|thanks|thank\s+you|"
@@ -61,13 +65,18 @@ Output ONLY the query.
 Question: {question}
 Queries already tried: {tried}"""
 
-ANSWER_PROMPT = """You answer questions strictly from the numbered excerpts below.
+ANSWER_PROMPT = """You are a Data Structures and Algorithms study assistant. You answer questions \
+strictly from the excerpts below.
 
 Rules:
 - Use ONLY the excerpts. Never invent facts, numbers or definitions.
 - Cite sources using the file name and page exactly as shown in the excerpt headers.
-- If the excerpts do not contain the answer, reply with exactly:
+- If the question is not about Data Structures or Algorithms, or the excerpts do not contain the
+  answer, reply with exactly:
   "{refusal}"
+- Refer to a source by its name, never by an excerpt number. Do not add a "Sources" list; it is
+  added automatically.
+- Answer only what the question asks. Ignore excerpts that are not relevant to it.
 - Be concise.
 
 Excerpts:
@@ -97,10 +106,10 @@ def is_smalltalk(text: str) -> bool:
 
 def smalltalk_reply(text: str) -> str:
     if _THANKS_RE.search(text):
-        return "You're welcome! Ask me anything about your study notes."
+        return "You're welcome! Ask me any Data Structures question."
     if _BYE_RE.search(text):
         return "Goodbye! Good luck with your studying."
-    return "Hi! Ask me a question about your study notes and I'll answer from them."
+    return "Hi! Ask me a Data Structures or Algorithms question and I'll answer from my notes."
 
 
 def keyword_query(text: str) -> str:
@@ -125,9 +134,13 @@ def display_page(page):
     return page + 1 if isinstance(page, int) else page
 
 
+def _page_suffix(page) -> str:
+    return f", p. {display_page(page)}" if isinstance(page, int) else ""
+
+
 def format_context(chunks: list) -> str:
     return "\n\n---\n\n".join(
-        f"[Excerpt {i} -- {c['source']}, p. {display_page(c['page'])}]\n{c['text'].strip()}"
+        f"[Source: {c['source']}{_page_suffix(c['page'])}]\n{c['text'].strip()}"
         for i, c in enumerate(chunks, 1)
     )
 
@@ -136,12 +149,20 @@ def clean_answer(raw: str) -> str:
     answer = (raw or "").strip()
     if answer[:7].lower() == "answer:":
         answer = answer[7:].strip()
-    return answer
+    # The UI appends the real source list, so drop a trailing "Sources: ..." line the model wrote.
+    lines = answer.splitlines()
+    while lines and (not lines[-1].strip() or re.match(r"^\W*sources?\b\W*:", lines[-1].strip(), re.I)):
+        lines.pop()
+    return "\n".join(lines).strip()
 
 
-def unique_sources(chunks: list) -> list:
+def unique_sources(chunks: list, min_score: float = 0.0) -> list:
+    """Distinct (source, page) pairs, best first. Chunks scoring below `min_score` are
+    dropped (the top chunk is always kept) so weakly related articles are not cited."""
     seen, out = set(), []
-    for c in chunks:
+    for i, c in enumerate(chunks):
+        if i > 0 and c["score"] < min_score:
+            continue
         key = (c["source"], c["page"])
         if key not in seen:
             seen.add(key)
@@ -221,6 +242,10 @@ def build_agent(
     def decide_after_grade(state: AgentState) -> str:
         if state["best_score"] >= threshold:
             return "generate"
+        # Near-zero score means nothing in the knowledge base is related (an off-topic
+        # question): rewording the query will not help, so skip the retries and their latency.
+        if state["best_score"] < threshold * HOPELESS_RATIO:
+            return "refuse"
         return "rewrite" if state["attempts"] < max_attempts else "refuse"
 
     def node_grade(state: AgentState) -> dict:
@@ -234,13 +259,15 @@ def build_agent(
             refusal=REFUSAL, context=format_context(state["chunks"]), question=state["question"])
         answer = clean_answer(ask(prompt, scratch))
         refused = REFUSAL.lower() in answer.lower()
+        if refused:
+            answer = REFUSAL_WITH_SCOPE
         return {"answer": answer, "llm_calls": scratch["llm_calls"],
-                "sources": [] if refused else unique_sources(state["chunks"]),
+                "sources": [] if refused else unique_sources(state["chunks"], threshold),
                 "trace": state["trace"] + [
                     {"step": "generate", "detail": "model refused" if refused else "answered"}]}
 
     def node_refuse(state: AgentState) -> dict:
-        return {"answer": REFUSAL, "sources": [],
+        return {"answer": REFUSAL_WITH_SCOPE, "sources": [],
                 "trace": state["trace"] + [
                     {"step": "refuse", "detail": f"best_score stayed below {threshold} after "
                                                   f"{state['attempts']} search(es)"}]}

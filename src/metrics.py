@@ -21,9 +21,11 @@ def gold_rank(chunks: list, gold: list) -> Optional[int]:
     chunks: best-first list of {"source", "page", ...}
     gold:   [{"source": "x.pdf", "pages": [3, 4]}, ...]
     """
-    targets = {(_norm(g["source"]), p) for g in gold for p in g["pages"]}
+    targets = {(_norm(g["source"]), p) for g in gold for p in (g.get("pages") or [])}
+    whole_sources = {_norm(g["source"]) for g in gold if not g.get("pages")}  # "pages": null = any page
     for rank, c in enumerate(chunks, start=1):
-        if (_norm(c.get("source")), c.get("page")) in targets:
+        src = _norm(c.get("source"))
+        if src in whole_sources or (src, c.get("page")) in targets:
             return rank
     return None
 

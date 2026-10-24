@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-10-23T12:52:33.294428",
-  "mode": "retrieval_only",
-  "generation_model": "google/gemma-2-9b-it",
-  "judge_model": null,
+  "timestamp": "2026-10-24T16:36:22.974774",
+  "mode": "full",
+  "generation_model": "qwen/qwen3.8-27b",
+  "judge_model": "openai/gpt-oss-120b",
   "rerank_threshold": 0.05,
   "n_questions": 30,
   "n_answerable": 21,
@@ -14,14 +14,14 @@
       "hit_at_4": 0.952,
       "hit_at_4_n": 21,
       "mrr": 0.813,
-      "faithfulness": null,
-      "faithfulness_n": 0,
-      "refusal_correct": null,
-      "refusal_correct_n": 0,
+      "faithfulness": 4.81,
+      "faithfulness_n": 21,
+      "refusal_correct": 1.0,
+      "refusal_correct_n": 9,
       "wrong_refusals": 0,
-      "wrong_refusals_n": 0,
-      "avg_latency_s": 0.011,
-      "avg_llm_calls": 0.0
+      "wrong_refusals_n": 21,
+      "avg_latency_s": 8.6,
+      "avg_llm_calls": 1.0
     },
     "B": {
       "questions": 30,
@@ -29,14 +29,29 @@
       "hit_at_4": 1.0,
       "hit_at_4_n": 21,
       "mrr": 0.929,
-      "faithfulness": null,
-      "faithfulness_n": 0,
-      "refusal_correct": null,
-      "refusal_correct_n": 0,
+      "faithfulness": 5.0,
+      "faithfulness_n": 19,
+      "refusal_correct": 1.0,
+      "refusal_correct_n": 9,
+      "wrong_refusals": 2,
+      "wrong_refusals_n": 21,
+      "avg_latency_s": 11.986,
+      "avg_llm_calls": 1.0
+    },
+    "C": {
+      "questions": 30,
+      "errors": 0,
+      "hit_at_4": 1.0,
+      "hit_at_4_n": 21,
+      "mrr": 0.952,
+      "faithfulness": 5.0,
+      "faithfulness_n": 21,
+      "refusal_correct": 1.0,
+      "refusal_correct_n": 9,
       "wrong_refusals": 0,
-      "wrong_refusals_n": 0,
-      "avg_latency_s": 8.01,
-      "avg_llm_calls": 0.0
+      "wrong_refusals_n": 21,
+      "avg_latency_s": 16.306,
+      "avg_llm_calls": 1.233
     }
   },
   "results": {
@@ -49,11 +64,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the definition and four operations of a stack as described in the retrieved context, with no extraneous or incorrect information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A stack is a linear list that allows insertion and deletion of an element at one end only, following the Last In First Out (LIFO) order (BE03000081_DS_Unit_2_Part1.pdf, p. 10).\n\nThe four main operations that can be performed on a stack are:\n1. **Push (Insert):** Inserts an element at the TOP of the stack.\n2. **Pop (Delete):** Removes the most recently added element from the TOP of the stack.\n3. **Peep (Search):** Finds the *i*th element from the TOP of the stack.\n4. **Change (Update):** Changes the value of the *i*th element from the TOP of the stack.\n\n(Source: BE03000081_DS_Unit_2_Part1.pdf, p. 11)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -72,8 +87,8 @@
             "page": 18
           }
         ],
-        "latency_s": 0.04,
-        "llm_calls": 0
+        "latency_s": 2.85,
+        "llm_calls": 1
       },
       {
         "id": 2,
@@ -83,11 +98,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 0.5,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately states the LIFO principle and correctly identifies the stack as the data structure that uses it, all directly supported by the provided context.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "The LIFO (Last In, First Out) principle means that the last inserted element gets deleted first. The Stack data structure uses this principle. (Source: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 36 and p. 10)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -106,8 +121,8 @@
             "page": 42
           }
         ],
-        "latency_s": 0.02,
-        "llm_calls": 0
+        "latency_s": 2.52,
+        "llm_calls": 1
       },
       {
         "id": 3,
@@ -117,11 +132,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 0.25,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately states that TOP points to the top (last inserted) element and that its value is \"Zero\" when the stack is empty, directly reflecting the retrieved context without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, the **TOP** pointer points to the top element of the stack (specifically, the last inserted element). When the stack is empty, the value of **TOP** is **“Zero”** (as stated in `data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 11`).\n\nAdditionally, `data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 18` notes that in the context of a linked stack, the condition for an empty stack is checked by verifying if `TOP = NULL`.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -140,8 +155,8 @@
             "page": 11
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 3.15,
+        "llm_calls": 1
       },
       {
         "id": 4,
@@ -151,11 +166,11 @@
         "error_detail": null,
         "hit": false,
         "rr": 0.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer only states information present in the context (POP underflow check) and correctly notes that PEEP is not covered, without fabricating details.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, the stack underflow check in the **POP** operation (note: \"PEEP\" is not mentioned in the context) involves checking if `TOP = NULL`. If `TOP` is `NULL`, it indicates that the stack is empty, and no more deletions can be performed. If an attempt is made to delete a value from an empty stack, an **UNDERFLOW** message is printed.\n\nSource: `data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 19`",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -174,8 +189,8 @@
             "page": 19
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 3.78,
+        "llm_calls": 1
       },
       {
         "id": 5,
@@ -185,11 +200,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the definitions provided in the context without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "An array is a data structure that contains a group of elements, typically all of the same data type (such as an integer or string). It is a collection of data items accessed using a common name and is commonly used to organize data so that related values can be easily sorted or searched (BE03000081_DS_Unit_2_Part1.pdf, p. 0).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -208,8 +223,8 @@
             "page": 0
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 2.8,
+        "llm_calls": 1
       },
       {
         "id": 6,
@@ -219,11 +234,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the retrieved context, correctly defining a sparse matrix, explaining why it is stored differently, and providing the triplet representation example without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A sparse matrix is a matrix that contains very few non-zero elements (BE03000081_DS_Unit_2_Part1.pdf, p. 9). It is stored differently because in a standard two-dimensional array representation, a significant amount of space is wasted storing zero values. For example, in a 10x10 matrix with only 10 non-zero elements, accessing those 10 elements requires scanning 100 spaces, and most of the storage is filled with useless zeros (BE03000081_DS_Unit_2_Part1.pdf, p. 9).\n\nTo address this inefficiency, sparse matrices are represented using a triplet format that stores only the non-zero elements along with their positions (row and column indices). This method saves space; for instance, a 6x7 matrix with 8 non-zero values takes 84 bytes in normal representation but only 54 bytes in sparse representation, saving 30 bytes of unused space (BE03000081_DS_Unit_2_Part1.pdf, p. 10).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -242,8 +257,8 @@
             "page": 10
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 3.26,
+        "llm_calls": 1
       },
       {
         "id": 7,
@@ -253,11 +268,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer correctly lists UNPARENTHESIZED_SUFFIX and REVPOL as the two algorithms, exactly matching the retrieved context without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "The two algorithms for converting an infix expression to postfix are:\n\n1. **UNPARENTHESIZED_SUFFIX** (Without Bracket)\n2. **REVPOL** (With Bracket)\n\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 15)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -276,8 +291,8 @@
             "page": 14
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 8.94,
+        "llm_calls": 1
       },
       {
         "id": 8,
@@ -287,11 +302,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 0.5,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the steps described in the retrieved context without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, the **Evaluate_Postfix** algorithm evaluates a postfix expression using a stack through the following steps:\n\n1.  **Initialize Stack:** Set `Top` to 0 and `Answer` to 0.\n2.  **Evaluate the expression:** Repeat the process until the last character of the input string `POSTFIX` is processed:\n    *   Retrieve the next symbol using `NEXTCHAR(POSTFIX)` and store it in `TEMP`.\n    *   **If `TEMP` is an OPERAND:** Push it onto the stack using `PUSH(S, TOP, TEMP)`.\n    *   **Else (if `TEMP` is an operator):**\n        *   Pop the top two elements from the stack into `OP2` and `OP1` (using `POP(S, TOP)`).\n        *   Perform the required operation on `OP1` and `OP2` using the function `PERFORM_OPERATION(OP1, OP2, TEMP)`.\n        *   Push the result (`Answer`) back onto the stack using `PUSH(S, TOP, Answer)`.\n3.  **Return Answer:** Return the final result by popping the last value from the stack using `POP(S, TOP)`.\n\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 19, p. 20)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -310,8 +325,8 @@
             "page": 56
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 18.21,
+        "llm_calls": 1
       },
       {
         "id": 9,
@@ -321,11 +336,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer directly mirrors the retrieved context, accurately describing recursion and the need for a base case without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Recursion is the process in which a function calls itself directly or indirectly, and the corresponding function is called a recursive function. A recursive algorithm takes one step toward a solution and then recursively calls itself to further move, stopping once the solution is reached. It is essential to provide a base case to terminate this process to prevent infinite calls. (Source: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 24)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -344,8 +359,8 @@
             "page": 25
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 4.99,
+        "llm_calls": 1
       },
       {
         "id": 10,
@@ -355,11 +370,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely reflects the context, stating that a base case prevents infinite recursion and stack overflow, which is directly supported by the retrieved text.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A recursive function needs a base case to terminate the recursion process. Without a base case, the function would call itself infinitely, leading to a stack overflow (BE03000081_DS_Unit_2_Part1.pdf, p. 25).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -378,8 +393,8 @@
             "page": 25
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 6.19,
+        "llm_calls": 1
       },
       {
         "id": 11,
@@ -389,11 +404,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately describes the Tower of Hanoi puzzle using details directly from the retrieved context and does not add any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "The Tower of Hanoi is a mathematical game or puzzle consisting of three rods and a number of disks of different sizes that can slide onto any rod. The puzzle starts with the disks stacked in ascending order of size on one rod (smallest at the top), forming a conical shape. The objective is to move the entire stack to another rod while following these rules:\n1. Only one disk can be moved at a time.\n2. Each move consists of taking the upper disk from one stack and placing it on top of another stack or an empty rod.\n3. No larger disk may be placed on top of a smaller disk.\n\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 26)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -412,8 +427,8 @@
             "page": 26
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 20.09,
+        "llm_calls": 1
       },
       {
         "id": 12,
@@ -423,11 +438,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely matches the retrieved context, correctly describing the base cases and recursive step with the exact C code provided, without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided document, the Fibonacci series can be generated using recursion by defining a function that calls itself. The logic is as follows:\n\n*   If `n` is 0, return 0.\n*   If `n` is 1, return 1.\n*   Otherwise, return the sum of `fibonacci(n - 1)` and `fibonacci(n - 2)`.\n\nThe document provides the following C code example:\n\n```c\nint fibonacci(int n) {\n if (n == 0) return 0;\n else if (n == 1) return 1;\n else return fibonacci(n - 1) + fibonacci(n - 2);\n}\n```\n\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 40)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -446,8 +461,8 @@
             "page": 54
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 5.38,
+        "llm_calls": 1
       },
       {
         "id": 13,
@@ -457,11 +472,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 0.3333333333333333,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately restates the definition of a queue and the meanings of front and rear exactly as described in the retrieved context, without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, a queue is defined as a linear list that permits deletion at one end and insertion at the other end, processing information in a FIFO (First In First Out) or FCFS (First Come First Served) manner (BE03000081_DS_Unit_2_Part1.pdf, p. 27).\n\nIn this structure:\n*   **Front** is the end of the queue from which deletion is performed.\n*   **Rear** is the end of the queue at which new elements are inserted (BE03000081_DS_Unit_2_Part1.pdf, p. 27).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -480,8 +495,8 @@
             "page": 29
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 10.12,
+        "llm_calls": 1
       },
       {
         "id": 14,
@@ -491,11 +506,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the context, stating that a circular queue is a linear FIFO structure that prevents excessive memory use by arranging elements circularly and linking the last node to the first, with no unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A circular queue is a linear data structure that follows the FIFO (First In, First Out) principle. It is used as a more suitable method of representing a simple queue because it prevents excessive use of memory by arranging elements in a circular fashion, where the last node is connected back to the first node (BE03000081_DS_Unit_2_Part1.pdf, p. 30).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -514,8 +529,8 @@
             "page": 27
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 9.19,
+        "llm_calls": 1
       },
       {
         "id": 15,
@@ -525,11 +540,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "All statements in the answer are directly supported by the retrieved context and no unsupported information is added.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, the differences between linked lists and arrays are:\n\n*   **Memory Storage:** Unlike an array, a linked list does not store its nodes in consecutive memory locations (BE03000081_DS_Unit_2_Part2.pdf, p. 0).\n*   **Access Method:** A linked list does not allow random access of data; nodes can only be accessed in a sequential manner (BE03000081_DS_Unit_2_Part2.pdf, p. 0).\n*   **Size Limitations:** A linked list can store any number of elements, whereas an array has a fixed maximum capacity determined at declaration (e.g., `int marks[20]` stores a maximum of 20 elements) (BE03000081_DS_Unit_2_Part2.pdf, p. 0).\n*   **Similarity:** Like an array, insertions and deletions in a linked list can be done at any point in constant time (BE03000081_DS_Unit_2_Part2.pdf, p. 0).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -548,8 +563,8 @@
             "page": 0
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 19.08,
+        "llm_calls": 1
       },
       {
         "id": 16,
@@ -559,11 +574,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately lists the three linked list types and correctly describes a singly linked list using only information present in the retrieved context.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, the types of linked lists are:\n*   Singly Linked List\n*   Circular Linked List\n*   Doubly Linked List\n\nA **Singly Linked List** is defined as the basic type of linked list where:\n*   Each node contains data and a pointer to the next node.\n*   The last node’s pointer is null.\n*   The first node address is available with a pointer variable FIRST.\n*   It has the limitation that it can only be traversed in one direction (forward).\n\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 1)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -582,8 +597,8 @@
             "page": 40
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 8.96,
+        "llm_calls": 1
       },
       {
         "id": 17,
@@ -593,11 +608,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the retrieved context, describing the two link fields, predecessor/successor pointers, and bidirectional traversal without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A doubly linked list (or two-way chain) is a list where each node contains two link fields: a Left Link (LPTR) pointing to the predecessor and a Right Link (RPTR) pointing to the successor. This structure allows the list to be traversed in both forward and reverse directions. The leftmost node (L) has an LPTR of NULL, and the rightmost node (R) has an RPTR of NULL.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 9",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -616,8 +631,8 @@
             "page": 41
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 18.08,
+        "llm_calls": 1
       },
       {
         "id": 18,
@@ -627,11 +642,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately restates the definition and advantages exactly as presented in the retrieved context, without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A circular linked list is formed by replacing the NULL pointer of the last node of a Singly Linked Linear List with the address of its first node (BE03000081_DS_Unit_2_Part2.pdf, p. 13).\n\nThe advantages of a circular list are:\n*   Every node is accessible from a given node.\n*   It saves time when moving from the last node to the first node.\n*   This transition can be done in a single step without traversing the in-between nodes (BE03000081_DS_Unit_2_Part2.pdf, p. 13).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -650,8 +665,8 @@
             "page": 14
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 4.92,
+        "llm_calls": 1
       },
       {
         "id": 19,
@@ -661,11 +676,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the node definition, global top pointer, and push/pop behavior described in the context, without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, a stack is implemented using a linked list in C by defining a structure for a node that contains an integer `info` (data) and a pointer `ptr` to the next node. The implementation uses a global pointer `top` to point to the top of the stack.\n\nKey aspects of the implementation include:\n\n*   **Structure Definition**: A `struct node` is defined with `int info` and `struct node *ptr`.\n*   **Push Operation**:\n    *   If the stack is empty (`top == NULL`), memory is allocated for a new node, its `ptr` is set to `NULL`, its `info` is set to the data, and `top` points to this new node.\n    *   If the stack is not empty, memory is allocated for a new node, its `ptr` is set to the current `top`, its `info` is set to the data, and `top` is updated to point to the new node.\n    *   A counter `count` is incremented.\n*   **Pop Operation**:\n    *   If the stack is empty (`top == NULL`), it indicates \"Stack Underflow\".\n    *   Otherwise, the `top` pointer is moved to the next node (`top->ptr`), the data from the current top node is retrieved, and the memory for the current top node is freed.\n\nAccording to the text, the storage requirement for a linked stack with *n* elements is O(n), and the typical time requirement for operations is O(1). All insertions and deletions are performed at the node pointed to by `TOP`.\n\nSource: `data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf` (Excerpts 1, 2, and 3)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -684,8 +699,8 @@
             "page": 0
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 18.46,
+        "llm_calls": 1
       },
       {
         "id": 20,
@@ -695,11 +710,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 1,
+        "judge_reasoning": "The answer discusses linked list operations, not the stack operations asked for, and provides information not supported by the retrieved context for the question.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, the operations supported by a Linked List are:\n\n*   **Insert:**\n    *   Insert at first position\n    *   Insert at last position\n    *   Insert into ordered list\n*   **Delete**\n*   **Traverse list (Print list)**\n\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 0)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -718,8 +733,8 @@
             "page": 0
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 36.1,
+        "llm_calls": 1
       },
       {
         "id": 21,
@@ -729,11 +744,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 0.5,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the retrieved context, correctly describing the two-pointer structure and bidirectional traversal of doubly linked lists versus singly linked lists without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided documents, a doubly linked list differs from a singly linked list in the following ways:\n\n*   **Traversal Direction:** A singly linked list allows traversal only in the forward direction, whereas a doubly linked list can be traversed in either the forward or reverse direction (BE03000081_DS_Unit_2_Part2.pdf, p. 1; p. 9).\n*   **Node Structure:** Each node in a singly linked list contains data and a pointer to the next node. In contrast, each node in a doubly linked list contains two link fields: a Left Link (LPTR) pointing to the predecessor and a Right Link (RPTR) pointing to the successor (BE03000081_DS_Unit_2_Part2.pdf, p. 1; p. 9).\n*   **Boundary Pointers:** In a singly linked list, the last node’s pointer is null. In a doubly linked list, the LPTR of the leftmost node is always NULL, and the RPTR of the rightmost node is always NULL (BE03000081_DS_Unit_2_Part2.pdf, p. 1; p. 9).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -752,8 +767,8 @@
             "page": 40
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 3.26,
+        "llm_calls": 1
       },
       {
         "id": 22,
@@ -763,11 +778,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -786,8 +801,8 @@
             "page": 33
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 1.09,
+        "llm_calls": 1
       },
       {
         "id": 23,
@@ -797,11 +812,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -820,8 +835,8 @@
             "page": 33
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 0.92,
+        "llm_calls": 1
       },
       {
         "id": 24,
@@ -831,11 +846,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -854,8 +869,8 @@
             "page": 13
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 0.95,
+        "llm_calls": 1
       },
       {
         "id": 25,
@@ -865,11 +880,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -888,8 +903,8 @@
             "page": 34
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 0.89,
+        "llm_calls": 1
       },
       {
         "id": 26,
@@ -899,11 +914,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -922,8 +937,8 @@
             "page": 10
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 3.12,
+        "llm_calls": 1
       },
       {
         "id": 27,
@@ -933,11 +948,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -956,8 +971,8 @@
             "page": 56
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 16.33,
+        "llm_calls": 1
       },
       {
         "id": 28,
@@ -967,11 +982,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -990,8 +1005,8 @@
             "page": 44
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 7.34,
+        "llm_calls": 1
       },
       {
         "id": 29,
@@ -1001,11 +1016,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1024,8 +1039,8 @@
             "page": 17
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 16.12,
+        "llm_calls": 1
       },
       {
         "id": 30,
@@ -1035,11 +1050,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1058,8 +1073,8 @@
             "page": 0
           }
         ],
-        "latency_s": 0.01,
-        "llm_calls": 0
+        "latency_s": 0.9,
+        "llm_calls": 1
       }
     ],
     "B": [
@@ -1071,11 +1086,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely reflects the retrieved context, correctly defining a stack and listing the four operations without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A stack is a linear list that allows insertion and deletion of an element at one end only, following the Last In First Out (LIFO) order. The four main operations that can be performed on a stack are:\n\n1.  **Push (Insert):** Inserts an element at the TOP of the stack.\n2.  **Pop (Delete):** Removes the most recently added element from the TOP of the stack.\n3.  **Peep (Search):** Finds the ith element from the TOP of the stack.\n4.  **Change (Update):** Changes the value of the ith element from the TOP of the stack.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 10, p. 11",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1094,8 +1109,8 @@
             "page": 55
           }
         ],
-        "latency_s": 9.21,
-        "llm_calls": 0
+        "latency_s": 13.05,
+        "llm_calls": 1
       },
       {
         "id": 2,
@@ -1105,11 +1120,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 0.5,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer correctly states the LIFO definition and identifies the stack as the data structure that uses it, matching the retrieved context without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "The LIFO (Last In, First Out) principle means that the last inserted element gets deleted at first. The Stack data structure uses this principle.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 36; data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 10",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1128,8 +1143,8 @@
             "page": 0
           }
         ],
-        "latency_s": 8.72,
-        "llm_calls": 0
+        "latency_s": 12.17,
+        "llm_calls": 1
       },
       {
         "id": 3,
@@ -1139,11 +1154,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the context, correctly describing TOP's role and its empty-stack values (Zero, NULL, -1) all of which are supported by the retrieved excerpts.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided excerpts, the role of the TOP pointer and its value when the stack is empty are as follows:\n\n*   **Role:** TOP is a pointer that points to the top element of the stack. It is incremented by one when a new element is inserted and decremented by one when a deletion is made. In a linked representation, the START pointer of the linked list is used as TOP, and all insertions and deletions occur at the node pointed to by TOP.\n*   **Value when empty:**\n    *   In the general description, initially when the stack is empty, TOP has a value of “Zero” (data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 11).\n    *   In the linked representation, if TOP = NULL, it indicates that the stack is empty (data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 18).\n    *   In the provided C code implementation, the stack is considered empty if `top == -1` (data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 42).",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1162,8 +1177,8 @@
             "page": 42
           }
         ],
-        "latency_s": 8.66,
-        "llm_calls": 0
+        "latency_s": 14.0,
+        "llm_calls": 1
       },
       {
         "id": 4,
@@ -1173,11 +1188,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately describes the underflow checks for both PEEP and POP as stated in the retrieved context, without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "In the **PEEP** procedure, the underflow check verifies if `(Top - I + 1) ≤ 0`. If true, it writes \"Stack Underflow on Peep\" and exits.\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 13\n\nIn the **POP** procedure, the underflow check verifies if `Top = 0`. If true, it writes \"Stack Underflow on Pop\" and exits.\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 12",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1196,8 +1211,8 @@
             "page": 11
           }
         ],
-        "latency_s": 7.89,
-        "llm_calls": 0
+        "latency_s": 11.66,
+        "llm_calls": 1
       },
       {
         "id": 5,
@@ -1207,11 +1222,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely mirrors the definitions provided in the context, covering all key points without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "An array is a data structure that contains a group of elements, typically all of the same data type (such as an integer or string). It is a collection of data items accessed using a common name, commonly used to organize data so that related values can be easily sorted or searched.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 0",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1230,8 +1245,8 @@
             "page": 6
           }
         ],
-        "latency_s": 7.5,
-        "llm_calls": 0
+        "latency_s": 11.27,
+        "llm_calls": 1
       },
       {
         "id": 6,
@@ -1241,11 +1256,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the context, defining a sparse matrix and explaining its efficient triplet storage without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A sparse matrix is a matrix that contains very few non-zero elements, while the remaining spaces are filled with zeros. It is stored differently because the standard two-dimensional array representation is inefficient; for example, in a 10x10 matrix with only 10 non-zero elements, accessing those 10 elements requires scanning 100 times, and most of the storage space is wasted on useless zero values. The sparse matrix representation stores only the non-zero elements (typically as a triplet) to carry out operations more efficiently.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 9",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1264,8 +1279,8 @@
             "page": 9
           }
         ],
-        "latency_s": 8.08,
-        "llm_calls": 0
+        "latency_s": 11.76,
+        "llm_calls": 1
       },
       {
         "id": 7,
@@ -1275,11 +1290,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer correctly lists the two algorithms (UNPARENTHESIZED_SUFFIX and REVPOL) exactly as described in the retrieved context, with no hallucinations.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "The two algorithms for converting an infix expression to postfix are:\n\n1. **UNPARENTHESIZED_SUFFIX** (Without Bracket)\n2. **REVPOL** (With Bracket)\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 15",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1298,8 +1313,8 @@
             "page": 19
           }
         ],
-        "latency_s": 6.37,
-        "llm_calls": 0
+        "latency_s": 9.62,
+        "llm_calls": 1
       },
       {
         "id": 8,
@@ -1309,11 +1324,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately restates the algorithm steps from the context without adding any unsupported details.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "The `Evaluate_Postfix` algorithm evaluates a postfix expression using a stack (represented by vector `S` with `TOP` denoting the top) through the following steps:\n\n1.  **Initialize Stack**: Set `Top` to 0 and `Answer` to 0.\n2.  **Evaluate the postfix expression**: Repeat until the last character of the input string `POSTFIX`:\n    *   Retrieve the next symbol using `NEXTCHAR` and store it in `TEMP`.\n    *   If `TEMP` is an **OPERAND**, push it onto the stack using `PUSH(S, TOP, TEMP)`.\n    *   If `TEMP` is an **operator**:\n        *   Pop the top two elements from the stack into `OP2` and `OP1` respectively (using `POP`).\n        *   Perform the operation on `OP1` and `OP2` using the function `PERFORM_OPERATION`, storing the result in `Answer`.\n        *   Push the `Answer` back onto the stack using `PUSH(S, TOP, Answer)`.\n3.  **Return Answer**: Return the result by popping the final value from the stack using `POP(S, TOP)`.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 19; data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 20",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1332,8 +1347,8 @@
             "page": 23
           }
         ],
-        "latency_s": 6.19,
-        "llm_calls": 0
+        "latency_s": 9.6,
+        "llm_calls": 1
       },
       {
         "id": 9,
@@ -1343,11 +1358,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely mirrors the retrieved context, accurately defining recursion and mentioning the need for a base case without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Recursion is the process in which a function calls itself directly or indirectly, and the corresponding function is called a recursive function. A recursive algorithm takes one step toward a solution and then recursively calls itself to further move, stopping once the solution is reached. It is essential to provide a base case to terminate this process.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 24",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1366,8 +1381,8 @@
             "page": 25
           }
         ],
-        "latency_s": 8.12,
-        "llm_calls": 0
+        "latency_s": 11.58,
+        "llm_calls": 1
       },
       {
         "id": 10,
@@ -1377,11 +1392,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer directly reflects statements from the retrieved context about the need for a base case to prevent infinite recursion and stack overflow, and correctly defines the base case without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A recursive function needs a base case to terminate the recursion process. Without a base case, the function would call itself infinitely, leading to a stack overflow. The base case identifies the simplest instance of the problem that can be solved directly without further recursive calls.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 24; data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 25",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1400,8 +1415,8 @@
             "page": 5
           }
         ],
-        "latency_s": 8.61,
-        "llm_calls": 0
+        "latency_s": 12.2,
+        "llm_calls": 1
       },
       {
         "id": 11,
@@ -1411,11 +1426,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately describes the Tower of Hanoi puzzle, its rules, and minimal moves exactly as stated in the retrieved context, without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "The Tower of Hanoi is a mathematical game or puzzle consisting of three rods and a number of disks of different sizes that can slide onto any rod. The puzzle starts with the disks stacked in ascending order of size on one rod (smallest at the top), forming a conical shape. The objective is to move the entire stack to another rod while obeying these rules:\n1. Only one disk can be moved at a time.\n2. Each move consists of taking the upper disk from one stack and placing it on top of another stack or an empty rod.\n3. No larger disk may be placed on top of a smaller disk.\n\nThe minimal number of moves required to solve the puzzle is $2^n - 1$, where $n$ is the number of disks.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 26",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1434,8 +1449,8 @@
             "page": 53
           }
         ],
-        "latency_s": 6.8,
-        "llm_calls": 0
+        "latency_s": 11.34,
+        "llm_calls": 1
       },
       {
         "id": 12,
@@ -1445,11 +1460,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely reflects the recursive Fibonacci implementation described in the context, with no extra or missing information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "The Fibonacci series can be generated using recursion by defining a function that returns 0 if the input is 0, returns 1 if the input is 1, and otherwise returns the sum of the function called with the previous two integers (`n-1` and `n-2`).\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 40",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1468,8 +1483,8 @@
             "page": 13
           }
         ],
-        "latency_s": 8.77,
-        "llm_calls": 0
+        "latency_s": 12.41,
+        "llm_calls": 1
       },
       {
         "id": 13,
@@ -1479,11 +1494,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely reflects the retrieved context, accurately defining a queue and correctly describing front and rear without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A queue is a linear list that permits deletion at one end and insertion at the other, processing information in a FIFO (First In First Out) or FCFS (First Come First Served) manner. In this structure, the **front** is the end where deletion is performed, and the **rear** is the end where new elements are inserted.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 27",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1502,8 +1517,8 @@
             "page": 36
           }
         ],
-        "latency_s": 6.94,
-        "llm_calls": 0
+        "latency_s": 10.42,
+        "llm_calls": 1
       },
       {
         "id": 14,
@@ -1513,11 +1528,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately restates the definition and purpose of a circular queue exactly as described in the retrieved context, without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A circular queue is a linear data structure that follows the FIFO (First-In, First-Out) principle. It is used as a more suitable method of representing a simple queue to prevent excessive use of memory. This is achieved by arranging the elements Q[1], Q[2]....,Q[n] in a circular fashion where Q[0] follows Q[n], effectively connecting the last node back to the first node to form a circle.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 30",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1536,8 +1551,8 @@
             "page": 36
           }
         ],
-        "latency_s": 7.96,
-        "llm_calls": 0
+        "latency_s": 11.31,
+        "llm_calls": 1
       },
       {
         "id": 15,
@@ -1547,11 +1562,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the retrieved context, covering memory storage, access method, and size limitations without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided excerpts, the differences between linked lists and arrays are:\n\n*   **Memory Storage:** Arrays store elements in consecutive memory locations, whereas linked lists do not store their nodes in consecutive memory locations.\n*   **Access Method:** Arrays allow random access of data, while linked lists do not allow random access; nodes in a linked list can only be accessed sequentially.\n*   **Size Limitations:** Arrays have a fixed maximum size determined at declaration (e.g., `int marks[20]` stores a maximum of 20 elements), whereas linked lists can have any number of elements added without such restrictions.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 0",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1570,8 +1585,8 @@
             "page": 40
           }
         ],
-        "latency_s": 6.82,
-        "llm_calls": 0
+        "latency_s": 10.29,
+        "llm_calls": 1
       },
       {
         "id": 16,
@@ -1581,11 +1596,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the types and definition of a singly linked list as described in the retrieved context, without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "Based on the provided excerpts:\n\n**Types of Linked Lists:**\nThe types of linked lists are:\n*   Singly Linked List\n*   Circular Linked List\n*   Doubly Linked List\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 1)\n\n**Definition of Singly Linked List:**\nA singly linked list is the basic type of linked list where:\n*   Each node contains data and a pointer to the next node.\n*   The last node’s pointer is null.\n*   The first node address is available with a pointer variable FIRST.\n*   Its limitation is that it can only be traversed in one direction (forward).\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 1)",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1604,8 +1619,8 @@
             "page": 40
           }
         ],
-        "latency_s": 6.57,
-        "llm_calls": 0
+        "latency_s": 10.34,
+        "llm_calls": 1
       },
       {
         "id": 17,
@@ -1615,11 +1630,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the retrieved context, correctly describing the two link fields, forward/reverse traversal, and node structure without adding unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A doubly linked list (or two-way chain) is a list where each node contains two link fields to allow traversal in both forward and reverse directions. The links denote the predecessor (Left Link, LPTR) and successor (Right Link, RPTR) of a node. A typical node contains INFO, LPTR, and RPTR fields. In a doubly linked linear list, the left-most node (L) has an LPTR of NULL, and the right-most node (R) has an RPTR of NULL.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 9",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1638,8 +1653,8 @@
             "page": 10
           }
         ],
-        "latency_s": 6.66,
-        "llm_calls": 0
+        "latency_s": 10.78,
+        "llm_calls": 1
       },
       {
         "id": 18,
@@ -1649,11 +1664,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately restates the definition and advantages of a circular linked list exactly as described in the retrieved context, without adding any unsupported information.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A circular linked list is formed by replacing the NULL pointer of the last node of a Singly Linked Linear List with the address of its first node. In this structure, FIRST is the address of the first node and LAST is the address of the last node.\n\nThe advantages of a circular list are:\n*   Every node is accessible from a given node.\n*   It saves time when moving from the last node to the first node.\n*   Moving from the last node to the first node can be done in a single step without traversing the in-between nodes.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 13",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1672,8 +1687,8 @@
             "page": 40
           }
         ],
-        "latency_s": 7.0,
-        "llm_calls": 0
+        "latency_s": 10.9,
+        "llm_calls": 1
       },
       {
         "id": 19,
@@ -1683,11 +1698,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 0.5,
-        "refused": null,
-        "faithfulness": null,
-        "judge_reasoning": null,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the code and description in the retrieved context, correctly summarizing the struct definition and push/pop operations without adding unsupported details.",
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "A stack is implemented using a linked list in C by defining a `struct node` containing an integer `info` and a pointer `ptr` to the next node. A global pointer `top` tracks the top of the stack.\n\nThe **Push** operation allocates memory for a new node. If the stack is empty (`top == NULL`), the new node becomes `top`. Otherwise, the new node's `ptr` is set to the current `top`, and `top` is updated to point to the new node.\n\nThe **Pop** operation checks if the stack is empty (underflow). If not, it stores the current `top` in a temporary pointer, updates `top` to `top->ptr`, retrieves the data from the original top node, and frees the memory of that node.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 33",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1706,8 +1721,8 @@
             "page": 22
           }
         ],
-        "latency_s": 8.71,
-        "llm_calls": 0
+        "latency_s": 12.48,
+        "llm_calls": 1
       },
       {
         "id": 20,
@@ -1717,11 +1732,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 1.0,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1740,8 +1755,8 @@
             "page": 13
           }
         ],
-        "latency_s": 9.06,
-        "llm_calls": 0
+        "latency_s": 10.74,
+        "llm_calls": 1
       },
       {
         "id": 21,
@@ -1751,11 +1766,11 @@
         "error_detail": null,
         "hit": true,
         "rr": 0.5,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1774,8 +1789,8 @@
             "page": 0
           }
         ],
-        "latency_s": 6.39,
-        "llm_calls": 0
+        "latency_s": 8.15,
+        "llm_calls": 1
       },
       {
         "id": 22,
@@ -1785,11 +1800,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1808,8 +1823,8 @@
             "page": 25
           }
         ],
-        "latency_s": 8.7,
-        "llm_calls": 0
+        "latency_s": 10.74,
+        "llm_calls": 1
       },
       {
         "id": 23,
@@ -1819,11 +1834,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1842,8 +1857,8 @@
             "page": 10
           }
         ],
-        "latency_s": 8.38,
-        "llm_calls": 0
+        "latency_s": 11.43,
+        "llm_calls": 1
       },
       {
         "id": 24,
@@ -1853,11 +1868,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1876,8 +1891,8 @@
             "page": 8
           }
         ],
-        "latency_s": 9.14,
-        "llm_calls": 0
+        "latency_s": 15.46,
+        "llm_calls": 1
       },
       {
         "id": 25,
@@ -1887,11 +1902,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1910,8 +1925,8 @@
             "page": 22
           }
         ],
-        "latency_s": 8.06,
-        "llm_calls": 0
+        "latency_s": 12.69,
+        "llm_calls": 1
       },
       {
         "id": 26,
@@ -1921,11 +1936,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -1944,8 +1959,8 @@
             "page": 52
           }
         ],
-        "latency_s": 9.66,
-        "llm_calls": 0
+        "latency_s": 21.61,
+        "llm_calls": 1
       },
       {
         "id": 27,
@@ -1955,11 +1970,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -1978,8 +1993,8 @@
             "page": 7
           }
         ],
-        "latency_s": 9.25,
-        "llm_calls": 0
+        "latency_s": 15.0,
+        "llm_calls": 1
       },
       {
         "id": 28,
@@ -1989,11 +2004,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
@@ -2012,8 +2027,8 @@
             "page": 18
           }
         ],
-        "latency_s": 9.4,
-        "llm_calls": 0
+        "latency_s": 13.28,
+        "llm_calls": 1
       },
       {
         "id": 29,
@@ -2023,11 +2038,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -2046,8 +2061,8 @@
             "page": 35
           }
         ],
-        "latency_s": 9.3,
-        "llm_calls": 0
+        "latency_s": 13.45,
+        "llm_calls": 1
       },
       {
         "id": 30,
@@ -2057,11 +2072,11 @@
         "error_detail": null,
         "hit": null,
         "rr": null,
-        "refused": null,
+        "refused": true,
         "faithfulness": null,
         "judge_reasoning": null,
         "judge_parse_failed": false,
-        "answer": null,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
         "sources": [
           {
             "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
@@ -2080,8 +2095,1030 @@
             "page": 42
           }
         ],
-        "latency_s": 7.37,
-        "llm_calls": 0
+        "latency_s": 9.84,
+        "llm_calls": 1
+      }
+    ],
+    "C": [
+      {
+        "id": 1,
+        "question": "What is a stack and what are the four main operations that can be performed on it?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely reflects the retrieved context, correctly defining a stack and listing the four operations (Push, Pop, Peep, Change) without adding unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "A stack is a linear list that allows insertion and deletion of an element at one end only, following the Last In First Out (LIFO) order. The four main operations that can be performed on a stack are:\n\n1.  **Push (Insert):** Inserts an element at the TOP of the stack.\n2.  **Pop (Delete):** Removes the most recently added element from the TOP of the stack.\n3.  **Peep (Search):** Finds the ith element from the TOP of the stack.\n4.  **Change (Update):** Changes the value of the ith element from the TOP of the stack.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 10; data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 11",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 10
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 55
+          }
+        ],
+        "latency_s": 13.73,
+        "llm_calls": 1
+      },
+      {
+        "id": 2,
+        "question": "What is the LIFO principle and which data structure uses it?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.5,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer correctly states the LIFO definition and identifies the stack as the data structure that uses it, directly matching the provided context without any hallucinations.",
+        "judge_parse_failed": false,
+        "answer": "The LIFO (Last In, First Out) principle means that the last inserted element gets deleted at first. The Stack data structure uses this principle.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 36\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 10",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 10
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 30
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          }
+        ],
+        "latency_s": 13.6,
+        "llm_calls": 1
+      },
+      {
+        "id": 3,
+        "question": "What is the role of the TOP pointer in a stack and what is its value when the stack is empty?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the context, correctly describing TOP's role and its empty-stack values (Zero, NULL, -1) all of which are present in the retrieved excerpts, with no hallucinated information.",
+        "judge_parse_failed": false,
+        "answer": "Based on the provided excerpts, the role of the TOP pointer and its value when the stack is empty are as follows:\n\n*   **Role:** TOP is a pointer that points to the top element of the stack. It is incremented by one when a new element is inserted and decremented by one when a deletion is made. In a linked representation, the START pointer of the linked list is used as TOP, and all insertions and deletions are performed at the node pointed to by TOP.\n*   **Value when empty:**\n    *   In the general description, initially when the stack is empty, TOP has a value of “Zero” (data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 11).\n    *   In the linked representation, if TOP = NULL, it indicates that the stack is empty (data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 18).\n    *   In the provided C code implementation, the stack is considered empty if `top == -1` (data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 42).",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 19
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          }
+        ],
+        "latency_s": 13.62,
+        "llm_calls": 1
+      },
+      {
+        "id": 4,
+        "question": "What does the stack underflow check do in the PEEP and POP procedures?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the underflow checks for both PEEP and POP as described in the retrieved context, with no extraneous or incorrect information.",
+        "judge_parse_failed": false,
+        "answer": "In the **PEEP** procedure, the underflow check verifies if `(Top - I + 1) ≤ 0`. If true, it writes “Stack Underflow on Peep” and exits.\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 13\n\nIn the **POP** procedure, the underflow check verifies if `Top = 0`. If true, it writes “Stack Underflow on Pop” and exits.\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 12",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 12
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          }
+        ],
+        "latency_s": 11.95,
+        "llm_calls": 1
+      },
+      {
+        "id": 5,
+        "question": "What is an array?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the definitions and details provided in the context without adding any unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "An array is a data structure that contains a group of elements, typically all of the same data type (such as an integer or string). It is a collection of data items accessed using a common name, commonly used to organize data for easy sorting or searching.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 0",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 5
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 6
+          }
+        ],
+        "latency_s": 15.82,
+        "llm_calls": 1
+      },
+      {
+        "id": 6,
+        "question": "What is a sparse matrix and why is it stored differently?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the context, defining a sparse matrix and explaining its efficient triplet storage without adding unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "A sparse matrix is a matrix that contains very few non-zero elements, while the remaining spaces are filled with zeros. It is stored differently because the standard two-dimensional array representation is inefficient; for example, in a 10x10 matrix with only 10 non-zero elements, accessing those 10 elements requires scanning 100 times, and most of the storage space is wasted on useless zero values. The sparse matrix representation stores only the non-zero elements (typically as a triplet) to carry out operations more efficiently.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 9",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 53
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 9
+          }
+        ],
+        "latency_s": 13.17,
+        "llm_calls": 1
+      },
+      {
+        "id": 7,
+        "question": "What are the two algorithms for converting an infix expression to postfix?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer correctly lists the two algorithms (UNPARENTHESIZED_SUFFIX and REVPOL) exactly as described in the retrieved context, with no hallucinations.",
+        "judge_parse_failed": false,
+        "answer": "The two algorithms for converting an infix expression to postfix are:\n\n1. **UNPARENTHESIZED_SUFFIX** (Without Bracket)\n2. **REVPOL** (With Bracket)\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 15",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 15
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 15
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 19
+          }
+        ],
+        "latency_s": 9.99,
+        "llm_calls": 1
+      },
+      {
+        "id": 8,
+        "question": "How does the Evaluate_Postfix algorithm evaluate a postfix expression?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely mirrors the steps described in the retrieved context, covering initialization, operand push, operator handling with POP and PERFORM_OPERATION, and returning the final result, without adding unsupported details.",
+        "judge_parse_failed": false,
+        "answer": "The **Evaluate_Postfix** algorithm evaluates a postfix expression using a stack as follows:\n\n1.  **Initialize**: Set the stack top (`TOP`) to 0 and the `Answer` variable to 0.\n2.  **Process Characters**: Repeat until the last character of the input string `POSTFIX` is reached:\n    *   Retrieve the next symbol using `NEXTCHAR`.\n    *   **If the symbol is an operand**: Push it onto the stack (`PUSH`).\n    *   **If the symbol is an operator**:\n        *   Pop the top two elements from the stack into `OP2` and `OP1` (respectively).\n        *   Perform the operation on `OP1` and `OP2` using the operator (`PERFORM_OPERATION`) and store the result in `Answer`.\n        *   Push the `Answer` back onto the stack.\n3.  **Return Result**: Pop the final result from the stack and return it.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 19; data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 20",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 19
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 20
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 56
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 23
+          }
+        ],
+        "latency_s": 12.5,
+        "llm_calls": 1
+      },
+      {
+        "id": 9,
+        "question": "What is recursion?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely mirrors the retrieved context, accurately defining recursion and mentioning the need for a base case without adding any unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "Recursion is the process in which a function calls itself directly or indirectly, and the corresponding function is called a recursive function. A recursive algorithm takes one step toward a solution and then recursively calls itself to further move, stopping once the solution is reached. It is essential to provide a base case to terminate this process.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 24",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          }
+        ],
+        "latency_s": 19.94,
+        "llm_calls": 1
+      },
+      {
+        "id": 10,
+        "question": "Why does a recursive function need a base case?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer directly matches the retrieved context, stating the need for a base case to prevent infinite recursion and stack overflow, with no unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "A recursive function needs a base case to terminate the recursion process. Without a base case, the function would call itself infinitely, leading to a stack overflow.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 25",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 25
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 24
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 5
+          }
+        ],
+        "latency_s": 19.34,
+        "llm_calls": 1
+      },
+      {
+        "id": 11,
+        "question": "What is the Tower of Hanoi problem?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely reflects the retrieved context, covering the rods, disks, rules, minimal moves, and recursion without adding unsupported details.",
+        "judge_parse_failed": false,
+        "answer": "The Tower of Hanoi is a mathematical game or puzzle consisting of three rods and a number of disks of different sizes that can slide onto any rod. The puzzle starts with the disks stacked in ascending order of size on one rod (smallest at the top), forming a conical shape. The objective is to move the entire stack to another rod while obeying these rules:\n1. Only one disk can be moved at a time.\n2. Each move consists of taking the upper disk from one stack and placing it on top of another stack or an empty rod.\n3. No larger disk may be placed on top of a smaller disk.\n\nThe minimal number of moves required to solve the puzzle is $2^n - 1$, where $n$ is the number of disks. The solution typically uses recursion, utilizing a helper node to reach the destination.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 26",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 53
+          }
+        ],
+        "latency_s": 21.42,
+        "llm_calls": 1
+      },
+      {
+        "id": 12,
+        "question": "How can the Fibonacci series be generated using recursion?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer precisely reflects the recursive Fibonacci implementation and main loop described in the retrieved context, without adding unsupported details.",
+        "judge_parse_failed": false,
+        "answer": "The Fibonacci series can be generated using recursion by defining a function that returns 0 if the input is 0, returns 1 if the input is 1, and otherwise returns the sum of the function called with the previous two integers (`n-1` and `n-2`). A main function then iterates from 0 to `n-1` to print the series.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 40",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 13
+          }
+        ],
+        "latency_s": 16.38,
+        "llm_calls": 1
+      },
+      {
+        "id": 13,
+        "question": "What is a queue and what do front and rear mean?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the retrieved context, correctly defining a queue and the roles of front and rear without adding any unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "A queue is a linear list that permits deletion at one end and insertion at the other, processing information in a FIFO (First In First Out) or FCFS (First Come First Served) manner. In this structure, the **front** is the end where deletion is performed, and the **rear** is the end where new elements are inserted.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 27",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 27
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 35
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          }
+        ],
+        "latency_s": 26.98,
+        "llm_calls": 1
+      },
+      {
+        "id": 14,
+        "question": "What is a circular queue and why is it used?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately restates the definition and purpose of a circular queue exactly as described in the retrieved context, without adding any unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "A circular queue is a linear data structure that follows the FIFO (First-In, First-Out) principle. It is used as a more suitable method of representing a simple queue to prevent excessive use of memory. This is achieved by arranging the elements Q[1], Q[2]....,Q[n] in a circular fashion where Q[0] follows Q[n], effectively connecting the last node back to the first node to form a circle.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 30",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 30
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 57
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          }
+        ],
+        "latency_s": 11.22,
+        "llm_calls": 1
+      },
+      {
+        "id": 15,
+        "question": "What are the differences between linked lists and arrays?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the retrieved context, covering memory storage, access method, and size limitations without adding unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "Based on the provided excerpts, the differences between linked lists and arrays are:\n\n*   **Memory Storage:** Arrays store elements in consecutive memory locations, whereas linked lists do not store their nodes in consecutive memory locations.\n*   **Access Method:** Arrays allow random access to data, while linked lists do not allow random access; nodes in a linked list can only be accessed sequentially.\n*   **Size Limitations:** Arrays have a fixed maximum size determined at declaration (e.g., `int marks[20]` stores a maximum of 20 elements), whereas linked lists can store any number of elements without such restrictions.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 0",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          }
+        ],
+        "latency_s": 10.98,
+        "llm_calls": 1
+      },
+      {
+        "id": 16,
+        "question": "What are the types of linked lists and what is a singly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately lists the three linked list types and correctly describes a singly linked list exactly as stated in the retrieved context, without adding any unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "Based on the provided excerpts:\n\n**Types of Linked Lists:**\nThe types of linked lists are:\n*   Singly Linked List\n*   Circular Linked List\n*   Doubly Linked List\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 1)\n\n**Definition of Singly Linked List:**\nA singly linked list is the basic type of linked list where:\n*   Each node contains data and a pointer to the next node.\n*   The last node’s pointer is null.\n*   The first node address is available with a pointer variable FIRST.\n*   It can only be traversed in one direction (forward).\n(Source: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 1)",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          }
+        ],
+        "latency_s": 11.14,
+        "llm_calls": 1
+      },
+      {
+        "id": 17,
+        "question": "What is a doubly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately reflects the retrieved context, correctly describing the two link fields, forward/reverse traversal, and node structure without adding unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "A doubly linked list (or two-way chain) is a list where each node contains two link fields to allow traversal in both forward and reverse directions. The links denote the predecessor (Left Link, LPTR) and successor (Right Link, RPTR) of a node. A typical node contains INFO, LPTR, and RPTR fields. In a doubly linked linear list, the left-most node (L) has an LPTR of NULL, and the right-most node (R) has an RPTR of NULL.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 9",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 9
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 41
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 10
+          }
+        ],
+        "latency_s": 11.25,
+        "llm_calls": 1
+      },
+      {
+        "id": 18,
+        "question": "What is a circular linked list and what are its advantages?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately restates the definition and advantages of a circular linked list exactly as described in the retrieved context, without adding any unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "A circular linked list is formed by replacing the NULL pointer of the last node of a Singly Linked Linear List with the address of its first node. In this structure, FIRST is the address of the first node and LAST is the address of the last node.\n\nThe advantages of a circular list are:\n*   Every node is accessible from any given node.\n*   It saves time when moving from the last node to the first node.\n*   Moving from the last node to the first node can be done in a single step without traversing the in-between nodes.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 13",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 13
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          }
+        ],
+        "latency_s": 10.46,
+        "llm_calls": 1
+      },
+      {
+        "id": 19,
+        "question": "How is a stack implemented using a linked list in C?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 0.5,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer accurately describes the node structure, global top pointer, and push/pop operations exactly as presented in the retrieved context, without adding unsupported details.",
+        "judge_parse_failed": false,
+        "answer": "A stack is implemented using a linked list in C by defining a `struct node` containing an integer `info` and a pointer `ptr` to the next node. A global pointer `top` is used to point to the top of the stack.\n\nThe implementation includes the following operations:\n*   **Push**: Allocates a new node using `malloc`. If the stack is empty (`top == NULL`), the new node becomes `top`. Otherwise, the new node's `ptr` is set to the current `top`, and `top` is updated to point to the new node.\n*   **Pop**: Checks for underflow if `top` is `NULL`. Otherwise, it saves the current `top` to a temporary pointer, updates `top` to `top->ptr`, retrieves the data from the original top node, and frees the memory of the removed node.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 33",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 35
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 42
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          }
+        ],
+        "latency_s": 12.08,
+        "llm_calls": 1
+      },
+      {
+        "id": 20,
+        "question": "What operations does it support?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer lists Push, Pop, Peep, and Change, exactly matching the operations described in the retrieved context, with no extra or unsupported information.",
+        "judge_parse_failed": false,
+        "answer": "Based on the provided excerpts, the stack supports the following four operations:\n\n*   **Push (Insert):** Inserts an element at the TOP of the stack.\n*   **Pop (Delete):** Removes the most recently added element from the TOP of the stack.\n*   **Peep (Search):** Finds the *i*th element from the TOP of the stack.\n*   **Change (Update):** Changes the value of the *i*th element from the TOP of the stack.\n\nSource: data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf, p. 11",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 11
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 36
+          }
+        ],
+        "latency_s": 13.7,
+        "llm_calls": 2
+      },
+      {
+        "id": 21,
+        "question": "How does it differ from a singly linked list?",
+        "answerable": true,
+        "error": false,
+        "error_detail": null,
+        "hit": true,
+        "rr": 1.0,
+        "refused": false,
+        "faithfulness": 5,
+        "judge_reasoning": "The answer correctly states that doubly linked lists support bidirectional traversal and have two link fields, while singly linked lists only traverse forward and have a single pointer, all directly supported by the provided context.",
+        "judge_parse_failed": false,
+        "answer": "Based on the provided excerpts, a doubly linked list differs from a singly linked list in the following ways:\n\n*   **Traversal Direction:** A doubly linked list allows traversal in either the forward or reverse direction, whereas a singly linked list can only be traversed in the forward direction (data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 1; data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 9).\n*   **Node Structure:** Each node in a doubly linked list contains two link fields (Left Link/LPTR for the predecessor and Right Link/RPTR for the successor), while a singly linked list node contains only a pointer to the next node (data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 1; data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf, p. 9).",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 40
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 9
+          }
+        ],
+        "latency_s": 10.25,
+        "llm_calls": 2
+      },
+      {
+        "id": 22,
+        "question": "What is the average-case time complexity of quicksort?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 2
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 18
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 5
+          }
+        ],
+        "latency_s": 34.01,
+        "llm_calls": 2
+      },
+      {
+        "id": 23,
+        "question": "How does a B-tree split a full node during insertion?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 10
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 10
+          }
+        ],
+        "latency_s": 10.51,
+        "llm_calls": 1
+      },
+      {
+        "id": 24,
+        "question": "How does Dijkstra's algorithm find the shortest path?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 54
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 32
+          }
+        ],
+        "latency_s": 33.17,
+        "llm_calls": 2
+      },
+      {
+        "id": 25,
+        "question": "What is the difference between TCP and UDP?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 22
+          }
+        ],
+        "latency_s": 10.41,
+        "llm_calls": 1
+      },
+      {
+        "id": 26,
+        "question": "What is database normalization?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 0
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 21
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 4
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 52
+          }
+        ],
+        "latency_s": 11.7,
+        "llm_calls": 1
+      },
+      {
+        "id": 27,
+        "question": "What is the capital of Japan?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 26
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 8
+          }
+        ],
+        "latency_s": 22.15,
+        "llm_calls": 2
+      },
+      {
+        "id": 28,
+        "question": "When did the Roman Empire fall?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 4
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 8
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 21
+          }
+        ],
+        "latency_s": 33.81,
+        "llm_calls": 2
+      },
+      {
+        "id": 29,
+        "question": "Which Python library is commonly used for plotting graphs?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 42
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 37
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 6
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
+            "page": 39
+          }
+        ],
+        "latency_s": 24.87,
+        "llm_calls": 2
+      },
+      {
+        "id": 30,
+        "question": "Who invented the linked list data structure and in what year?",
+        "answerable": false,
+        "error": false,
+        "error_detail": null,
+        "hit": null,
+        "rr": null,
+        "refused": true,
+        "faithfulness": null,
+        "judge_reasoning": null,
+        "judge_parse_failed": false,
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "sources": [
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 6
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 33
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 1
+          },
+          {
+            "source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
+            "page": 42
+          }
+        ],
+        "latency_s": 9.04,
+        "llm_calls": 1
       }
     ]
   }

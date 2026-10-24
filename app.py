@@ -12,15 +12,30 @@ import gradio as gr
 
 EXAMPLES = [
     "What is a stack and what are its main operations?",
-    "What is a circular linked list?",
+    "How does quicksort work and what is its time complexity?",
+    "What is the difference between BFS and DFS?",
+    "How does a hash table handle collisions?",
+    "What is an AVL tree and why does it rotate?",
     "How do you convert an infix expression to postfix?",
 ]
+
+INTRO = (
+    "# Data Structures & Algorithms Assistant\n"
+    "Ask any **Data Structures or Algorithms** question: arrays, stacks, queues, linked lists, "
+    "trees, graphs, hashing, sorting, searching, recursion and complexity. "
+    "Answers come only from the knowledge base (lecture notes plus Wikipedia articles), "
+    "with sources shown. Questions on other topics are politely declined."
+)
 
 
 def format_sources(sources: list) -> str:
     if not sources:
         return ""
-    lines = [f"- `{s['source']}` p. {s['page']}" for s in sources]
+    lines = []
+    for s in sources:
+        name = s["source"].replace("\\", "/").split("/")[-1]   # show the file name, not the path
+        page = f" p. {s['page']}" if s.get("page") is not None else ""
+        lines.append(f"- `{name}`{page}")
     return "\n\n**Sources**\n" + "\n".join(lines)
 
 
@@ -38,7 +53,7 @@ def respond(message, history):
 
     history = history or []
     turn = history + [{"role": "user", "content": message}]
-    yield turn + [{"role": "assistant", "content": "_Searching the notes..._"}], ""
+    yield turn + [{"role": "assistant", "content": "_Searching the knowledge base..._"}], ""
 
     if app_state["agent"] is None:
         reply, trace = "The knowledge base is still waking up. Please try again in a moment.", ""
@@ -56,11 +71,11 @@ def respond(message, history):
 
 
 def build_ui() -> gr.Blocks:
-    with gr.Blocks(title="Agentic RAG Chatbot") as ui:
-        gr.Markdown("# Agentic RAG Chatbot\nAsk questions about the study notes. "
-                    "Embeddings and retrieval run locally; answers come from a hosted model.")
+    with gr.Blocks(title="Data Structures & Algorithms Assistant") as ui:
+        gr.Markdown(INTRO)
         chatbot = gr.Chatbot(type="messages", height=460, label="Chat")
-        box = gr.Textbox(placeholder="Ask a question...", show_label=False, max_lines=4)
+        box = gr.Textbox(placeholder="Ask a Data Structures question, e.g. what is a queue?",
+                         show_label=False, max_lines=4)
         with gr.Accordion("Agent trace (rewritten query, scores, retries)", open=False):
             trace = gr.Markdown("_Ask something to see the agent's steps._")
         gr.Examples(EXAMPLES, inputs=box)

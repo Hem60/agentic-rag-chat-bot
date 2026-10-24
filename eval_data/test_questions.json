@@ -10,6 +10,10 @@
         "pages": [
           11
         ]
+      },
+      {
+        "source": "Wikipedia: Stack (abstract data type)",
+        "pages": null
       }
     ]
   },
@@ -25,6 +29,10 @@
           10,
           11
         ]
+      },
+      {
+        "source": "Wikipedia: Stack (abstract data type)",
+        "pages": null
       }
     ]
   },
@@ -39,6 +47,10 @@
         "pages": [
           11
         ]
+      },
+      {
+        "source": "Wikipedia: Stack (abstract data type)",
+        "pages": null
       }
     ]
   },
@@ -54,6 +66,10 @@
           12,
           13
         ]
+      },
+      {
+        "source": "Wikipedia: Stack (abstract data type)",
+        "pages": null
       }
     ]
   },
@@ -68,6 +84,10 @@
         "pages": [
           0
         ]
+      },
+      {
+        "source": "Wikipedia: Array (data structure)",
+        "pages": null
       }
     ]
   },
@@ -83,6 +103,10 @@
           9,
           10
         ]
+      },
+      {
+        "source": "Wikipedia: Sparse matrix",
+        "pages": null
       }
     ]
   },
@@ -97,6 +121,14 @@
         "pages": [
           15
         ]
+      },
+      {
+        "source": "Wikipedia: Shunting yard algorithm",
+        "pages": null
+      },
+      {
+        "source": "Wikipedia: Reverse Polish notation",
+        "pages": null
       }
     ]
   },
@@ -111,6 +143,10 @@
         "pages": [
           19
         ]
+      },
+      {
+        "source": "Wikipedia: Reverse Polish notation",
+        "pages": null
       }
     ]
   },
@@ -125,6 +161,10 @@
         "pages": [
           24
         ]
+      },
+      {
+        "source": "Wikipedia: Recursion (computer science)",
+        "pages": null
       }
     ]
   },
@@ -140,6 +180,10 @@
           24,
           25
         ]
+      },
+      {
+        "source": "Wikipedia: Recursion (computer science)",
+        "pages": null
       }
     ]
   },
@@ -154,6 +198,10 @@
         "pages": [
           26
         ]
+      },
+      {
+        "source": "Wikipedia: Tower of Hanoi",
+        "pages": null
       }
     ]
   },
@@ -168,6 +216,10 @@
         "pages": [
           40
         ]
+      },
+      {
+        "source": "Wikipedia: Recursion (computer science)",
+        "pages": null
       }
     ]
   },
@@ -182,6 +234,10 @@
         "pages": [
           27
         ]
+      },
+      {
+        "source": "Wikipedia: Queue (abstract data type)",
+        "pages": null
       }
     ]
   },
@@ -196,6 +252,14 @@
         "pages": [
           30
         ]
+      },
+      {
+        "source": "Wikipedia: Circular buffer",
+        "pages": null
+      },
+      {
+        "source": "Wikipedia: Queue (abstract data type)",
+        "pages": null
       }
     ]
   },
@@ -210,6 +274,10 @@
         "pages": [
           0
         ]
+      },
+      {
+        "source": "Wikipedia: Linked list",
+        "pages": null
       }
     ]
   },
@@ -224,6 +292,10 @@
         "pages": [
           1
         ]
+      },
+      {
+        "source": "Wikipedia: Linked list",
+        "pages": null
       }
     ]
   },
@@ -238,6 +310,10 @@
         "pages": [
           9
         ]
+      },
+      {
+        "source": "Wikipedia: Doubly linked list",
+        "pages": null
       }
     ]
   },
@@ -252,6 +328,10 @@
         "pages": [
           13
         ]
+      },
+      {
+        "source": "Wikipedia: Linked list",
+        "pages": null
       }
     ]
   },
@@ -266,6 +346,14 @@
         "pages": [
           33
         ]
+      },
+      {
+        "source": "Wikipedia: Stack (abstract data type)",
+        "pages": null
+      },
+      {
+        "source": "Wikipedia: Linked list",
+        "pages": null
       }
     ]
   },
@@ -280,6 +368,10 @@
         "pages": [
           11
         ]
+      },
+      {
+        "source": "Wikipedia: Stack (abstract data type)",
+        "pages": null
       }
     ],
     "history": [
@@ -305,6 +397,14 @@
           1,
           9
         ]
+      },
+      {
+        "source": "Wikipedia: Doubly linked list",
+        "pages": null
+      },
+      {
+        "source": "Wikipedia: Linked list",
+        "pages": null
       }
     ],
     "history": [
@@ -320,63 +420,219 @@
   },
   {
     "id": 22,
-    "question": "What is the average-case time complexity of quicksort?",
-    "answerable": false,
-    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
-    "gold": []
+    "question": "What is the average-case and worst-case time complexity of quicksort?",
+    "answerable": true,
+    "expected_answer": "Quicksort takes O(n log n) time on average and O(n^2) in the worst case.",
+    "gold": [
+      {
+        "source": "Wikipedia: Quicksort",
+        "pages": null
+      }
+    ]
   },
   {
     "id": 23,
     "question": "How does a B-tree split a full node during insertion?",
-    "answerable": false,
-    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
-    "gold": []
+    "answerable": true,
+    "expected_answer": "When a node exceeds the maximum number of keys it is split around its median key: the median moves up to the parent and the remaining keys form two nodes.",
+    "gold": [
+      {
+        "source": "Wikipedia: B-tree",
+        "pages": null
+      }
+    ]
   },
   {
     "id": 24,
     "question": "How does Dijkstra's algorithm find the shortest path?",
-    "answerable": false,
-    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
-    "gold": []
+    "answerable": true,
+    "expected_answer": "From a source node it repeatedly picks the unvisited node with the smallest tentative distance and relaxes its outgoing edges, for graphs with non-negative edge weights.",
+    "gold": [
+      {
+        "source": "Wikipedia: Dijkstra's algorithm",
+        "pages": null
+      }
+    ]
   },
   {
     "id": 25,
+    "question": "Who invented the linked list data structure and in what year?",
+    "answerable": true,
+    "expected_answer": "Linked lists were developed in 1955-1956 by Allen Newell, Cliff Shaw and Herbert A. Simon at RAND Corporation for their Information Processing Language.",
+    "gold": [
+      {
+        "source": "Wikipedia: Linked list",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "question": "How does a hash table handle collisions?",
+    "answerable": true,
+    "expected_answer": "When two keys hash to the same slot, collisions are resolved by techniques such as separate chaining (lists per bucket) or open addressing (probing for another slot).",
+    "gold": [
+      {
+        "source": "Wikipedia: Hash table",
+        "pages": null
+      },
+      {
+        "source": "Wikipedia: Hash collision",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "question": "What is the difference between breadth-first search and depth-first search?",
+    "answerable": true,
+    "expected_answer": "BFS explores a graph level by level using a queue, while DFS follows each branch as deep as possible before backtracking, using a stack or recursion.",
+    "gold": [
+      {
+        "source": "Wikipedia: Breadth-first search",
+        "pages": null
+      },
+      {
+        "source": "Wikipedia: Depth-first search",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "question": "What is an AVL tree and why does it perform rotations?",
+    "answerable": true,
+    "expected_answer": "An AVL tree is a self-balancing binary search tree in which the heights of the two child subtrees of any node differ by at most one; rotations restore this balance after insertions and deletions.",
+    "gold": [
+      {
+        "source": "Wikipedia: AVL tree",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "question": "What does Big O notation describe?",
+    "answerable": true,
+    "expected_answer": "Big O notation describes an upper bound on how an algorithm's running time or space grows as the input size grows.",
+    "gold": [
+      {
+        "source": "Wikipedia: Big O notation",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "question": "How does merge sort work?",
+    "answerable": true,
+    "expected_answer": "Merge sort is a divide-and-conquer algorithm: it splits the list into halves, sorts each half recursively and merges the sorted halves, in O(n log n) time.",
+    "gold": [
+      {
+        "source": "Wikipedia: Merge sort",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "question": "What is a trie and what is it used for?",
+    "answerable": true,
+    "expected_answer": "A trie (prefix tree) is a tree for storing strings in which each node stands for a prefix; it supports fast prefix lookup, such as autocomplete.",
+    "gold": [
+      {
+        "source": "Wikipedia: Trie",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "question": "What is the time complexity of binary search and what does it require?",
+    "answerable": true,
+    "expected_answer": "Binary search runs in O(log n) time and requires the array to be sorted; it repeatedly halves the search interval.",
+    "gold": [
+      {
+        "source": "Wikipedia: Binary search",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "question": "What is memoization in dynamic programming?",
+    "answerable": true,
+    "expected_answer": "Memoization stores the results of expensive function calls and reuses them when the same inputs occur again, avoiding repeated computation.",
+    "gold": [
+      {
+        "source": "Wikipedia: Memoization",
+        "pages": null
+      },
+      {
+        "source": "Wikipedia: Dynamic programming",
+        "pages": null
+      }
+    ]
+  },
+  {
+    "id": 34,
     "question": "What is the difference between TCP and UDP?",
     "answerable": false,
     "expected_answer": "I don't have enough information in the provided documents to answer this question.",
     "gold": []
   },
   {
-    "id": 26,
+    "id": 35,
     "question": "What is database normalization?",
     "answerable": false,
     "expected_answer": "I don't have enough information in the provided documents to answer this question.",
     "gold": []
   },
   {
-    "id": 27,
+    "id": 36,
     "question": "What is the capital of Japan?",
     "answerable": false,
     "expected_answer": "I don't have enough information in the provided documents to answer this question.",
     "gold": []
   },
   {
-    "id": 28,
+    "id": 37,
     "question": "When did the Roman Empire fall?",
     "answerable": false,
     "expected_answer": "I don't have enough information in the provided documents to answer this question.",
     "gold": []
   },
   {
-    "id": 29,
+    "id": 38,
     "question": "Which Python library is commonly used for plotting graphs?",
     "answerable": false,
     "expected_answer": "I don't have enough information in the provided documents to answer this question.",
     "gold": []
   },
   {
-    "id": 30,
-    "question": "Who invented the linked list data structure and in what year?",
+    "id": 39,
+    "question": "What is the boiling point of water at sea level?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 40,
+    "question": "How do I train a convolutional neural network?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 41,
+    "question": "Who won the Cricket World Cup in 2011?",
+    "answerable": false,
+    "expected_answer": "I don't have enough information in the provided documents to answer this question.",
+    "gold": []
+  },
+  {
+    "id": 42,
+    "question": "What are the symptoms of diabetes?",
     "answerable": false,
     "expected_answer": "I don't have enough information in the provided documents to answer this question.",
     "gold": []

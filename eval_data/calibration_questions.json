@@ -118,5 +118,73 @@
   {
     "question": "What is the boiling point of mercury?",
     "answerable": false
+  },
+  {
+    "question": "How does the quicksort partition step work?",
+    "answerable": true
+  },
+  {
+    "question": "What is a red-black tree?",
+    "answerable": true
+  },
+  {
+    "question": "How does Prim's algorithm build a minimum spanning tree?",
+    "answerable": true
+  },
+  {
+    "question": "What is a skip list?",
+    "answerable": true
+  },
+  {
+    "question": "What is the Floyd-Warshall algorithm used for?",
+    "answerable": true
+  },
+  {
+    "question": "How does a binary heap support a priority queue?",
+    "answerable": true
+  },
+  {
+    "question": "What is amortized analysis?",
+    "answerable": true
+  },
+  {
+    "question": "How does radix sort work?",
+    "answerable": true
+  },
+  {
+    "question": "What is a Bloom filter?",
+    "answerable": true
+  },
+  {
+    "question": "How does the union-find (disjoint-set) data structure work?",
+    "answerable": true
+  },
+  {
+    "question": "What is topological sorting?",
+    "answerable": true
+  },
+  {
+    "question": "How does insertion sort work?",
+    "answerable": true
+  },
+  {
+    "question": "What is the capital of France?",
+    "answerable": false
+  },
+  {
+    "question": "How do vaccines work?",
+    "answerable": false
+  },
+  {
+    "question": "Who painted the Mona Lisa?",
+    "answerable": false
+  },
+  {
+    "question": "How do I change a flat tire?",
+    "answerable": false
+  },
+  {
+    "question": "What is the plot of Hamlet?",
+    "answerable": false
   }
 ]

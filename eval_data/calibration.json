@@ -1,44 +1,44 @@
 {
-  "threshold": 0.0471,
-  "balanced_accuracy": 0.95,
+  "threshold": 0.6411,
+  "balanced_accuracy": 0.967,
   "answerable_pass_rate": 1.0,
-  "unanswerable_refusal_rate": 0.9,
-  "n_answerable": 20,
-  "n_unanswerable": 10,
-  "answerable_min": 0.09347088634967804,
-  "unanswerable_max": 0.9592450857162476,
+  "unanswerable_refusal_rate": 0.933,
+  "n_answerable": 32,
+  "n_unanswerable": 15,
+  "answerable_min": 0.674720048904419,
+  "unanswerable_max": 0.9983810186386108,
   "rows": [
     {
       "question": "What is an array and how is it initialized?",
       "answerable": true,
-      "best_score": 0.9784415364265442,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 0,
-      "top_preview": "New L.J Institute of Engineering and Technology Semester: III Subject: Data Structures (BE03000081) Unit 2: Linear Data "
+      "best_score": 0.9916067123413086,
+      "top_source": "Wikipedia: Array (data structure)",
+      "top_page": null,
+      "top_preview": "In computer science, an array is a data structure consisting of a collection of elements (values or variables), of the s"
     },
     {
       "question": "How is a two-dimensional array stored in memory using row-major order?",
       "answerable": true,
-      "best_score": 0.9153769016265869,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 4,
-      "top_preview": "New L.J Institute of Engineering and Technology Semester: III Subject: Data Structures (BE03000081) Unit 2: Linear Data "
+      "best_score": 0.9854928851127625,
+      "top_source": "Wikipedia: Array (data structure)",
+      "top_page": null,
+      "top_preview": "There are two systematic compact layouts for a two-dimensional array. For example, consider the matrix   A  =   [   1   "
     },
     {
       "question": "What is a sparse matrix and how is it represented efficiently?",
       "answerable": true,
-      "best_score": 0.9973610043525696,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 9,
-      "top_preview": "- Sparse Matrix  - Sparse matrix is a matrix which contains very few non-zero elements. - A matrix that is not sparse is"
+      "best_score": 0.9993020296096802,
+      "top_source": "Wikipedia: Sparse matrix",
+      "top_page": null,
+      "top_preview": "In numerical analysis and scientific computing, a sparse matrix or sparse array is a matrix in which most of the element"
     },
     {
       "question": "What is a stack and what are its main operations?",
       "answerable": true,
-      "best_score": 0.8345304131507874,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 11,
-      "top_preview": "Operations on Stack"
+      "best_score": 0.999884843826294,
+      "top_source": "Wikipedia: Stack (abstract data type)",
+      "top_page": null,
+      "top_preview": "In computer science, a stack is an abstract data type that serves as a collection of elements with two main operations:"
     },
     {
       "question": "What is the LIFO principle?",
@@ -51,15 +51,15 @@
     {
       "question": "What is stack underflow and when does it occur?",
       "answerable": true,
-      "best_score": 0.09347088634967804,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 11,
-      "top_preview": "Operations on Stack"
+      "best_score": 0.674720048904419,
+      "top_source": "Wikipedia: Stack (abstract data type)",
+      "top_page": null,
+      "top_preview": "In computer science, a stack is an abstract data type that serves as a collection of elements with two main operations:"
     },
     {
       "question": "What is the role of the TOP pointer in a stack?",
       "answerable": true,
-      "best_score": 0.7309250831604004,
+      "best_score": 0.7309250235557556,
       "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
       "top_page": 11,
       "top_preview": "New L.J Institute of Engineering and Technology Semester: III Subject: Data Structures (BE03000081) Unit 2: Linear Data "
@@ -83,23 +83,23 @@
     {
       "question": "What is recursion and why is a base case needed?",
       "answerable": true,
-      "best_score": 0.9897852540016174,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 24,
-      "top_preview": "New L.J Institute of Engineering and Technology Semester: III Subject: Data Structures (BE03000081) Unit 2: Linear Data "
+      "best_score": 0.99750816822052,
+      "top_source": "Wikipedia: Recursion (computer science)",
+      "top_page": null,
+      "top_preview": "The base case specifies input values for which the function can provide a result directly, without any further recursion"
     },
     {
       "question": "How does the Tower of Hanoi problem work?",
       "answerable": true,
-      "best_score": 0.9662172198295593,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 26,
-      "top_preview": "- Tower of Hanoi  - The Tower of Hanoi is a mathematical game or Puzzle. - It consists of three rods and a number of dis"
+      "best_score": 0.9985325336456299,
+      "top_source": "Wikipedia: Tower of Hanoi",
+      "top_page": null,
+      "top_preview": "The Tower of Hanoi aka TOH (also called the problem of Benares Temple, Tower of Brahma or Lucas's Tower, and sometimes p"
     },
     {
       "question": "How can the Fibonacci series be computed using recursion?",
       "answerable": true,
-      "best_score": 0.9182390570640564,
+      "best_score": 0.9182394742965698,
       "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
       "top_page": 40,
       "top_preview": "New L.J Institute of Engineering and Technology Semester: III Subject: Data Structures (BE03000081) Unit 2: Linear Data "
@@ -107,10 +107,10 @@
     {
       "question": "What is a queue and what do enqueue and dequeue do?",
       "answerable": true,
-      "best_score": 0.9545372724533081,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 36,
-      "top_preview": "the first inserted element in a queue. Operations Stack uses push and pop as two of its operations. The pop operation fu"
+      "best_score": 0.9858803153038025,
+      "top_source": "Wikipedia: Queue (abstract data type)",
+      "top_page": null,
+      "top_preview": "Enqueue, which adds one element to the rear of the queue Dequeue, which removes one element from the front of the queue."
     },
     {
       "question": "What is a circular queue?",
@@ -123,10 +123,10 @@
     {
       "question": "What is a linked list and what are its types?",
       "answerable": true,
-      "best_score": 0.96708083152771,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
-      "top_page": 22,
-      "top_preview": "- Applications:  - Implementation of Stacks and Queues: Stacks and queues are abstract data types that can be efficientl"
+      "best_score": 0.9997957348823547,
+      "top_source": "Wikipedia: Linked list",
+      "top_page": null,
+      "top_preview": "In computer science, a linked list is a linear collection of data elements whose order is not given by their physical pl"
     },
     {
       "question": "What are the differences between linked lists and arrays?",
@@ -139,10 +139,10 @@
     {
       "question": "How does a doubly linked list differ from a singly linked list?",
       "answerable": true,
-      "best_score": 0.8909661769866943,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
-      "top_page": 1,
-      "top_preview": "New L.J Institute of Engineering and Technology Semester: III Subject: Data Structures (BE03000081) Unit 2: Linear Data "
+      "best_score": 0.9975928664207458,
+      "top_source": "Wikipedia: Linked list",
+      "top_page": null,
+      "top_preview": "Double-linked lists require more space per node (unless one uses XOR-linking), and their elementary operations are more "
     },
     {
       "question": "What is a circular linked list and what are its disadvantages?",
@@ -155,10 +155,10 @@
     {
       "question": "How do you insert a node at the beginning of a singly linked list?",
       "answerable": true,
-      "best_score": 0.9978370070457458,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
-      "top_page": 40,
-      "top_preview": "Sr. No Questions CO Answer Marks 1 What i s linked list? States the advantages of linked list over array. Also list vari"
+      "best_score": 0.9990197420120239,
+      "top_source": "Wikipedia: Linked list",
+      "top_page": null,
+      "top_preview": "Traversal of a singly linked list is simple, beginning at the first node and following each next link until reaching the"
     },
     {
       "question": "How is a stack implemented using a linked list?",
@@ -171,82 +171,218 @@
     {
       "question": "What is the population of Mars?",
       "answerable": false,
-      "best_score": 3.744273635675199e-05,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
-      "top_page": 40,
-      "top_preview": "Sr. No Questions CO Answer Marks 1 What i s linked list? States the advantages of linked list over array. Also list vari"
+      "best_score": 9.327071893494576e-05,
+      "top_source": "Wikipedia: Hash collision",
+      "top_page": null,
+      "top_preview": "number of people. This idea has led to what has been called the birthday attack. The premise of this attack is that it i"
     },
     {
       "question": "Who won the FIFA World Cup in 2018?",
       "answerable": false,
-      "best_score": 3.9330767322098836e-05,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 16,
-      "top_preview": "8. [Is the expression valid?] If RANK = 1 then Write (‘VALID’) else Write (‘INVALID’) Exit"
+      "best_score": 0.00021456158719956875,
+      "top_source": "Wikipedia: Tower of Hanoi",
+      "top_page": null,
+      "top_preview": "466  885   ⋅   2   n   −   1  3   −   3  5   ⋅   (   1  3   )   n   +   (   12  59   +   18  1003   17   )   (   5  +   "
     },
     {
       "question": "How do I bake a chocolate cake?",
       "answerable": false,
-      "best_score": 3.978218956035562e-05,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
-      "top_page": 20,
-      "top_preview": "- Linked Representation of QUEUE  - We have seen how a queue is created using an array. - Although this technique of cre"
+      "best_score": 0.00034225673880428076,
+      "top_source": "Wikipedia: Dynamic programming",
+      "top_page": null,
+      "top_preview": "This can be achieved in either of two ways:"
     },
     {
       "question": "What is the capital of Australia?",
       "answerable": false,
-      "best_score": 0.00036237426684238017,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 16,
-      "top_preview": "8. [Is the expression valid?] If RANK = 1 then Write (‘VALID’) else Write (‘INVALID’) Exit"
+      "best_score": 0.05668231472373009,
+      "top_source": "Wikipedia: Dynamic programming",
+      "top_page": null,
+      "top_preview": "β  ∈  (  0  ,  1  )   {\\displaystyle \\beta \\in (0,1)}  . A discrete approximation to the transition equation of capital "
     },
     {
       "question": "Explain how photosynthesis works in plants.",
       "answerable": false,
-      "best_score": 0.0007629498722963035,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
-      "top_page": 0,
-      "top_preview": "basic operations such as insertion, deletion, and updation of information at the cost of extra space required for storin"
+      "best_score": 0.00951522495597601,
+      "top_source": "Wikipedia: Tree (abstract data type)",
+      "top_page": null,
+      "top_preview": "In computer science, a tree is a widely used abstract data type that represents a hierarchical tree structure with a set"
     },
     {
       "question": "What is the current price of Bitcoin?",
       "answerable": false,
-      "best_score": 3.8384401705116034e-05,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 54,
-      "top_preview": "representation of 2-D array. [NLJIET] 14 State at least one efficient representation of a sparse matrix. [NLJIET] 2 Pg 1"
+      "best_score": 0.0007234155782498419,
+      "top_source": "Wikipedia: B+ tree",
+      "top_page": null,
+      "top_preview": "b  =   B  k   −  1   {\\displaystyle b={\\tfrac {B}{k}}-1}"
     },
     {
       "question": "Who wrote the novel Pride and Prejudice?",
       "answerable": false,
-      "best_score": 0.0005195898120291531,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 16,
-      "top_preview": "8. [Is the expression valid?] If RANK = 1 then Write (‘VALID’) else Write (‘INVALID’) Exit"
+      "best_score": 0.003148320596665144,
+      "top_source": "Wikipedia: Breadth-first search",
+      "top_page": null,
+      "top_preview": "BFS and its application in finding connected components of graphs were invented in 1945 by Konrad Zuse, in his (rejected"
     },
     {
       "question": "How does the TCP three-way handshake work?",
       "answerable": false,
-      "best_score": 0.9592450857162476,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part2.pdf",
-      "top_page": 0,
-      "top_preview": "basic operations such as insertion, deletion, and updation of information at the cost of extra space required for storin"
+      "best_score": 0.9983810186386108,
+      "top_source": "Wikipedia: Dijkstra's algorithm",
+      "top_page": null,
+      "top_preview": "The algorithm repeatedly extracts the minimum-distance vertex from whichever queue currently has the smaller key, relaxe"
     },
     {
       "question": "What are the symptoms of the common cold?",
       "answerable": false,
-      "best_score": 3.8155685615492985e-05,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 42,
-      "top_preview": "while (1) {  printf(\"\\n--- Stack Menu ---\\n\");"
+      "best_score": 3.7448236980708316e-05,
+      "top_source": "Wikipedia: Adjacency list",
+      "top_page": null,
+      "top_preview": "In graph theory and computer science, an adjacency list is a collection of unordered lists used to represent a finite gr"
     },
     {
       "question": "What is the boiling point of mercury?",
       "answerable": false,
-      "best_score": 0.0007944775279611349,
-      "top_source": "data\\pdfs\\BE03000081_DS_Unit_2_Part1.pdf",
-      "top_page": 35,
-      "top_preview": "1. Add F on the left.  2. Add G on the right.  3. Add H on the right.  4. Delete two alphabets from left  5. Add I on th"
+      "best_score": 0.6074036359786987,
+      "top_source": "Wikipedia: Shellsort",
+      "top_page": null,
+      "top_preview": "Ω  (  p   n   1  +  1   /   p   )  =  Ω  (   n   5   /   4   )   {\\displaystyle \\Omega (pn^{1+1/p})=\\Omega (n^{5/4})}   "
+    },
+    {
+      "question": "How does the quicksort partition step work?",
+      "answerable": true,
+      "best_score": 0.9997919201850891,
+      "top_source": "Wikipedia: Quicksort",
+      "top_page": null,
+      "top_preview": "Quicksort's divide-and-conquer formulation makes it amenable to parallelization using task parallelism. The partitioning"
+    },
+    {
+      "question": "What is a red-black tree?",
+      "answerable": true,
+      "best_score": 0.9960021376609802,
+      "top_source": "Wikipedia: Red–black tree",
+      "top_page": null,
+      "top_preview": "In computer science, a red–black tree is a self-balancing binary search tree data structure noted for fast storage and r"
+    },
+    {
+      "question": "How does Prim's algorithm build a minimum spanning tree?",
+      "answerable": true,
+      "best_score": 0.9999229907989502,
+      "top_source": "Wikipedia: Prim's algorithm",
+      "top_page": null,
+      "top_preview": "In computer science, Prim's algorithm is a greedy algorithm that finds a minimum spanning tree for a weighted undirected"
+    },
+    {
+      "question": "What is a skip list?",
+      "answerable": true,
+      "best_score": 0.9999665021896362,
+      "top_source": "Wikipedia: Skip list",
+      "top_page": null,
+      "top_preview": "In computer science, a skip list (or skiplist) is a probabilistic data structure that allows   O   (  log  ⁡  n  )   {\\d"
+    },
+    {
+      "question": "What is the Floyd-Warshall algorithm used for?",
+      "answerable": true,
+      "best_score": 0.9999510049819946,
+      "top_source": "Wikipedia: Floyd–Warshall algorithm",
+      "top_page": null,
+      "top_preview": "In computer science, the Floyd–Warshall algorithm (also known as Floyd's algorithm, the Roy–Warshall algorithm, the Roy–"
+    },
+    {
+      "question": "How does a binary heap support a priority queue?",
+      "answerable": true,
+      "best_score": 0.9834756851196289,
+      "top_source": "Wikipedia: Binary heap",
+      "top_page": null,
+      "top_preview": "A binary heap is a heap data structure that takes the form of a binary tree. Binary heaps are a common way of implementi"
+    },
+    {
+      "question": "What is amortized analysis?",
+      "answerable": true,
+      "best_score": 0.9995155334472656,
+      "top_source": "Wikipedia: Amortized analysis",
+      "top_page": null,
+      "top_preview": "In computer science, amortized analysis is a method for analyzing a given algorithm's complexity, or how much of a resou"
+    },
+    {
+      "question": "How does radix sort work?",
+      "answerable": true,
+      "best_score": 0.9995871186256409,
+      "top_source": "Wikipedia: Sorting algorithm",
+      "top_page": null,
+      "top_preview": "Radix sort is an algorithm that sorts numbers by processing individual digits. n numbers consisting of k digits each are"
+    },
+    {
+      "question": "What is a Bloom filter?",
+      "answerable": true,
+      "best_score": 0.9997542500495911,
+      "top_source": "Wikipedia: Bloom filter",
+      "top_page": null,
+      "top_preview": "In computing, a Bloom filter is a space-efficient probabilistic data structure, conceived by Burton Howard Bloom in 1970"
+    },
+    {
+      "question": "How does the union-find (disjoint-set) data structure work?",
+      "answerable": true,
+      "best_score": 0.999964714050293,
+      "top_source": "Wikipedia: Disjoint-set data structure",
+      "top_page": null,
+      "top_preview": "In computer science, a disjoint-set data structure, also called a union–find data structure or merge–find set, is a data"
+    },
+    {
+      "question": "What is topological sorting?",
+      "answerable": true,
+      "best_score": 0.9994753003120422,
+      "top_source": "Wikipedia: Topological sorting",
+      "top_page": null,
+      "top_preview": "In computer science, a topological sort or topological ordering of a directed graph is a linear ordering of its vertices"
+    },
+    {
+      "question": "How does insertion sort work?",
+      "answerable": true,
+      "best_score": 0.9997782111167908,
+      "top_source": "Wikipedia: Insertion sort",
+      "top_page": null,
+      "top_preview": "Insertion sort iterates, consuming one input element each repetition, and grows a sorted output list. At each iteration,"
+    },
+    {
+      "question": "What is the capital of France?",
+      "answerable": false,
+      "best_score": 0.015908697620034218,
+      "top_source": "Wikipedia: Dynamic programming",
+      "top_page": null,
+      "top_preview": "β  ∈  (  0  ,  1  )   {\\displaystyle \\beta \\in (0,1)}  . A discrete approximation to the transition equation of capital "
+    },
+    {
+      "question": "How do vaccines work?",
+      "answerable": false,
+      "best_score": 0.0008094800869002938,
+      "top_source": "Wikipedia: Abstract data type",
+      "top_page": null,
+      "top_preview": "create(), that yields a new instance of the ADT; compare(s, t), that tests whether two instances' states are equivalent "
+    },
+    {
+      "question": "Who painted the Mona Lisa?",
+      "answerable": false,
+      "best_score": 0.0003683121467474848,
+      "top_source": "Wikipedia: Tower of Hanoi",
+      "top_page": null,
+      "top_preview": "The puzzle was invented by the French mathematician Édouard Lucas, first presented in 1883 as a game discovered by \"N. C"
+    },
+    {
+      "question": "How do I change a flat tire?",
+      "answerable": false,
+      "best_score": 0.19010186195373535,
+      "top_source": "Wikipedia: Binary heap",
+      "top_page": null,
+      "top_preview": "Replace the root of the heap with the last element on the last level. Compare the new root with its children; if they ar"
+    },
+    {
+      "question": "What is the plot of Hamlet?",
+      "answerable": false,
+      "best_score": 0.0420856736600399,
+      "top_source": "Wikipedia: Tower of Hanoi",
+      "top_page": null,
+      "top_preview": "As more disks are added, the graph representation of the game will resemble a fractal figure, the Sierpiński triangle. I"
     }
   ]
 }
