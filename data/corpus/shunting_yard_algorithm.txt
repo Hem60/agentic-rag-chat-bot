@@ -1,0 +1,64 @@
+TITLE: Shunting yard algorithm
+URL: https://en.wikipedia.org/wiki/Shunting_yard_algorithm
+
+In computer science, the shunting yard algorithm is a method for parsing arithmetical or logical expressions, or a combination of both, specified in infix notation. It can produce either a postfix notation string, also known as reverse Polish notation (RPN), or an abstract syntax tree (AST). The algorithm was invented by Edsger Dijkstra, first published in November 1961, and named because its operation resembles that of a railroad shunting yard.
+Like the evaluation of RPN, the shunting yard algorithm is stack-based. Infix expressions are the form of mathematical notation most people are used to, for instance "3 + 4" or "3 + 4 × (2 − 1)". For the conversion there are two text variables (strings), the input and the output. There is also a stack that holds operators not yet added to the output queue. To convert, the program reads each symbol in order and does something based on that symbol. The result for the above examples would be (in reverse Polish notation) "3 4 +" and "3 4 2 1 − × +", respectively.
+The shunting yard algorithm will correctly parse all valid infix expressions, but does not reject all invalid expressions. For example, "1 2 +" is not a valid infix expression, but would be parsed as "1 + 2". The algorithm can however reject expressions with mismatched parentheses.
+The shunting yard algorithm was later generalized into operator-precedence parsing.
+
+Input: 3 + 4
+Push 3 to the output queue (whenever a number is read it is pushed to the output)
+Push + (or its ID) onto the operator stack
+Push 4 to the output queue
+After reading the expression, pop the operators off the stack and add them to the output.
+In this case there is only one, "+".
+Output: 3 4 +
+This already shows a couple of rules:
+
+All numbers are pushed to the output when they are read.
+At the end of reading the expression, pop all operators off the stack and onto the output.
+
+Graphical illustration of algorithm, using a three-way railroad junction. The input is processed one symbol at a time: if a variable or number is found, it is copied directly to the output a), c), e), h). If the symbol is an operator, it is pushed onto the operator stack b), d), f). If the operator's precedence is lower than that of the operators at the top of the stack or the precedences are equal and the operator is left associative, then that operator is popped off the stack and added to the output g). Finally, any remaining operators are popped off the stack and added to the output i).
+
+while there are tokens to be read:
+    read a token
+    if the token is:
+    - a number:
+        put it into the output queue
+    - a function:
+        push it onto the operator stack 
+    - an operator o1:
+        while (
+            there is an operator o2 at the top of the operator stack which is not a left parenthesis, 
+            and (o2 has greater precedence than o1 or (o1 and o2 have the same precedence and o1 is left-associative))
+        ):
+            pop o2 from the operator stack into the output queue
+        push o1 onto the operator stack
+    - a ",":
+        while the operator at the top of the operator stack is not a left parenthesis:
+             pop the operator from the operator stack into the output queue
+    - a left parenthesis (i.e. "("):
+        push it onto the operator stack
+    - a right parenthesis (i.e. ")"):
+        while the operator at the top of the operator stack is not a left parenthesis:
+            {assert the operator stack is not empty}
+            /* If the stack runs out without finding a left parenthesis, then there are mismatched parentheses. */
+            pop the operator from the operator stack into the output queue
+        {assert there is a left parenthesis at the top of the operator stack}
+        pop the left parenthesis from the operator stack and discard it
+        if there is a function token at the top of the operator stack, then:
+            pop the function from the operator stack into the output queue
+/* After the while loop, pop the remaining items from the operator stack into the output queue. */
+while there are tokens on the operator stack:
+    /* If the operator token on the top of the stack is a parenthesis, then there are mismatched parentheses. */
+    {assert the operator on top of the stack is not a (left) parenthesis}
+    pop the operator from the operator stack onto the output queue
+
+To analyze the running time complexity of this algorithm, one has only to note that each token will be read once, each number, function, or operator will be printed once, and each function, operator, or parenthesis will be pushed onto the stack and popped off the stack once—therefore, there are at most a constant number of operations executed per token, and the running time is thus O(n) — linear in the size of the input.
+The shunting yard algorithm can also be applied to produce prefix notation (also known as Polish notation). To do this one would simply start from the end of a string of tokens to be parsed and work backwards, reverse the output queue (therefore making the output queue an output stack), and flip the left and right parenthesis behavior (remembering that the now-left parenthesis behavior should pop until it finds a now-right parenthesis), while making sure to change the associativity condition to right.
+
+Input: 3 + 4 × 2 ÷ ( 1 − 5 ) ^ 2 ^ 3
+
+The symbol ^ represents the power operator.
+
+Input: sin ( max ( 2, 3 ) ÷ 3 × π )

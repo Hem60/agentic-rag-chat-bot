@@ -1,0 +1,117 @@
+TITLE: Greedy algorithm
+URL: https://en.wikipedia.org/wiki/Greedy_algorithm
+
+A greedy algorithm is an algorithm which, at each step, makes the choice that is locally optimal, and subsequently does not reconsider past choices. Greedy algorithms are often used to solve combinatorial optimization problems. If an optimization problem only depends on the partial solution of solving it for one subproblem, we can solve this problem by "greedily" considering only the locally optimal subproblem. In this sense, a greedy algorithm is a special case of a dynamic programming algorithm. Uriel Feige notes that: [Greedy algorithms] may be viewed as the ultimate form of dynamic programming, in which only one partial solution is maintained. The problem needs to have much more structure for this approach to work. In many cases, a greedy algorithm does not produce an exact solution, but can yield solutions that approximate an exact solution in a reasonable amount of time.
+An example of a problem which admits an exact greedy solution, the activity selection problem. Given a collection of tasks which can be done between allotted time intervals, the problem is to determine the maximum number of tasks that can be done. A greedy algorithm in 
+  
+    
+      
+        O
+        (
+        n
+        log
+        ⁡
+        (
+        n
+        )
+        )
+      
+    
+    {\displaystyle O(n\log(n))}
+  
+ which solves this problem sorts the tasks by the end time and then repeatedly chooses the first task that begins after the last task ended.
+
+Many classic algorithms in computer science such as the Huffman coding algorithm, Prim's algorithm, Kruskal's algorithm, and Dijkstra's algorithm all use greedy properties in their design. Mathematicians frequently use greedy strategies in proofs as well. A classic example is what Raphael Yuster refers to as the greedy proof that every tournament contains a Hamiltonian path.
+
+Since there is no formal definition of what a greedy algorithm is, a complete characterization of when a problem admits a greedy algorithm as a solution is not known. However, special cases have been identified. Jack Edmonds showed that a greedy algorithm can be used to solve a class of linear combinatorial optimization problems with a matroid structure.
+Later Bernhard Korte and László Lovász characterized a broader class of optimization problems by introducing the notion of a greedoid. This allowed, for example, a proof of the optimality of Prim's algorithm. 
+Algorithms which undo past steps are not greedy. For example, the Gale-Shapley algorithm is not a greedy algorithm since although it constructs a solution by choosing the current best pairing, in the process, existing solutions may be modified. 
+
+One technique used to prove the optimality of greedy algorithms is an exchange argument. The exchange argument demonstrates that any solution different from the greedy solution is at most as good as the greedy solution. This proof pattern typically follows these steps:
+
+Assume there exists an optimal solution different from the greedy solution.
+Consider the first point where the optimal and greedy solutions differ.
+Prove that exchanging the optimal choice for the greedy choice at this point cannot worsen the optimal solution.
+Conclude by induction that the greedy solution is optimal.
+
+In the fractional knapsack problem, one is given a list of items with weights and values. The goal is to choose fractional amounts of each item such that the total value is maximised, and the weight is below a fixed constraint. Unlike the knapsack problem, which is known to be NP-hard, the fractional knapsack problem admits a polynomial time greedy algorithm.
+Instances of the Frobenius coin problem admit greedy solutions. However, in some cases the greedy algorithm does not yield an optimal solution.
+The matching pursuit is an example of a greedy algorithm applied on signal approximation.
+A greedy algorithm finds the optimal solution to Malfatti's problem of finding three disjoint circles within a given triangle that maximize the total area of the circles; it is conjectured that the same greedy algorithm is optimal for any number of circles.
+In decision tree learning, greedy algorithms are commonly used, however they are not guaranteed to find the optimal solution.
+One popular such algorithm is the ID3 algorithm for decision tree construction.
+A greedy algorithm constructs the Zeckendorf representation (or Fibonacci coding) of a natural number. Subtracting the largest Fibonacci number less than or equal to the natural number repeatedly gives its Zecekndorf representation. The greedy algorithm is extracted from the existence proof of the Zeckendorf representation. The uniqueness of the Zeckendorf representation guarantees that no other non-consecutive Fibonacci sum can give a different output.
+Fibonacci described a greedy algorithm for computing Egyptian fractions.
+Greedy algorithms appear in network routing. Using greedy routing, a message is forwarded to the neighbouring node which is "closest" to the destination. The notion of a node's location (and hence "closeness") may be determined by its physical location, as in geographic routing used by ad hoc networks.  Location may also be an entirely artificial construct as in small world routing and distributed hash table.
+
+Graph theory is a rich source of greedy algorithms. Computing scientists frequently use greedy algorithms to compute graph invariants. 
+
+Dijkstra's algorithm and the related A* search algorithm are verifiably optimal greedy algorithms for graph search and shortest path finding.
+A* search is conditionally optimal, requiring an "admissible heuristic" that will not overestimate path costs.
+Kruskal's algorithm and Prim's algorithm are greedy algorithms for constructing minimum spanning trees of a given connected graph. They always find an optimal solution, which may not be unique in general.
+A greedy algorithm constructs a Huffman tree in Huffman coding.
+The Sequitur and Lempel-Ziv-Welch algorithms are greedy algorithms for grammar induction.
+A greedy algorithm finds the maximum independent set in a tree.
+Greedy algorithms are also used to find upper bounds for the chromatic numbers. A simple example is the bound 
+  
+    
+      
+        χ
+        (
+        G
+        )
+        ≤
+        Δ
+        (
+        G
+        )
+        +
+        1
+      
+    
+    {\displaystyle \chi (G)\leq \Delta (G)+1}
+  
+ obtained by a greedy algorithm. We begin by taking a vertex that has not been colored. Since it has at most 
+  
+    
+      
+        Δ
+        (
+        G
+        )
+      
+    
+    {\displaystyle \Delta (G)}
+  
+ neighbours, at most 
+  
+    
+      
+        Δ
+        (
+        G
+        )
+      
+    
+    {\displaystyle \Delta (G)}
+  
+ colors are used in adjacent vertices, leaving a color free for the vertex under consideration.
+
+A solution to the NP-complete travelling salesman problem can be approximated by starting from an empty edge set and then adding the next cheapest edge which is a subgraph of a complete tour. This greedy algorithm has been proven to yield at most 
+  
+    
+      
+        Θ
+        (
+        log
+        ⁡
+        n
+        )
+      
+    
+    {\displaystyle \Theta (\log n)}
+  
+ times longer than the optimal tour.
+Another example is that a solution for the 0-1 knapsack problem can be approximated by using the greedy algorithm for the  fractional knapsack problem. This greedy algorithm has been proven to yield a solution at least half the value of the optimal solution.
+Solutions for submodular maximization are approximated using a greedy algorithm which yields a solution at least half the value of the optimal solution. 
+Problems for which greedy algorithms are used to provide approximation algorithms include the set cover, load balancing, Steiner tree and independent set problem.

@@ -41,6 +41,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 PDF_DIR         = Path(os.getenv("PDF_DIR", "data/pdfs"))
+CORPUS_DIR      = Path(os.getenv("CORPUS_DIR", "data/corpus"))   # .txt articles from src/fetch_corpus.py
 VECTORSTORE_DIR = Path(os.getenv("VECTORSTORE_DIR", "vectorstore"))
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
 CHUNK_SIZE      = int(os.getenv("CHUNK_SIZE", "1000"))
@@ -110,9 +111,8 @@ def load_pdfs(pdf_dir: Path) -> list:
 
     pdf_files = sorted(pdf_dir.glob("*.pdf"))
     if not pdf_files:
-        print(f"\n[ERROR] No PDF files found in '{pdf_dir}/'")
-        print("    Drop 3-5 PDF files into that folder, then re-run ingestion.\n")
-        sys.exit(1)
+        print(f"\n[WARN] No PDF files found in '{pdf_dir}/' (corpus articles are still indexed).")
+        return []
 
     print(f"\n[INFO] Found {len(pdf_files)} PDF(s) in '{pdf_dir}/':")
     for p in pdf_files:
@@ -151,6 +151,28 @@ def load_pdfs(pdf_dir: Path) -> list:
     if pua_found:
         print(f"    Normalised {pua_found} Private Use Area glyph(s) (Symbol/Wingdings bullets)")
     return all_docs
+
+
+def load_corpus(corpus_dir: Path) -> list:
+    """
+    Load the .txt articles written by src/fetch_corpus.py.
+
+    Each file starts with `TITLE:` and `URL:` lines, a blank line, then the body.
+    Chunks are cited as "Wikipedia: <title>" and carry no page number.
+    """
+    from langchain_core.documents import Document
+
+    docs = []
+    for path in sorted(corpus_dir.glob("*.txt")):
+        raw = path.read_text(encoding="utf-8")
+        head, _, body = raw.partition("\n\n")
+        meta = dict(line.split(": ", 1) for line in head.splitlines() if ": " in line)
+        title = meta.get("TITLE", path.stem)
+        docs.append(Document(page_content=clean_text(body),
+                             metadata={"source": f"Wikipedia: {title}", "url": meta.get("URL", "")}))
+    if docs:
+        print(f"\n[INFO] Loaded {len(docs)} corpus article(s) from '{corpus_dir}/'")
+    return docs
 
 
 def split_documents(docs: list) -> list:
@@ -256,6 +278,12 @@ def main():
     start = time.time()
 
     docs   = load_pdfs(PDF_DIR)
+    if CORPUS_DIR.exists():
+        docs += load_corpus(CORPUS_DIR)
+    if not docs:
+        print("\n[ERROR] Nothing to index: no PDFs and no corpus articles.")
+        print("    Add PDFs to data/pdfs/ or run: python -m src.fetch_corpus\n")
+        sys.exit(1)
     chunks = split_documents(docs)
     build_vectorstore(chunks)
 

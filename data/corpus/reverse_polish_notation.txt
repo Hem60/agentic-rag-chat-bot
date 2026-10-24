@@ -1,0 +1,181 @@
+TITLE: Reverse Polish notation
+URL: https://en.wikipedia.org/wiki/Reverse_Polish_notation
+
+Reverse Polish notation (RPN), also known as reverse Łukasiewicz notation, Polish postfix notation or simply postfix notation, is a mathematical notation in which operators follow their operands (e.g. 
+  
+    
+      
+        3
+         
+        4
+         
+        +
+      
+    
+    {\displaystyle 3\ 4\ +}
+  
+), in contrast to the more common infix notation (in which operators are placed between operands, e.g. 
+  
+    
+      
+        3
+        +
+        4
+      
+    
+    {\displaystyle 3+4}
+  
+), as well as prefix notation (in which operators precede their operands, e.g. 
+  
+    
+      
+        +
+         
+        3
+         
+        4
+      
+    
+    {\displaystyle +\ 3\ 4}
+  
+). The notation does not need any parentheses as long as each operator has a fixed number of operands.
+Here are some examples to illustrate the differences between the aforementioned types of notation:
+
+The term postfix notation describes the general scheme in mathematics and computer sciences, whereas the term reverse Polish notation typically refers specifically to the method used to enter calculations into hardware or software calculators, which often have additional side effects and implications depending on the actual implementation involving a  stack. The description "Polish" refers to the nationality of logician Jan Łukasiewicz, who invented Polish notation in 1924.
+The first computer to use postfix notation, though it long remained essentially unknown outside of Germany, was Konrad Zuse's Z3 in 1941 as well as his Z4 in 1945. The reverse Polish scheme was again proposed in 1954 by Arthur Burks, Don Warren, and Jesse Wright and was independently reinvented by Friedrich L. Bauer and Edsger W. Dijkstra in the early 1960s to reduce computer memory access and use the stack to evaluate expressions. The algorithms and notation for this scheme were extended by the philosopher and computer scientist Charles L. Hamblin in the mid-1950s.
+During the 1970s and 1980s, Hewlett-Packard used RPN in all of their desktop and hand-held calculators, and has continued to use it in some models into the 2020s. In computer science, reverse Polish notation is used in stack-oriented programming languages such as Forth, dc, Factor, STOIC, PostScript, RPL, and Joy.
+
+In reverse Polish notation, the operators follow their operands. For example, to add 3 and 4 together, the expression is 3 4 + rather than 3 + 4. The conventional notation expression 3 − 4 + 5 becomes 3 4 − 5 + in reverse Polish notation: 4 is first subtracted from 3, then 5 is added to it.
+The computation may be illustrated as such:
+  
+    
+      
+        
+          
+            
+              
+                 
+              
+              
+                3
+                 
+                4
+                 
+                −
+                 
+                5
+                 
+                +
+              
+            
+            
+              
+                =
+                 
+              
+              
+                
+                (
+                −
+                1
+                )
+                 
+                5
+                 
+                +
+              
+            
+            
+              
+                =
+                 
+              
+              
+                4
+              
+            
+          
+        
+      
+    
+    {\displaystyle {\begin{aligned}\ &3\ 4\ -\ 5\ +\\=\ &(-1)\ 5\ +\\=\ &4\end{aligned}}}
+  
+The concept of a stack, a last-in/first-out construct, is integral to the left-to-right evaluation of RPN. In the example 3 4 −, first the 3 is put onto the stack, then the 4; the 4 is now on top and the 3 below it. The subtraction operator removes the top two items from the stack, performs 3 − 4, and puts the result of −1 onto the stack.
+Common language in this context refers to items being pushed onto the stack when added and popped or removed from the stack when taken off.
+The advantage of reverse Polish notation is that it removes the need for order of operations and parentheses that are required by infix notation and can be evaluated linearly, left-to-right. For example, the infix expression (3 + 4) × (5 + 6) becomes 3 4 + 5 6 + × in reverse Polish notation.
+
+Reverse Polish notation has been compared to how one had to work through problems with a slide rule.
+By comparison, in testing of reverse Polish notation with algebraic notation, reverse Polish has been found to lead to faster calculations, for two reasons. The first reason is that reverse Polish calculators do not need expressions to be parenthesized, so fewer operations need to be entered to perform typical calculations. Additionally, users of reverse Polish calculators made fewer mistakes than for other types of calculators. Later research clarified that the increased speed from reverse Polish notation may be attributed to the smaller number of keystrokes needed to enter this notation, rather than to a smaller cognitive load on its users. However, anecdotal evidence suggests that reverse Polish notation is more difficult for users who previously learned algebraic notation.
+
+Edsger W. Dijkstra invented the shunting-yard algorithm to convert infix expressions to postfix expressions (reverse Polish notation), so named because its operation resembles that of a railroad shunting yard.
+There are other ways of producing postfix expressions from infix expressions. Most operator-precedence parsers can be modified to produce postfix expressions; in particular, once an abstract syntax tree has been constructed, the corresponding postfix expression is given by a simple post-order traversal of that tree.
+
+The first computer implementing a form of reverse Polish notation (but without the name and also without a stack), was Konrad Zuse's Z3, which he started to construct in 1938 and demonstrated publicly on 12 May 1941. In dialog mode, it allowed operators to enter two operands followed by the desired operation. It was destroyed on 21 December 1943 in a bombing raid. With Zuse's help a first replica was built in 1961. The 1945 Z4 also added a 2-level stack.
+Other early computers to implement architectures enabling reverse Polish notation were the English Electric Company's KDF9 machine, which was announced in 1960 and commercially available in 1963, and the Burroughs B5000, announced in 1961 and also delivered in 1963:
+The KDF9 designers drew ideas from Hamblin's GEORGE (General Order Generator), a high-level programming language written for a DEUCE computer installed at The New South Wales University of Technology, Kensington, Australia, in 1957.
+One of the designers of the B5000, Robert S. Barton, later wrote that he developed reverse Polish notation independently of Hamblin sometime in 1958 after reading a 1954 textbook on symbolic logic by Irving Copi, where he found a reference to Polish notation, which made him read the works of Jan Łukasiewicz as well, and before he was aware of Hamblin's work.
+Friden introduced reverse Polish notation to the desktop calculator market with the EC-130, designed by Robert "Bob" Appleby Ragen, supporting a four-level stack in June 1963. The successor EC-132 added a square root function in April 1965. Around 1966, the Monroe Epic calculator supported an unnamed input scheme resembling RPN as well.
+
+Hewlett-Packard engineers designed the 9100A Desktop Calculator in 1968 with reverse Polish notation with only three stack levels with working registers X ("keyboard"), Y ("accumulate") and visible storage register Z ("temporary"), a reverse Polish notation variant later referred to as three-level RPN. This calculator popularized reverse Polish notation among the scientific and engineering communities.
+The HP-35, the world's first handheld scientific calculator, introduced the classical four-level RPN with its specific ruleset of the so-called operational (memory) stack (later also called automatic memory stack) in 1972. In this scheme, the Enter ↑ key duplicates values into Y under certain conditions (automatic stack lift with temporary stack lift disable), and the top register T ("top") gets duplicated on drops (top copy on pop aka top stack level repetition) in order to ease some calculations and to save keystrokes. HP used reverse Polish notation on every handheld calculator it sold, whether scientific, financial, or programmable, until it introduced the HP-10 adding machine calculator in 1977. By this time, HP was the leading manufacturer of calculators for professionals, including engineers and accountants.
+Later calculators with LCDs in the early 1980s, such as the HP-10C, HP-11C, HP-15C, HP-16C, and the financial HP-12C calculator also used reverse Polish notation. In 1988, Hewlett-Packard introduced a business calculator, the HP-19B, without reverse Polish notation, but its 1990 successor, the HP-19BII, gave users the option of using algebraic or reverse Polish notation again.
+In 1986, HP introduced RPL, an object-oriented successor to reverse Polish notation. It deviates from classical reverse Polish notation by using a dynamic stack only limited by the amount of available memory (instead of three or four fixed levels) and which could hold all kinds of data objects (including symbols, strings, lists, matrices, graphics, programs, etc.) instead of just numbers. The system would display an error message when running out of memory instead of just dropping values off the stack on overflow as with fixed-sized stacks. It also changed the behaviour of the stack to no longer duplicate the top register on drops (since in an unlimited stack there is no longer a top register) and the behaviour of the Enter ↑ key so that it no longer duplicated values into Y, which had shown to sometimes cause confusion among users not familiar with the specific properties of the automatic memory stack. From 1990 to 2003, HP manufactured the HP-48 series of graphing RPL calculators, followed by the HP-49 series between 1999 and 2008. The last RPL calculator was named HP 50g, introduced in 2006 and discontinued in 2015. However, there are several community efforts like newRPL or DB48X to recreate RPL on modern calculators.
+As of 2011, Hewlett-Packard was offering the calculator models 12C, 12C Platinum, 17bII+, 20b, 30b, 33s, 35s, 48gII (RPL) and 50g (RPL) which support reverse Polish notation.
+While calculators emulating classical models continued to support classical reverse Polish notation, new reverse Polish notation models feature a variant of reverse Polish notation, where the Enter ↑ key behaves as in RPL. This latter variant is sometimes known as entry RPN.
+In 2013, the HP Prime introduced a 128-level form of entry RPN called advanced RPN. In contrast to RPL with its dynamic stack, it just drops values off the stack on overflow like other fixed-sized stacks do. However, like RPL, it does not emulate the behaviour of a classical operational RPN stack to duplicate the top register on drops.
+In late 2017, the list of active models supporting reverse Polish notation included only the 12C, 12C Platinum, 17bii+, 35s, and Prime. By July 2023, only the 12C, 12C Platinum, the HP 15C Collector's Edition, and the Prime remain active models supporting RPN.
+
+In Britain, Clive Sinclair's Sinclair Scientific (1974) and Scientific Programmable (1975) models used reverse Polish notation.
+
+In 1974, Commodore produced the Minuteman *6 (MM6) without an Enter ↑ key and the Minuteman *6X (MM6X) with an Enter ↑ key, both implementing a form of two-level RPN. The SR4921 RPN came with a variant of four-level RPN with stack levels named X, Y, Z, and W (rather than T) and an Ent key (for "entry"). In contrast to Hewlett-Packard's reverse Polish notation implementation, W filled with 0 instead of its contents being duplicated on stack drops.
+
+Prinz and Prinztronic were own-brand trade names of the British Dixons photographic and electronic goods stores retail chain, later rebranded as Currys Digital stores, and became part of DSG International. A variety of calculator models was sold in the 1970s under the Prinztronic brand, all made for them by other companies.
+Among these was the PROGRAM Programmable Scientific Calculator which featured reverse Polish notation.
+
+The Aircraft Navigation Computer Heathkit OC-1401/OCW-1401 used five-level RPN in 1978.
+
+Soviet programmable calculators (MK-52, MK-61, B3-34 and earlier B3-21 models) used reverse Polish notation for both automatic mode and programming. Modern Russian calculators MK-161 and MK-152, designed and manufactured in Novosibirsk since 2007 and offered by Semico, are backwards compatible with them. Their extended architecture is also based on reverse Polish notation.
+
+A seven-level stack had been implemented in the MITS 7400C scientific desktop calculator in 1972
+National Semiconductor 4615 and 4640
+Novus 650 Mathbox, 3500 Sliderule, 4510 Mathematician, 4515 Mathematician PRO/RG, 4520 Scientist and 4525 Scientist PR
+Some APF calculators like the Mark 55 (1976)
+SwissMicros (originally firming as RPN-Calc) calculators including the DM-10CC (2012), DM-11CC (2012), DM-12CC (2012), DM-15CC (2012), DM-16CC (2012), DM10 (2013), DM11 (2013), DM12 (2013), DM15 (2013), DM16 (2013), DM10L Collector's Edition (2020), DM11L (2016), DM12L (2016), DM15L (2015), DM16L (2015), DM41 (2015), DM41L (2015), DM41X (2020), DM42 (2017) and DM32 (2023).
+The Tektronix 7854 Digital Oscilloscope (1980) included calculator functionality implemented using RPN, where operations could be applied to entire waveforms (arrays).Rousseau, Tom; Cox, Bill (August 1980). "Digital Waveform Processing in a High-Performance 7000-Series Oscilloscope" (PDF). TekScope. Vol. 12, no. 3. Beaverton, Oregon, US: Tektronix, Inc. Retrieved 2026-06-07.
+
+An eight-level stack was suggested by John A. Ball in 1978.
+The community-developed calculators WP 34S (2011), WP 31S (2014) and WP 34C (2015), which are based on the HP 20b/HP 30b hardware platform, support classical Hewlett-Packard-style reverse Polish notation supporting automatic stack lift behaviour of the Enter ↑ key and top register copies on pops, but switchable between a four- and an eight-level operational stack.
+In addition to the optional support for an eight-level stack, the newer SwissMicros DM42-based WP 43S as well as the WP 43C (2019) / C43 (2022) / C47 (2023) derivatives support data types for stack objects (real numbers, infinite integers, finite integers, complex numbers, strings, matrices, dates and times). The latter three variants can also be switched between classical and entry RPN behaviour of the Enter ↑ key, a feature often requested by the community. They also support a rarely seen significant figures mode, which had already been available as a compile-time option for the WP 34S and WP 31S.
+Since 2021, the HP-42S simulator Free42 version 3 can be enabled to support a dynamic RPN stack only limited by the amount of available memory instead of the classical 4-level stack. This feature was incorporated as a selectable function into the DM42 since firmware DMCP-3.21 / DM42-3.18.
+
+Software calculators:
+
+Atari Calculator
+Mac OS X Calculator
+Unix system calculator program dc
+Emacs lisp library package calc
+Xorg calculator (xcalc)
+F-Correlatives in MultiValue dictionary items
+RRDtool, a widely used tabulating and graphing software
+grdmath, a program for algebraic operations on NetCDF grids, part of Generic Mapping Tools (GMT) suite
+Qalculate!, a powerful and versatile cross-platform desktop calculator
+WRPN Calculator
+
+Existing implementations using reverse Polish notation include:
+
+Stack-oriented programming languages such as:
+Forth
+dc
+STOIC
+Factor
+PostScript page description language
+BibTeX style files
+Befunge
+Joy
+IPTSCRAE
+Lotus 1-2-3 and Lotus Symphony formulas
+RPL (aka Reverse Polish Language), a programming language for the Commodore PET around 1979/1981
+RPL (aka Reverse Polish Lisp), a programming language for Hewlett-Packard calculators between 1986 and 2015
+RPNL (Reverse Polish Notation Language)
+Class libraries
+TRURL, a class library for the construction of RPN calculators in Object Pascal

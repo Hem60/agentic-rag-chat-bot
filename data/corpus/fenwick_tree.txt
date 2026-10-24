@@ -1,0 +1,1208 @@
+TITLE: Fenwick tree
+URL: https://en.wikipedia.org/wiki/Fenwick_tree
+
+A Fenwick tree or binary indexed tree (BIT) is a data structure that stores an array of values and can efficiently compute prefix sums of the values and update the values.  It also supports an efficient rank-search operation for finding the longest prefix whose sum is no more than a specified value.  Its primary use is operating on the cumulative distribution function of a statistical frequency table which is updated often.
+This structure was proposed by Boris Ryabko in 1989
+with a further modification published in 1992.
+It has subsequently become known under the name Fenwick tree after Peter Fenwick, who described this structure in his 1994 article.
+A simple array of values is trivial (constant-time) to update but requires 
+  
+    
+      
+        O
+        (
+        n
+        )
+      
+    
+    {\displaystyle O(n)}
+  
+ time to compute a prefix sum or search for a prefix length.
+An array of prefix sums can return a prefix sum in constant time, and search for a prefix length in 
+  
+    
+      
+        O
+        (
+        log
+        ⁡
+        n
+        )
+      
+    
+    {\displaystyle O(\log n)}
+  
+ time, but requires 
+  
+    
+      
+        O
+        (
+        n
+        )
+      
+    
+    {\displaystyle O(n)}
+  
+ time to update one of the values.
+A Fenwick tree allows all three operations to be performed in 
+  
+    
+      
+        O
+        (
+        log
+        ⁡
+        n
+        )
+      
+    
+    {\displaystyle O(\log n)}
+  
+ time.  This is achieved by representing the values as a tree with 
+  
+    
+      
+        n
+        +
+        1
+      
+    
+    {\displaystyle n+1}
+  
+ nodes where each node in the tree stores the sum of the values from the index of its parent (exclusive) up to the index of the node (inclusive). The tree itself is implicit and can be stored as an array of 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+ values, with the implicit root node omitted from the array. The tree structure allows the operations of value retrieval, value update, prefix sum, and range sum to be performed using only 
+  
+    
+      
+        O
+        (
+        log
+        ⁡
+        n
+        )
+      
+    
+    {\displaystyle O(\log n)}
+  
+ node accesses.
+
+Given an array of values, it is sometimes desirable to calculate the running total of values up to each index according to some associative binary operation (addition on integers being by far the most common). Fenwick trees provide a method to query the running total at any index, or prefix sum, while allowing changes to the underlying value array and having all further queries reflect those changes.
+Fenwick trees are particularly designed to implement adaptive arithmetic coding, which maintains counts of each symbol produced and needs to convert those to the cumulative probability of a symbol less than a given symbol.  Development of operations it supports were primarily motivated by use in that case.
+
+A Fenwick tree is an implicit tree where nodes are consecutively numbered, and parent-child relationships are determined by arithmetic on the node indexes.
+An important function in this index arithmetic is the least significant set bit.  This is the greatest power of two which divides an index 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+.  This is the power of two (1, 2, 4, 8, ...) and not the exponent (0, 1, 2, 3, ...).  It can be efficiently computed in two's complement arithmetic as 
+  
+    
+      
+        lsb
+        ⁡
+        (
+        i
+        )
+        =
+        i
+        
+          &
+        
+        −
+        i
+      
+    
+    {\displaystyle \operatorname {lsb} (i)=i\mathbin {\&} -i}
+  
+ (where & denotes bitwise AND).
+A Fenwick tree is most easily understood using a one-based array 
+  
+    
+      
+        A
+        [
+        n
+        ]
+      
+    
+    {\displaystyle A[n]}
+  
+ with 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+ values.  Using half-open interval syntax, let 
+  
+    
+      
+        A
+        (
+        i
+        ,
+        j
+        ]
+        =
+        {
+        A
+        [
+        k
+        ]
+        
+          }
+          
+            k
+            =
+            i
+            +
+            1
+          
+          
+            j
+          
+        
+        ,
+      
+    
+    {\displaystyle A(i,j]=\{A[k]\}_{k=i+1}^{j},}
+  
+ the range from 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+ (exclusive) to 
+  
+    
+      
+        j
+      
+    
+    {\displaystyle j}
+  
+ (inclusive).  The corresponding Fenwick array 
+  
+    
+      
+        F
+        [
+        n
+        ]
+      
+    
+    {\displaystyle F[n]}
+  
+ stores the range sums 
+  
+    
+      
+        
+          F
+          [
+          i
+          ]
+          =
+          ∑
+          A
+          (
+          i
+          −
+          lsb
+          ⁡
+          (
+          i
+          )
+          ,
+          i
+          ]
+        
+      
+    
+    {\displaystyle \textstyle F[i]=\sum A(i-\operatorname {lsb} (i),i]}
+  
+.  That is, the sum of 
+  
+    
+      
+        lsb
+        ⁡
+        (
+        i
+        )
+      
+    
+    {\displaystyle \operatorname {lsb} (i)}
+  
+ values ending with and including 
+  
+    
+      
+        A
+        [
+        i
+        ]
+      
+    
+    {\displaystyle A[i]}
+  
+.
+A fictitious node 0 is used in some descriptions, but is never actually accessed and need not be explicitly stored.  
+  
+    
+      
+        lsb
+        ⁡
+        (
+        0
+        )
+        =
+        ∞
+        ,
+      
+    
+    {\displaystyle \operatorname {lsb} (0)=\infty ,}
+  
+ but the value is never actually needed.  
+  
+    
+      
+        F
+        [
+        0
+        ]
+      
+    
+    {\displaystyle F[0]}
+  
+ may be considered to contain the sum of the empty range 
+  
+    
+      
+        A
+        (
+        0
+        ,
+        0
+        ]
+        =
+        {
+        }
+      
+    
+    {\displaystyle A(0,0]=\{\}}
+  
+ with value 0.
+A "Fenwick tree" is actually three implicit trees over the same array: the interrogation tree used for translating indexes to prefix sums, the update tree used for updating elements, and the search tree for translating prefix sums to indexes (rank queries).  The first two are normally walked upwards, while the third is usually walked downwards.
+
+The interrogation tree is defined so that the parent of node 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+ is 
+  
+    
+      
+        i
+        −
+        lsb
+        ⁡
+        (
+        i
+        )
+        =
+        i
+        
+          &
+        
+        (
+        i
+        −
+        1
+        )
+      
+    
+    {\displaystyle i-\operatorname {lsb} (i)=i\mathbin {\&} (i-1)}
+  
+.  For example, the parent of 6 = 1102 is 4 = 1002.  Implicit node 0 is the root.
+Each level 
+  
+    
+      
+        k
+      
+    
+    {\displaystyle k}
+  
+ of the tree contains nodes with indices corresponding to sums of 
+  
+    
+      
+        k
+      
+    
+    {\displaystyle k}
+  
+ distinct powers of 2 (with 
+  
+    
+      
+        k
+        =
+        0
+      
+    
+    {\displaystyle k=0}
+  
+ representing an empty sum 0). For example, level 
+  
+    
+      
+        k
+        =
+        1
+      
+    
+    {\displaystyle k=1}
+  
+ contains nodes 
+  
+    
+      
+        1
+        =
+        
+          2
+          
+            0
+          
+        
+        ,
+        2
+        =
+        
+          2
+          
+            1
+          
+        
+        ,
+        4
+        =
+        
+          2
+          
+            2
+          
+        
+        ,
+        .
+        .
+        .
+      
+    
+    {\displaystyle 1=2^{0},2=2^{1},4=2^{2},...}
+  
+ and level 
+  
+    
+      
+        k
+        =
+        2
+      
+    
+    {\displaystyle k=2}
+  
+ contains nodes 
+  
+    
+      
+        3
+        =
+        
+          2
+          
+            1
+          
+        
+        +
+        
+          2
+          
+            0
+          
+        
+        ,
+        5
+        =
+        
+          2
+          
+            2
+          
+        
+        +
+        
+          2
+          
+            0
+          
+        
+        ,
+        6
+        =
+        
+          2
+          
+            2
+          
+        
+        +
+        
+          2
+          
+            1
+          
+        
+        ,
+        .
+        .
+        .
+      
+    
+    {\displaystyle 3=2^{1}+2^{0},5=2^{2}+2^{0},6=2^{2}+2^{1},...}
+  
+
+Node 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+ has 
+  
+    
+      
+        
+          log
+          
+            2
+          
+        
+        ⁡
+        (
+        lsb
+        ⁡
+        (
+        i
+        )
+        )
+      
+    
+    {\displaystyle \log _{2}(\operatorname {lsb} (i))}
+  
+ children (
+  
+    
+      
+        i
+        +
+        1
+        ,
+        i
+        +
+        2
+        ,
+        i
+        +
+        4
+        ,
+        .
+        .
+        .
+        ,
+        i
+        +
+        lsb
+        ⁡
+        (
+        i
+        )
+        
+          /
+        
+        2
+      
+    
+    {\displaystyle i+1,i+2,i+4,...,i+\operatorname {lsb} (i)/2}
+  
+), and 
+  
+    
+      
+        lsb
+        ⁡
+        (
+        i
+        )
+        −
+        1
+      
+    
+    {\displaystyle \operatorname {lsb} (i)-1}
+  
+ total descendants.  (These numbers include nodes greater than 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+, which are omitted and never accessed.)
+The below diagram shows the structure of a 16-node Fenwick tree's interrogation tree, including the root, so it corresponds to a 15-element array A:
+
+To find the prefix sum 
+  
+    
+      
+        A
+        [
+        1
+        ]
+        +
+        ⋯
+        +
+        A
+        [
+        i
+        ]
+      
+    
+    {\displaystyle A[1]+\cdots +A[i]}
+  
+, sum the values in 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+, its parent, its parent's parent, and so on up to (but not including) the root.  To compute a range sum 
+  
+    
+      
+        A
+        [
+        i
+        ]
+        +
+        ⋯
+        +
+        A
+        [
+        j
+        ]
+      
+    
+    {\displaystyle A[i]+\cdots +A[j]}
+  
+, subtract the prefix sums for 
+  
+    
+      
+        i
+        −
+        1
+      
+    
+    {\displaystyle i-1}
+  
+ and 
+  
+    
+      
+        j
+      
+    
+    {\displaystyle j}
+  
+.
+This can be optimized by stopping at their first common ancestor.  An extreme example is asking for a single entry 
+  
+    
+      
+        A
+        [
+        j
+        ]
+      
+    
+    {\displaystyle A[j]}
+  
+.  In this case, the common ancestor of 
+  
+    
+      
+        j
+      
+    
+    {\displaystyle j}
+  
+ and 
+  
+    
+      
+        i
+        =
+        j
+        −
+        1
+      
+    
+    {\displaystyle i=j-1}
+  
+ is 
+  
+    
+      
+        j
+        −
+        lsb
+        ⁡
+        (
+        j
+        )
+      
+    
+    {\displaystyle j-\operatorname {lsb} (j)}
+  
+, so start with 
+  
+    
+      
+        F
+        [
+        j
+        ]
+      
+    
+    {\displaystyle F[j]}
+  
+ and then, as long as 
+  
+    
+      
+        i
+        ≠
+        j
+        −
+        lsb
+        ⁡
+        (
+        j
+        )
+      
+    
+    {\displaystyle i\neq j-\operatorname {lsb} (j)}
+  
+, subtract 
+  
+    
+      
+        F
+        [
+        i
+        ]
+      
+    
+    {\displaystyle F[i]}
+  
+ and update i := i - lsb(i).
+
+The update tree is the mirror image of the interrogation tree.  The parent of node 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+ is 
+  
+    
+      
+        i
+        +
+        lsb
+        ⁡
+        (
+        i
+        )
+        =
+        (
+        i
+        
+          
+            |
+          
+        
+        (
+        i
+        −
+        1
+        )
+        )
+        +
+        1
+      
+    
+    {\displaystyle i+\operatorname {lsb} (i)=(i\mathbin {|} (i-1))+1}
+  
+ (where | denotes bitwise OR).  For example, the parent of 6 = 1102 is 8 = 10002.
+This conceptual tree is infinite, but only the part with indexes up to 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+ is stored or used.  Excluding the fictitious nodes with indexes greater than 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+ it will be a forest of disjoint trees, one for each bit set in the binary representation of 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+.
+Here, a node's ancestors are all nodes whose range sums include its own.  For example, 
+  
+    
+      
+        F
+        [
+        6
+        ]
+      
+    
+    {\displaystyle F[6]}
+  
+ holds the sum of 
+  
+    
+      
+        A
+        (
+        4
+        ,
+        6
+        ]
+      
+    
+    {\displaystyle A(4,6]}
+  
+, 
+  
+    
+      
+        F
+        [
+        8
+        ]
+      
+    
+    {\displaystyle F[8]}
+  
+ holds the sum of 
+  
+    
+      
+        A
+        (
+        0
+        ,
+        8
+        ]
+      
+    
+    {\displaystyle A(0,8]}
+  
+, and so on.
+To modify one of the values 
+  
+    
+      
+        A
+        [
+        i
+        ]
+      
+    
+    {\displaystyle A[i]}
+  
+, add the change to 
+  
+    
+      
+        F
+        [
+        i
+        ]
+      
+    
+    {\displaystyle F[i]}
+  
+, then 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+'s parent, then its grandparent, and so on, until the index exceeds 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+.
+
+Unlike the other two trees, the search tree is a binary tree, arranged in an order Knuth calls a "sideways heap".   Each node is assigned a height equal to the number of trailing zeros in the binary representation of its index, with the parent and children being the numerically closest index(es) of the adjacent height.  Nodes with odd indexes (
+  
+    
+      
+        lsb
+        ⁡
+        (
+        i
+        )
+        =
+        1
+      
+    
+    {\displaystyle \operatorname {lsb} (i)=1}
+  
+) are leaves.  Nodes with even indexes have the closest two nodes of the next-lowest index as children, 
+  
+    
+      
+        i
+        ±
+        lsb
+        ⁡
+        (
+        i
+        )
+        
+          /
+        
+        2
+      
+    
+    {\displaystyle i\pm \operatorname {lsb} (i)/2}
+  
+.    Node 
+  
+    
+      
+        i
+      
+    
+    {\displaystyle i}
+  
+'s parent in the search tree is 
+  
+    
+      
+        (
+        i
+        −
+        lsb
+        ⁡
+        (
+        i
+        )
+        )
+        
+          
+            |
+          
+        
+        (
+        2
+        ⋅
+        lsb
+        ⁡
+        (
+        i
+        )
+        )
+      
+    
+    {\displaystyle (i-\operatorname {lsb} (i))\mathbin {|} (2\cdot \operatorname {lsb} (i))}
+  
+.
+For example, the children of 6 = 1102 are 5 = 1012 and 7 = 1112, and its parent is 4 = 1002.
+Although this tree is potentially infinite, we may define its root to be the highest existing node, whose index is the greatest power of 2 less than or equal to 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+.
+It is possible for a node to have a fictitious parent with an index greater than 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+ yet still have an existing grandparent.  If the example above applied to a 5-node tree, then node 5 would have a fictitious parent 6, but an existing grandparent 4.
+The search tree may be considered a combination of the previous two trees.  A node's left subtree contains all of its descendants in the update tree, while its right subtree contains all of its descendants in the interrogation tree.  A node's parent in the search tree is either its interrogation or update parent (depending on whether the node is a right or left child, respectively), and the other type of parent may be found by multiple upward steps in the search tree.
+However, upward traversals in the search tree are uncommon; its primary use is to perform rank queries: given a prefix sum, at what index does it appear?  This is done by a downward traversal through the search tree.  During the traversal, three variables are maintained: The current node's index, the rank being sought in the subtree rooted at the current node, and a "fallback index" to be returned if the rank sought is greater than can be found in the subtree.
+Initially, the current node is the root, the rank sought is the original query, and the fallback index is a special "overflow" value indicating that the rank is not in the tree.  (Depending on the application, 
+  
+    
+      
+        0
+      
+    
+    {\displaystyle 0}
+  
+ or 
+  
+    
+      
+        n
+        +
+        1
+      
+    
+    {\displaystyle n+1}
+  
+ might be used for this purpose.)
+Each step, either the current node is a fictitious node (index greater than 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+), or we must decide if the position sought is to the left or right of the end of the current node.  If the rank sought is less than the Fenwick array value 
+  
+    
+      
+        F
+        [
+        i
+        ]
+      
+    
+    {\displaystyle F[i]}
+  
+ for the current node, we must search its left subtree.  If it is greater, search its right subtree.  If it is equal, the direction chosen depends on how you wish to handle searches for sums lying exactly between two nodes.
+These three possibilities are then further divided based on whether the current node is a leaf or not:
+
+If the current node is a leaf and:
+the target is in its (empty) left subtree, return the current index.
+it is fictitious or the target is in its right subtree, return the fallback index.
+If the current node is not a leaf and:
+it is fictitious, search for the same rank in its left subtree with an unchanged fallback index.
+the target is in its left subtree, search for the same rank in its left subtree with the current index as the fallback index.
+the target is in its right subtree, search for the target rank minus the current node's value in the right subtree, with an unchanged fallback index.
+
+A simple pseudocode implementation of the two main operations on a Fenwick tree—query and update—is as following:
+
+function query(tree, index) is
+    sum := 0
+    while index > 0 do
+        sum += tree[index]
+        index -= lsb(index)
+    return sum
+
+function update(tree, index, value) is
+    while index < size(tree) do
+        tree[index] += value
+        index += lsb(index)
+
+The function 
+  
+    
+      
+        
+          lsb
+        
+        (
+        n
+        )
+      
+    
+    {\displaystyle {\text{lsb}}(n)}
+  
+ computes the least significant set bit of the given 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+ or, equivalently, the largest power of two that is also a divisor of 
+  
+    
+      
+        n
+      
+    
+    {\displaystyle n}
+  
+. For example, 
+  
+    
+      
+        
+          lsb
+        
+        (
+        20
+        )
+        =
+        4
+      
+    
+    {\displaystyle {\text{lsb}}(20)=4}
+  
+, as shown in its binary representation: 
+  
+    
+      
+        
+          lsb
+        
+        (
+        10
+        
+          
+            1
+          
+        
+        
+          00
+          
+            2
+          
+        
+        )
+        =
+        
+          100
+          
+            2
+          
+        
+        =
+        4
+      
+    
+    {\displaystyle {\text{lsb}}(10{\textbf {1}}00_{2})=100_{2}=4}
+  
+. This function can be simply implemented in code through a bitwise AND operation: lsb(n) = n & (-n), assuming two's complement negation.
+
+One naïve algorithm to construct a Fenwick tree consists of initializing the tree with null values and updating each index individually. This solution works in 
+  
+    
+      
+        O
+        (
+        n
+        log
+        ⁡
+        
+          n
+        
+        )
+      
+    
+    {\displaystyle O(n\log {n})}
+  
+ time, but an 
+  
+    
+      
+        O
+        (
+        n
+        )
+      
+    
+    {\displaystyle O(n)}
+  
+ construction is possible:
+
+function construct(values) is
+    tree := values
+    for index from 1 to size(tree) do
+        parentIndex := index + lsb(index)
+        if parentIndex < size(tree) then
+            tree[parentIndex] += tree[index]
+    return tree

@@ -1,0 +1,132 @@
+TITLE: Double-ended queue
+URL: https://en.wikipedia.org/wiki/Double-ended_queue
+
+In computer science, a double-ended queue (abbreviated as deque —  DEK),  is an abstract data type that serves as a container, with a restricted access to the stored items. As a generalization of both the stack and the queue, the deque may have similar functions as a data buffer: it can be use both as a retainer (queue), or for backtracking (stack). However it offers greater flexibility in managing the order of elements and some algorithms are based on its functionalities.
+
+The double-ended queue is most often presented as a generalized queue, which gives its name. It is a queue that "allows insertions and deletions at both ends". The deque is also described as a generalization of the stack abstract data structure, as "two stacks joined together at the base", with a shared bottom item, or as a combination of both the stack and the queue.
+
+ And then conversely the queue and the stack are restricted forms of the deque.
+
+Different analogies with real-world objects are used to describe the deque. It is compared to a "deck of cards" with which the structure shares some properties and the pronunciation. The deque is also likened to a "necklace with beads that can be added and/or removed at either end". Like the queue, it is depicted as a set of items lined up in a pipe open at both ends ; unlike the queue, the items can move in both direction in the pipe. The "railroad model" introduced by Knuth (after "Dijkstra's shunting yard") focus on the similarity with the queue, with one input and one output, and switches to select the side of the deque to be accessed.
+The main operations on a deque are said to act on either side (or end) of the structure: addition of an item into the collection (enqueue), removal of an item (dequeue), and reading of an item (peek). At a given point in time only two items can be accessed, from either side of the deque, based on the history of the structure. The designated item on one side is either the latest one that has been inserted on this side (LIFO behavior), or, — if there is none —, the oldest one that has been inserted on the other side (FIFO behavior). This service policy gives the structure more flexibility and versatility, but it is also more difficult to fathom and use.
+The six main operations on a deque may be described in two ways, based on the queue (or stack) operations: either by duplicating them, on each end of the structure (add_left, add_right, etc.), or by generalizing them with a parameter that indicates the location on which an operation is performed (add(left,...), add(right,...), etc.). Each approach has its merits: the first one allows the overloading of the operations but needs to have different names on each sides, while the second one simplifies the interface by halving the number of operations and allows to make use of the symmetry of the structure. In what follows, we will go with the second option to avoid needless repetition.
+The deque has two other possible sub-types (more restricted forms are useless) :
+
+An input-restricted deque is one where deletion can be made from either end, but insertion can be made at one end only. It is a queue with a back output, or a stack with a bottom output.
+An output-restricted deque is one where insertion can be made at either end, but deletion can be made from one end only. It is a queue with a front input, or a stack with bottom input.
+Despite their limitations these sub-types have many applications and some of their implementations may be simpler.
+
+After Knuth, these structures are often described as different forms of restricted linear lists , or sequences. They maintain the contained elements in a given order while only allow access to some of them: the first one and/or the last one in the sequence. However other authors object that they "hide their internal dynamism from the user" and only the common implementations are linear. They consider these restricted-access data structures are either:
+
+semi-structured: they have "a special or designated item but no logical relationship among the rest of the items", and "the operation that deletes an item takes no item as a parameter";
+or point structures "because only two points of a queue exist for the outside world": the stack is then a one-point structure, while the queue and the deque are two-point structures.
+For example, a deque can be implemented with a min-max heap, or with a set: before an item is inserted, it is tagged with a integer used as its value in the heap, and that depends on the history of the container. The stored elements in a heap are not ordered and their locations depend on the internal state of the structure. Another common restricted access structure is the priority queue, which is not a linear structure.
+The deque can be generalized by the addition of some operations: a deque with heap order, or mindeque, allows the find-min operation. Fast or even optimal catenation is also possible.
+Some authors consider the deque structure as being of little use, less useful than its restricted forms, especially the stack and the queue.
+
+The deque is here considered as unbounded: it can contain an unlimited (and undefined) number of items. A bounded deque is possible, and requires a slightly different specification, but when an overflow occurs the behavior depends on the implementation: error value, exception, deletion, etc. 
+Let a deque d ∈ D, an item x ∈ X, and a side (end) e ∈ E = {left,right} with ¬ left = right
+     Key operations: with D* = D \ {Λ}
+
+ 
+As a linear structure, the deque can be specified in terms of catenation (noted "~") of sequences and singleton sequences (noted "< ... >").
+
+An axiomatic specification (or algebraic) of the deque can be obtained by extending and merging those of the stack and the queue. (see Nguyen thesis for an alternative formulation).
+     Axiomatic constraints:
+
+The sequence of operations in the previous example results in the following expression:
+d = remove( right, add(left, DE, remove( left, remove( left, add(right, UE, add(right, QUE, add(left, STA, remove(left, add(right, CK, add(left,DE,Λ) )))))))))
+This can be simplified with the axioms (1), (2) and (3). In order of application, from the empty deque :
+
+This results in the following expression:
+
+d = add(left,DE,add(right,QUE,Λ))
+As a transformation from an empty sequence :
+
+< > add(right,QUE)⟼ < QUE > add(left,DE)⟼ < DE,QUE >
+Conversely the stack and the queue can be specified axiomatically in terms of the deque.
+
+The term deque ( DEK) is used as an abbreviation of Double-Ended QUEue. Dequeue is sometimes used but can be confusing as the term is also used for the operation of removing an element of the deque. A deque may also be called a head-tail linked list, though properly this refers to a specific implementation.An output-restricted deque may be designated as steque (for stack-ended queue).
+There is no standard vocabulary associated with deques. The terms enqueue and dequeue, borrowed from the queue structure, generally denote the basic operations on a deque, on either end. But papers and actual implementations often use different names.
+The names of the operations vary depending on the context, the author, the implementation or the programming language:
+
+in analogy to a queue: enqueue and dequeue, or push and pull;
+in analogy to a stack: push and pop on one side, and possibly inject and eject on the other side;
+in analogy to a list: cons and uncons on one side, snoc and unsnoc on the other side;
+in analogy to an array: append on one side, prepend on the other side, or shift and unshift.
+Unlike the associated data structures the deque is symmetrical. Its sides may be freely named according to the context:
+
+in analogy to a queue: front and back;
+in analogy to a stack: top and bottom;
+in analogy to a list: head or last;
+in analogy to an array: first and end, or first and last;
+finally left and right preserves the original symmetry of the structure.
+The full name of an operation may be a combination of the name of the basic operation and the name of the side: e.g. push_front and pop_back. Terms from different analogies may be associated in a single context: append and pop, push and shift, or front and tail. Finally some programming languages use even different names based on the underlying data structure.
+Also generally implemented are "peek" operations, which return the value at one end without dequeuing it. It is often named after the target side: e.g. top is the value of the element at the top of the deque. In the context of the functional programming, the dequeue operation (that returns two values: the removed element and the new deque) is not used. It is replaced by a peek function (i.e. head and last) and a function that returns the deque minus the end, i.e. tail and init.
+
+There are at least two common ways to efficiently implement a deque, that are often pitted against one another: with a doubly linked list or with a modified dynamic array. There are many variations and actual implementations are often hybrid solutions.
+Additionally, several purely functional implementations of the double-ended queue exist.
+
+While a simple list may implement a deque, a doubly-linked list is more adequate for its symmetry to achieve a fast access to both ends of the list (head and tail, hence the name head-tail linked list). The obvious solution is to manage two references; alternatively the deque can be built as a circular list.
+
+In a doubly-linked list implementation, and assuming no allocation/deallocation overhead, the time complexity of all deque operations is O(1). Additionally, insertion or deletion in the middle, given an iterator, can also be achieved in constant time; however, the time taken for random access by index is O(n). Similarly, finding a specific element normally requires O(n) time. Linked data structures generally have poor locality of reference.
+
+In this case as well, while a dynamic array can be used to implement a deque, a variant that can grow from both ends is more appropriate. This is sometimes called array deques. This can be achieved in various ways, e.g.:
+by offsetting the position of the first element of the array in the reserved memory: the unused space is distributed on both side of the data;
+with a circular array.
+The amortized time complexity of all deque operations with an array deque is O(1), thanks to the geometric expansion of the back-end buffer. Additionally, random access by index takes constant time; but the average time taken for insertion or deletion in the middle are O(n). Thank to the fast random access, finding an element in an ordered array is time O(log n) (binary search).
+Each time the array is resized, the whole content is moved: the memory usage is then momentarily doubled (or more), and all direct (external) references to the content of the array are lost.
+
+Doubly linked lists cannot be used as immutable data structures. And an immutable array would be highly inefficient (an array is often simulated by a tree). A purely functional implementation of the deque can be based on stack, that is easily implemented with a singly linked list as an immutable and persistent structure.
+
+There are several works in the literature dealing with this problem. All of these use two key ideas. The first is that a deque can be represented by a pair of stacks, one representing the front part of the deque and the other representing the reversal of the rear part. When one side becomes empty because of too many pop or eject operations, the deque, now all on one stack, is copied into two stacks each containing half of the deque elements. This fifty-fifty split guarantees that such copying, even though expensive, happens infrequently. A simple amortization argument shows that this gives a linear-time simulation of a deque by a constant number of stacks: k deque operations starting from an empty deque are simulated by O(k) stack operations.
+[...]The second idea is to use incremental copying to convert this linear-time simulation into a real-time simulation: as soon as the two stack become sufficiently unbalanced, recopying to create two balanced stacks begins.
+This last process could be rather complicated as it needs to be executed concurrently with other operations and completed before the next one, to achieve an amortized real-time complexity. The next step is to support the operations in O(1) worst-case time. Another challenge is the real-time catenation of deques.
+Okasaki gives a simple solution that uses lazy lists combined with memoization. The stack to stack balancing is then partially automatic by means of a precise scheduling of incremental functions. However some authors deem such algorithm as not purely functional since memoization is considered as a side effect. Kaplan and Tarjan gives their own version of the purely functional deque (non-catenable), based on three ideas:
+
+data-structural bootstrapping, resulting in a recursive structure that foresees the finger tree: a deque is a triple consisting of a sub-deque flanked by two size-bounded buffers. Enqueue and dequeue basically operate on the buffers (in real-time because of the bounded size), and move forward one step in the balancing process;
+recursive slow down, inspired by Redundant binary representation (RBR), where an additional 2 digit stands for a suspended carry: the sub-deque contains pairs of elements from the parent deque, and the propagation of the balancing process to the sub-deque is delayed like is the carry propagation after the increment or decrement of a RBR number;
+and a modification of the spine of the finger tree-like structure (a stack) into a stack of stacks that can be thought of as a 2-level skip list. This allows a real-time access to the unbalanced sub-deques. In analogy to a RBR, the sub-stacks stand for contiguous blocks of 1 digits, that can be skipped to access the next 2, i.e. a suspended carry.
+In this paper Kaplan and Tarjan also present an even more complex version that achieves catenation in real-time. However this description is mostly textual. J. Viennot, A. Wendling, A. Guéneau, and F. Pottier publish a verified implementation of this data structure (in OCaml and Rocq), alongside a formal description and detailed analysis of the algorithm.
+More generally, real-time catenation requires a deque is a tuple consisting mainly in two sub-structures, that themselves contain deques or compounds of deques. The linear spine of the non-catenable deque is then replaced by a binary skeleton.
+Kaplan, Okasaki, and Tarjan produced a simpler, amortized version that can be implemented either using lazy evaluation or more efficiently using mutation in a broader but still restricted fashion.
+Mihaescu and Tarjan created a simpler (but still highly complex) strictly purely functional implementation of catenable deques, and also a much simpler implementation of strictly purely functional non catenable deques, both of which have optimal worst-case bounds (not officially published).
+
+Ada's containers provides the generic packages Ada.Containers.Vectors and Ada.Containers.Doubly_Linked_Lists, for the dynamic array and linked list implementations, respectively.
+
+C++'s Standard Template Library provides the class templates std::deque and std::list, for the multiple array and linked list implementations, respectively.
+As of Java 6, Java's Collections Framework provides a new Deque interface that provides the functionality of insertion and removal at both ends. It is implemented by classes such as ArrayDeque (also new in Java 6) and LinkedList, providing the dynamic array and linked list implementations, respectively. However, the ArrayDeque, contrary to its name, does not support random access.
+JavaScript's Array prototype & Perl's arrays have native support for both removing (shift and pop) and adding (unshift and push) elements on both ends.
+Python 2.4 introduced the collections module with support for deque objects. It is implemented using a doubly linked list of fixed-length subarrays.
+As of PHP 5.3, PHP's SPL extension contains the 'SplDoublyLinkedList' class that can be used to implement Deque datastructures. Previously to make a Deque structure the array functions array_shift/unshift/pop/push had to be used instead.
+GHC's Data.Sequence module implements an efficient, functional deque structure in Haskell. The implementation uses 2–3 finger trees annotated with sizes.
+Rust's std::collections includes VecDeque which implements a double-ended queue using a growable ring buffer.
+
+A double-ended queue can always be used as a substitute for a queue or a stack structure. Thus real-world applications of the deque are often extended versions of stack- or queue-based algorithms. Actually many applications only need an output- or (more rarely) input-restricted deque. Only real-world applications that are optimally based on strict deque, i.e. which only need access to the elements at both ends and one by one, are listed here.
+
+An input-restricted deque can be used to build a monotonic queue, i.e. a sub-sequence whom elements are in given order, either increasing or decreasing. Given a sequence, the algorithm only keeps elements in the desired order and discards the other ones. The order of the elements is preserved.
+To build an increasing (resp. decreasing) monotonic sequence, only stack operations are used :
+
+Start with an empty deque,
+For each element in the input sequence:
+while the last element of the deque is greater (resp. smaller) than the current element, pop it out,
+push the current element into the deque.
+
+The elements of the monotonic sequence can then be dequeued from the other side (hence the usage of a deque).
+A monotonic queue can be used to find the minimum or maximum value in a sliding window over a sequence in a linear time complexity. The complexity of a naive solution is O(n.k) time and O(1) space, where n is the length of the input sequence and k the size of the window. A solution that uses some kind of search method is O(n.log n) time and O(n) space.
+In the following code, the monotonic queue stores references to the elements of the sequence.
+
+Each element of the input sequence is pushed and popped at most once resulting in 2.n operations. The time complexity is then O(n). The space complexity is O(k), the maximum size of the deque.
+In a similar way a monotonic queue allows the optimization of some dynamic programming cases equivalent to the least-weight sub-sequence problem : shortest path problem for a weighted directed graph, paragraph breaking, etc. These problems are said to be convex or concave, and then monotonic. The time complexity is then reduced from O(n2) to O(n.log n), and O(n) in conducive situations.
+
+An other direct application of the monotonic queue is the minimum queue or minqueue. In this case the count of items in the window varies. The minqueue is a data structure with a queue interface that additionally gives a direct access to the minimum stored item. The key operations are then enqueue, dequeue and find min. Despite the name alludes to the (min/max-) heap, the min/max-queue is not a priority queue: the order of the items is maintained from the enter to the exit (FIFO policy). A simple version of a min-queue with O(1) amortized time is a normal queue combined with an auxiliary increasing monotonic queue, that gives the minimum item on its front. The addition of an item applies to both queues, and when the minimum item is dequeued from the normal queue (i.e. same front item), it is also dequeued from the monotonic queue.
+
+Melkman's algorithm computes the convex hull of a simple polygonal chain (or a simple polygon) in linear time. The main difference with other similar algorithm is that Melkman requires vertices to be added or removed on both ends of the forming hull chain. Hence the use of a deque. 
+The algorithm computes the position of each new vertex relative to the 
+first and last segments (two vertices each) of the hull chain (stored in the deque). The vertex is either ignored or added (enqueued) to both sides of the deque (the hull is a loop), after removing (dequeueing) some previous vertices that are now on the inner side of the hull.
+
+Stacks and queues can be seen as a particular kinds of priority queues, with the priority determined by the order in which the elements are inserted. Similarly a deque can implement a priority queue with two levels of priority: high priority elements are added to the front side of the deque while low priority ones are added to the rear. Unless an element could be canceled or stolen and then ejected from the bottom, an output-restricted deque is adequate.
+Thus it's possible to modify the standard Dijkstra's algorithm to find single source shortest path in a graph with 0-cost and 1-cost edges. A deque substitutes the min-priority queue. 0-cost elements are enqueued in front of the deque (high-priority) and then are always processed before the higher cost elements (low-priority) that are enqueued at the rear end.
+A deque is used in the work stealing algorithm. This algorithm implements task scheduling for several processors. A separate deque with threads to be executed is maintained for each processor. To execute the next thread, the processor gets the first element from the deque (using the "remove first element" deque operation). If the current thread forks, it is put back to the front of the deque ("insert element at front") and a new thread is executed. When one of the processors finishes execution of its own threads (i.e. its deque is empty), it can "steal" a thread from another processor: it gets the last element from the deque of another processor ("remove last element") and executes it. The work stealing algorithm is used by Intel's Threading Building Blocks (TBB) library for parallel programming.
+
+A Deque automaton (DA) is a finite-state machine equipped with a deque auxiliary memory. It generalizes Pushdown automaton (PDA) (stack automaton) and Queue automaton (Pull up automaton,  PUA). As such it is equivalent to a Turing machine, and therefore it can process the same class of formal languages. But unlike the PDA and the PUA which impose serialization, a deque automaton permits parallel or interleaved execution of some operations.

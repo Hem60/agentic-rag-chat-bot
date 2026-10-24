@@ -1,0 +1,261 @@
+TITLE: Abstract data type
+URL: https://en.wikipedia.org/wiki/Abstract_data_type
+
+In computer science, an abstract data type (ADT) is a mathematical model for data types, defined by its behavior (semantics) from the point of view of a user of the data, specifically in terms of possible values, possible operations on data of this type, and the behavior of these operations. This mathematical model contrasts with data structures, which are concrete representations of data, and represent the point of view of an implementer, not a user. For example, a stack has push/pop operations that follow a Last-In-First-Out rule, and can be concretely implemented using either a linked list or an array. Another example is a set which stores values, without any particular order, and no repeated values. Values themselves are not retrieved from sets; rather, one tests a value for membership to obtain a Boolean "in" or "not in".
+ADTs are a theoretical concept, used in formal semantics and program verification and, less strictly, in the design and analysis of algorithms, data structures, and software systems. Most mainstream computer languages do not directly support formally specifying ADTs. However, various programming language features correspond to certain aspects of implementing ADTs and are often confused with ADTs themselves; these include abstract types, opaque data types, protocols, and design by contract. For example, in modular programming, the module declares procedures that correspond to the ADT operations, often with comments that describe the constraints. This information hiding strategy allows the implementation of the module to be changed without disturbing the client programs, but the module only informally defines an ADT. The notion of abstract data types is related to the concept of data abstraction, important in object-oriented programming and design by contract methodologies for software engineering.
+
+ADTs were first proposed by Barbara Liskov and Stephen N. Zilles in 1974, as part of the development of the CLU language. Algebraic specification was an important subject of research in CS around 1980 and almost a synonym for abstract data types at that time. It has a mathematical foundation in universal algebra.
+
+Formally, an ADT is analogous to an algebraic structure in mathematics, consisting of a domain, a collection of operations, and a set of constraints the operations must satisfy. The domain is often defined implicitly, for example the free object over the set of ADT operations. The interface of the ADT typically refers only to the domain and operations, and perhaps some of the constraints on the operations, such as pre-conditions and post-conditions; but not to other constraints, such as relations between the operations, which are considered behavior. There are two main styles of formal specifications for behavior, axiomatic semantics and operational semantics.
+Despite not being part of the interface, the constraints are still important to the definition of the ADT; for example a stack and a queue have similar add element/remove element interfaces, but it is the constraints that distinguish last-in-first-out from first-in-first-out behavior. The constraints do not consist only of equations such as fetch(store(S,v))=v but also logical formulas.
+
+In the spirit of functional programming, each state of an abstract data structure is a separate entity or value. In this view, each operation is modelled as a mathematical function with no side effects. Operations that modify the ADT are modeled as functions that take the old state as an argument and returns the new state as part of the result. The order in which operations are evaluated is immaterial, and the same operation applied to the same arguments (including the same input states) will always return the same results (and output states). The constraints are specified as axioms or algebraic laws that the operations must satisfy.
+
+In the spirit of imperative programming, an abstract data structure is conceived as an entity that is mutable—meaning that there is a notion of time and the ADT may be in different states at different times. Operations then change the state of the ADT over time; therefore, the order in which operations are evaluated is important, and the same operation on the same entities may have different effects if executed at different times. This is analogous to the instructions of a computer or the commands and procedures of an imperative language. To underscore this view, it is customary to say that the operations are executed or applied, rather than evaluated, similar to the imperative style often used when describing abstract algorithms. The constraints are typically specified in prose.
+
+Presentations of ADTs are often limited in scope to only key operations. More thorough presentations often specify auxiliary operations on ADTs, such as:
+
+create(), that yields a new instance of the ADT;
+compare(s, t), that tests whether two instances' states are equivalent in some sense;
+hash(s), that computes some standard hash function from the instance's state;
+print(s) or show(s), that produces a human-readable representation of the instance's state.
+These names are illustrative and may vary between authors. In imperative-style ADT definitions, one often finds also:
+
+initialize(s), that prepares a newly created instance s for further operations, or resets it to some "initial state";
+copy(s), that puts instance s in a state equivalent to that of t;
+clone(t), that performs s ← create(), copy(s, t), and returns s;
+free(s) or destroy(s), that reclaims the memory and other resources used by s.
+The free operation is not normally relevant or meaningful, since ADTs are theoretical entities that do not "use memory". However, it may be necessary when one needs to analyze the storage used by an algorithm that uses the ADT. In that case, one needs additional axioms that specify how much memory each ADT instance uses, as a function of its state, and how much of it is returned to the pool by free.
+
+The definition of an ADT often restricts the stored value(s) for its instances, to members of a specific set X called the range of those variables. For example, an abstract variable may be constrained to only store integers. As in programming languages, such restrictions may simplify the description and analysis of algorithms, and improve its readability. 
+
+In the operational style, it is often unclear how multiple instances are handled and if modifying one instance may affect others. A common style of defining ADTs writes the operations as if only one instance exists during the execution of the algorithm, and all operations are applied to that instance. For example, a stack may have operations push(x) and pop(), that operate on the only existing stack. ADT definitions in this style can be easily rewritten to admit multiple coexisting instances of the ADT, by adding an explicit instance parameter (like S in the stack example below) to every operation that uses or modifies the implicit instance. Some ADTs cannot be meaningfully defined without allowing multiple instances, for example when a single operation takes two distinct instances of the ADT as parameters, such as a union operation on sets or a compare operation on lists.
+The multiple instance style is sometimes combined with an aliasing axiom, namely that the result of create() is distinct from any instance already in use by the algorithm. Implementations of ADTs may still reuse memory and allow implementations of create() to yield a previously created instance; however, defining that such an instance even is "reused" is difficult in the ADT formalism.
+More generally, this axiom may be strengthened to exclude also partial aliasing with other instances, so that composite ADTs (such as trees or records) and reference-style ADTs (such as pointers) may be assumed to be completely disjoint. For example, when extending the definition of an abstract variable to include abstract records, operations upon a field F of a record variable R, clearly involve F, which is distinct from, but also a part of, R. A partial aliasing axiom would state that changing a field of one record variable does not affect any other records.
+
+Some authors also include the computational complexity ("cost") of each operation, both in terms of time (for computing operations) and space (for representing values), to aid in analysis of algorithms. For example, one may specify that each operation takes the same time and each value takes the same space regardless of the state of the ADT, or that there is a "size" of the ADT and the operations are linear, quadratic, etc. in the size of the ADT. Alexander Stepanov, designer of the C++ Standard Template Library, included complexity guarantees in the STL specification, arguing:
+
+The reason for introducing the notion of abstract data types was to allow interchangeable software modules. You cannot have interchangeable modules unless these modules share similar complexity behavior. If I replace one module with another module with the same functional behavior but with different complexity tradeoffs, the user of this code will be unpleasantly surprised. I could tell him anything I like about data abstraction, and he still would not want to use the code. Complexity assertions have to be part of the interface.
+Other authors disagree, arguing that a stack ADT is the same whether it is implemented with a linked list or an array, despite the difference in operation costs, and that an ADT specification should be independent of implementation.
+
+An abstract variable may be regarded as the simplest non-trivial ADT, with the semantics of an imperative variable. It admits two operations, fetch and store. Operational definitions are often written in terms of abstract variables. In the axiomatic semantics, letting 
+  
+    
+      
+        V
+      
+    
+    {\displaystyle V}
+  
+ be the type of the abstract variable and 
+  
+    
+      
+        X
+      
+    
+    {\displaystyle X}
+  
+ be the type of its contents, fetch is a function 
+  
+    
+      
+        V
+        →
+        X
+      
+    
+    {\displaystyle V\to X}
+  
+ and store is a function of type 
+  
+    
+      
+        V
+        ×
+        X
+        →
+        V
+      
+    
+    {\displaystyle V\times X\to V}
+  
+.  The main constraint is that fetch always returns the value x used in the most recent store operation on the same variable V, i.e. fetch(store(V,x)) = x. We may also require that store overwrites the value fully, store(store(V,x1),x2) = store(V,x2).
+In the operational semantics, fetch(V) is a procedure that returns the current value in the location V, and store(V, x) is a procedure with void return type that stores the value x in the location V. The constraints are described informally as that reads are consistent with writes. As in many programming languages, the operation store(V, x) is often written V ← x (or some similar notation), and fetch(V) is implied whenever a variable V is used in a context where a value is required. Thus, for example, V ← V + 1 is commonly understood to be a shorthand for store(V,fetch(V) + 1).
+In this definition, it is implicitly assumed that names are always distinct: storing a value into a variable U has no effect on the state of a distinct variable V. To make this assumption explicit, one could add the constraint that:
+
+if U and V are distinct variables, the sequence { store(U, x); store(V, y) } is equivalent to { store(V, y); store(U, x) }.
+This definition does not say anything about the result of evaluating fetch(V) when V is un-initialized, that is, before performing any store operation on V. Fetching before storing can be disallowed, defined to have a certain result, or left unspecified. There are some algorithms whose efficiency depends on the assumption that such a fetch is legal, and returns some arbitrary value in the variable's range.
+
+An abstract stack is a last-in-first-out structure, It is generally defined by three key operations: push, that inserts a data item onto the stack; pop, that removes a data item from it; and peek or top, that accesses a data item on top of the stack without removal. A complete abstract stack definition includes also a Boolean-valued function empty(S) and a create() operation that returns an initial stack instance.
+In the axiomatic semantics, letting 
+  
+    
+      
+        S
+      
+    
+    {\displaystyle S}
+  
+ be the type of stack states and 
+  
+    
+      
+        X
+      
+    
+    {\displaystyle X}
+  
+ be the type of values contained in the stack, these could have the types 
+  
+    
+      
+        p
+        u
+        s
+        h
+        :
+        S
+        →
+        X
+        →
+        S
+      
+    
+    {\displaystyle push:S\to X\to S}
+  
+, 
+  
+    
+      
+        p
+        o
+        p
+        :
+        S
+        →
+        (
+        S
+        ,
+        X
+        )
+      
+    
+    {\displaystyle pop:S\to (S,X)}
+  
+, 
+  
+    
+      
+        t
+        o
+        p
+        :
+        S
+        →
+        X
+      
+    
+    {\displaystyle top:S\to X}
+  
+, 
+  
+    
+      
+        c
+        r
+        e
+        a
+        t
+        e
+        :
+        S
+      
+    
+    {\displaystyle create:S}
+  
+, and 
+  
+    
+      
+        e
+        m
+        p
+        t
+        y
+        :
+        S
+        →
+        
+          B
+        
+      
+    
+    {\displaystyle empty:S\to \mathbb {B} }
+  
+. In the axiomatic semantics, creating the initial stack is a "trivial" operation, and always returns the same distinguished state. Therefore, it is often designated by a special symbol like Λ or "()". The empty operation predicate can then be written simply as 
+  
+    
+      
+        s
+        =
+        Λ
+      
+    
+    {\displaystyle s=\Lambda }
+  
+ or 
+  
+    
+      
+        s
+        ≠
+        Λ
+      
+    
+    {\displaystyle s\neq \Lambda }
+  
+.
+The constraints are then pop(push(S,v))=(S,v), top(push(S,v))=v, empty(create) = T (a newly created stack is empty), empty(push(S, x)) = F (pushing something into a stack makes it non-empty). These axioms do not define the effect of top(s) or pop(s), unless s is a stack state returned by a push. Since push leaves the stack non-empty, those two operations can be defined to be invalid when s = Λ. From these axioms (and the lack of side effects), it can be deduced that push(Λ, x) ≠ Λ. Also, push(s, x) = push(t, y) if and only if x = y and s = t.
+As in some other branches of mathematics, it is customary to assume also that the stack states are only those whose existence can be proved from the axioms in a finite number of steps. In this case, it means that every stack is a finite sequence of values, that becomes the empty stack (Λ) after a finite number of pops. By themselves, the axioms above do not exclude the existence of infinite stacks (that can be popped forever, each time yielding a different state) or circular stacks (that return to the same state after a finite number of pops). In particular, they do not exclude states s such that pop(s) = s or push(s, x) = s for some x. However, since one cannot obtain such stack states from the initial stack state with the given operations, they are assumed "not to exist".
+In the operational definition of an abstract stack, push(S, x) returns nothing and pop(S) yields the value as the result but not the new state of the stack. There is then the constraint that, for any value x and any abstract variable V, the sequence of operations { push(S, x); V ← pop(S) } is equivalent to V ← x. Since the assignment V ← x, by definition, cannot change the state of S, this condition implies that V ← pop(S) restores S to the state it had before the push(S, x). From this condition and from the properties of abstract variables, it follows, for example, that the sequence:
+
+{ push(S, x); push(S, y); U ← pop(S); push(S, z); V ← pop(S); W ← pop(S) }
+where x, y, and z are any values, and U, V, W are pairwise distinct variables, is equivalent to:
+
+{ U ← y; V ← z; W ← x }
+Unlike the axiomatic semantics, the operational semantics can suffer from aliasing. Here it is implicitly assumed that operations on a stack instance do not modify the state of any other ADT instance, including other stacks; that is:
+
+For any values x, y, and any distinct stacks S and T, the sequence { push(S, x); push(T, y) } is equivalent to { push(T, y); push(S, x) }.
+
+A more involved example is the Boom hierarchy of the binary tree, list, bag and set abstract data types. All these data types can be declared by three operations: null, which constructs the empty container, single, which constructs a container from a single element and append, which combines two containers of the same type. The complete specification for the four data types can then be given by successively adding the following rules over these operations:
+
+Access to the data can be specified by pattern-matching over the three operations, e.g. a member function for these containers by:
+
+Care must be taken to ensure that the function is invariant under the relevant rules for the data type. Within each of the equivalence classes implied by the chosen subset of equations, it has to yield the same result for all of its members.
+
+Some common ADTs, which have proved useful in a great variety of applications, are
+
+Each of these ADTs may be defined in many ways and variants, not necessarily equivalent. For example, an abstract stack may or may not have a count operation that tells how many items have been pushed and not yet popped. This choice makes a difference not only for its clients but also for the implementation.
+
+Abstract graphical data type
+An extension of ADT for computer graphics was proposed in 1979: an abstract graphical data type (AGDT). It was introduced by Nadia Magnenat Thalmann, and Daniel Thalmann. AGDTs provide the advantages of ADTs with facilities to build graphical objects in a structured way.
+
+Abstract data types are theoretical entities, used (among other things) to simplify the description of abstract algorithms, to classify and evaluate data structures, and to formally describe the type systems of programming languages. However, an ADT may be implemented. This means each ADT instance or state is represented by some of the concrete data type or data structure, and for each abstract operation there is a corresponding procedure or function, and these implemented procedures satisfy the ADT's specifications and axioms up to some standard. In practice, the implementation is not perfect, and users must be aware of issues due to limitations of the representation and implemented procedures.
+For example, integers may be specified as an ADT, defined by the distinguished values 0 and 1, the operations of addition, subtraction, multiplication, division (with care for division by zero), comparison, etc., behaving according to the familiar mathematical axioms in abstract algebra such as associativity, commutativity, and so on. However, in a computer, integers are most commonly represented as fixed-width 32-bit or 64-bit binary numbers. Users must be aware of issues with this representation, such as arithmetic overflow, where the ADT specifies a valid result but the representation is unable to accommodate this value. Nonetheless, for many purposes, the user can ignore these infidelities and simply use the implementation as if it were the abstract data type.
+Usually, there are many ways to implement the same ADT, using several different concrete data structures. Thus, for example, an abstract stack can be implemented by a linked list or by an array. Different implementations of the ADT, having all the same properties and abilities, can be considered semantically equivalent and may be used somewhat interchangeably in code that uses the ADT. This provides a form of abstraction or encapsulation, and gives a great deal of flexibility when using ADT objects in different situations. For example, different implementations of the ADT may be more efficient in different situations; it is possible to use each in the situation where they are preferable, thus increasing overall efficiency. Code that uses an ADT implementation according to its interface will continue working even if the implementation of the ADT is changed.
+In order to prevent clients from depending on the implementation, an ADT is often packaged as an opaque data type or  handle of some sort, in one or more modules, whose interface contains only the signature (number and types of the parameters and results) of the operations. The implementation of the module—namely, the bodies of the procedures and the concrete data structure used—can then be hidden from most clients of the module. This makes it possible to change the implementation without affecting the clients. If the implementation is exposed, it is known instead as a transparent data type.
+Modern object-oriented languages, such as C++ and Java, support a form of abstract data types. When a class is used as a type, it is an abstract type that refers to a hidden representation. In this model, an ADT is typically implemented as a class, and each instance of the ADT is usually an object of that class. The module's interface typically declares the constructors as ordinary procedures, and most of the other ADT operations as methods of that class. Many modern programming languages, such as C++ and Java, come with standard libraries that implement numerous ADTs in this style. However, such an approach does not easily encapsulate multiple representational variants found in an ADT. It also can undermine the extensibility of object-oriented programs. In a pure object-oriented program that uses interfaces as types, types refer to behaviours, not representations.
+The specification of some programming languages is intentionally vague about the representation of certain built-in data types, defining only the operations that can be done on them. Therefore, those types can be viewed as "built-in ADTs". Examples are the arrays in many scripting languages, such as Awk, Lua, and Perl, which can be regarded as an implementation of the abstract list.
+In a formal specification language, ADTs may be defined axiomatically, and the language then allows manipulating values of these ADTs, thus providing a straightforward and immediate implementation. The OBJ family of programming languages for instance allows defining equations for specification and rewriting to run them. Such automatic implementations are usually not as efficient as dedicated implementations, however.
+
+As an example, here is an implementation of the abstract stack above in the C programming language.
+
+An imperative-style interface might be:
+
+This interface could be used in the following manner:
+
+This interface can be implemented in many ways. The implementation may be arbitrarily inefficient, since the formal definition of the ADT, above, does not specify how much space the stack may use, nor how long each operation should take. It also does not specify whether the stack state s continues to exist after a call x ← pop(s).
+In practice the formal definition should specify that the space is proportional to the number of items pushed and not yet popped; and that every one of the operations above must finish in a constant amount of time, independently of that number. To comply with these additional specifications, the implementation could use a linked list, or an array (with dynamic resizing) together with two integers (an item count and the array size).
+
+Functional-style ADT definitions are more appropriate for functional programming languages, and vice versa. However, one can provide a functional-style interface even in an imperative language like C. For example:
