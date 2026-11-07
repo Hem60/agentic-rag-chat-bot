@@ -8,7 +8,44 @@ A chatbot that answers **Data Structures and Algorithms** questions from a knowl
 
 ---
 
-## Architecture
+## How it works (in simple words)
+
+**Step 0, done once: build the knowledge base.** The bot reads the lecture PDFs and 72 Wikipedia articles on Data Structures, cuts them into small pieces, and saves them so they can be searched quickly.
+
+```mermaid
+flowchart LR
+    A[PDFs and Wikipedia articles] --> B[Cut into small pieces]
+    B --> C[(Searchable knowledge base)]
+```
+
+**Every time someone asks a question:**
+
+```mermaid
+flowchart TD
+    Q([You ask a question]) --> T{Is it just hello or thanks?}
+    T -- Yes --> H[Friendly reply]
+    T -- No --> F[Find the best matching pieces in the knowledge base]
+    F --> OK{Are the pieces relevant enough?}
+    OK -- Yes --> A[The AI writes the answer using ONLY those pieces]
+    A --> S([You get the answer and its sources])
+    OK -- Not really --> R[Reword the question and search again, up to 3 tries]
+    R --> OK
+    OK -- Nothing related at all --> N([Polite refusal: I only answer Data Structures questions])
+```
+
+What each box means:
+
+| Step | What happens | Why it matters |
+|---|---|---|
+| Find the best matching pieces | Two searches run together: one by exact words, one by meaning. Their results are merged, then a stronger model re-checks the top ones and keeps the best 4. | Finds the right text even if you phrase the question differently. |
+| Relevant enough? | The bot scores how well the pieces match your question. | Stops it from answering when it has nothing useful. |
+| Reword and search again | A follow-up like "what are its disadvantages?" is rewritten using the chat history into a full question. Weak searches are retried with different words. | Makes follow-up questions and unusual phrasing work. |
+| Write the answer | The AI is told to use only the retrieved pieces and to say so if they do not contain the answer. | Keeps answers grounded in real sources instead of guesses. |
+| Sources | Every answer lists where it came from (PDF page or Wikipedia article). | You can check the answer yourself. |
+
+Example: *"How does a hash table handle collisions?"* finds the Hash table article, the AI summarises it (separate chaining, open addressing), and the answer shows `Wikipedia: Hash table` as the source. *"Who won the 2011 Cricket World Cup?"* matches nothing, so the bot politely declines.
+
+## Architecture (technical detail)
 
 ```mermaid
 flowchart TD
