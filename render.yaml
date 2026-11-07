@@ -1,0 +1,38 @@
+# Render Blueprint: one Docker web service serving the chat page (/) and the API (/chat, /health).
+# Render: New > Blueprint > pick this repo. It asks for the values marked `sync: false`.
+#
+# Notes
+#  * The image bakes in the embedding model, the BGE reranker and the index, and needs about
+#    2 GB RAM. Render's free tier (512 MB) will run out of memory; `standard` is the smallest
+#    plan I expect to fit. Confirm current plans/prices on Render before deploying.
+#  * Render injects PORT itself; the Dockerfile's CMD reads it. Do not set PORT here.
+#  * Secrets are never stored in this file. Enter LLM_API_KEY and APP_PASSWORD in the dashboard.
+services:
+  - type: web
+    name: agentic-rag-chat-bot
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: standard
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      # Generation provider (any OpenAI-compatible API). Groq shown; change to yours.
+      - key: LLM_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: LLM_API_KEY
+        sync: false          # paste your key in the Render dashboard
+      - key: GENERATION_MODEL
+        value: qwen/qwen3.8-27b
+      - key: FALLBACK_MODEL
+        value: openai/gpt-oss-20b
+      # Retrieval / agent
+      - key: RERANK_THRESHOLD
+        value: "0.3"
+      # Public-demo protection: login (user "demo") and per-IP rate limit on /chat.
+      - key: APP_PASSWORD
+        sync: false          # choose a password in the Render dashboard
+      - key: RATE_LIMIT_PER_MIN
+        value: "20"
+      # Set to your service URL (https://<name>.onrender.com) after the first deploy.
+      - key: CORS_ORIGINS
+        sync: false

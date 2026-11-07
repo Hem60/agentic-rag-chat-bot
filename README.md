@@ -186,6 +186,17 @@ The image installs CPU-only PyTorch, downloads the embedding model and the BGE r
 
 > The Dockerfile has not been built successfully on the development machine yet: three attempts failed while downloading Python packages (PyPI read timeouts), before any of the project's own build steps ran. Treat it as untested until `docker build` and a `/health` check pass.
 
+## Deploy on Render
+
+[render.yaml](render.yaml) describes one Docker web service that serves the chat page and the API.
+
+1. Push the repo to GitHub, then in Render choose **New → Blueprint** and select it.
+2. Enter the two secrets it asks for: `LLM_API_KEY` (your OpenAI-compatible provider key) and `APP_PASSWORD` (the chat page login, user `demo`; keep it set on a public demo so strangers cannot spend your provider quota).
+3. After the first deploy, set `CORS_ORIGINS` to your `https://<name>.onrender.com` URL and redeploy.
+4. Check `/health` (`index_loaded` and `reranker_loaded` should be true), then open `/`.
+
+The service needs about 2 GB of RAM (PyTorch + embedding model + reranker), so Render's free 512 MB tier will not work; the blueprint uses the `standard` plan, so confirm current plans and prices first. The first build downloads PyTorch and the models and can take 10-20 minutes. The Dockerfile has not been built successfully on the development machine yet, so this build is its first real test: read the build log if it fails.
+
 ## Planned next
 
 Cloud deployment (Render or Hugging Face Spaces; the earlier Azure plan was dropped), faster reranking (fewer candidates or a smaller reranker), a larger and harder test set, and the ablations (chunk size, k, BM25 weight, embedding model).
