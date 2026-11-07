@@ -4,7 +4,7 @@ A chatbot that answers **Data Structures and Algorithms** questions from a knowl
 
 **What runs where.** Embeddings, retrieval and reranking run locally on CPU. Only answer generation is hosted: it calls the Hugging Face Inference API (or any OpenAI-compatible provider, see Configuration) with a model you choose in `.env`. There is no OpenAI or Pinecone dependency.
 
-> **Status.** Code, API, chat UI, tests and a Dockerfile are in place. The evaluation is being re-run on the expanded knowledge base (see Results); the Dockerfile has not been built successfully on the development machine yet, and no cloud deployment has been done.
+> **Status.** Code, API, chat UI, tests, the full 3-variant evaluation and a Dockerfile are in place. The Dockerfile has not been built successfully on the development machine yet, and no cloud deployment has been done.
 
 ---
 
@@ -177,29 +177,42 @@ Metrics: hit@4 and MRR (is a gold page among the final 4 chunks), faithfulness (
 
 ### Results
 
-**The 42-question run on the current knowledge base (notes + Wikipedia) is in progress; its numbers will be added here from the real run.** Until then, the table below is an *earlier* run: the notes-only index and the earlier 30-question set (21 answerable, 9 unanswerable), before the Wikipedia corpus, the scope prompt and the 0.3 threshold existed. Those numbers do not describe the current system. Generator `qwen/qwen3.8-27b`, judge `openai/gpt-oss-120b` (a different model), both via Groq. 0 pipeline errors in every variant.
+Real run of `python -m src.evaluate` on the current system: knowledge base = lecture notes + 72 Wikipedia articles, 42 questions (33 answerable, 9 off-topic), `RERANK_THRESHOLD=0.3`. Generator `qwen/qwen3.8-27b`, judge `openai/gpt-oss-120b` (a different model), both via Groq. **0 pipeline errors in every variant.**
 
 | Variant | Hit@4 | MRR | Faithfulness (1-5) | Refusal correct | Wrong refusals | Errors | Avg latency | Avg LLM calls |
 |---|---|---|---|---|---|---|---|---|
-| A: Naive | 95% (20/21) | 0.81 | 4.81 (n=21) | 100% (9/9) | 0/21 | 0/30 | 8.6 s | 1.00 |
-| B: Hybrid + rerank | 100% (21/21) | 0.93 | 5.00 (n=19) | 100% (9/9) | 2/21 | 0/30 | 12.0 s | 1.00 |
-| C: Agentic | 100% (21/21) | 0.95 | 5.00 (n=21) | 100% (9/9) | 0/21 | 0/30 | 16.3 s | 1.23 |
+| A: Naive | 100% (33/33) | 0.95 | 4.63 (n=30) | 100% (9/9) | 3/33 | 0/42 | 7.4 s | 1.00 |
+| B: Hybrid + rerank | 100% (33/33) | 0.91 | 4.87 (n=31) | 100% (9/9) | 2/33 | 0/42 | 13.6 s | 1.00 |
+| C: Agentic | 100% (33/33) | 0.91 | 4.97 (n=32) | 100% (9/9) | 1/33 | 0/42 | 11.3 s | 0.98 |
 
-Faithfulness is judged only for answers a variant actually gave (B's n=19 because it refused two answerable questions).
+Faithfulness is judged only for answers a variant actually gave, so n is smaller than 33 where it refused an answerable question. "Wrong refusals" counts answerable questions the bot declined.
 
 **What the numbers say**
 
-- **Retrieval:** hybrid search plus reranking lifts MRR from 0.81 to 0.93 (hit@4 from 95% to 100%); the agent adds a little more (0.95).
-- **Follow-up questions are where the agent matters.** B has no query rewriting, so it refused both follow-ups ("What operations does it support?", "How does it differ from a singly linked list?") even though it retrieved the right page. A, with the same problem, answered the first one about the wrong structure (linked list instead of stack) and the judge gave it a 1. That single answer is the whole reason A's faithfulness is 4.81 instead of 5.0. C rewrites the question from the chat history and answered both correctly.
-- **Refusal:** all three variants refused all 9 out-of-scope questions, so on this set the reranker-score gate did not improve refusal accuracy; the prompt alone was enough for this generator. The gate's benefit here is skipping the answer call (1.23 average LLM calls for C).
-- **Cost:** the agent is the slowest. Refused questions take about 21 s for C because it runs 3 searches.
+- **The naive baseline is strong here.** With the Wikipedia articles in the index, plain vector search already finds the right source for every question (hit@4 100%) and even has the best MRR (0.95). The reranker did *not* improve retrieval on this set. B and C ranked the labelled article second on four corpus questions (quicksort, Dijkstra, BFS/DFS, binary search), putting another closely related article first. Part of this is how I labelled gold (one specific article per question), so treat the MRR gap as weak evidence, not a defect proven.
+- **Where B and C do better is answer quality.** Faithfulness goes 4.63 (A) → 4.87 (B) → 4.97 (C), and wrong refusals go 3 → 2 → 1 of 33. Differences of this size on 33 questions are small and could be noise.
+- **A refused three answerable questions**, including two plain stack questions (stack operations, the underflow check) and one follow-up; the old naive prompt is more eager to say "not enough information". B refused the "it" follow-up (no query rewriting) and, like C, the memoization question: both returned four chunks from the Memoization article only, none of which explained memoization in dynamic programming, so the generator declined. A's mix of four different articles answered it. C rewrites follow-ups, so it answered both follow-up questions.
+- **Refusal on off-topic questions is 9/9 for every variant**, so the score gate did not change refusal accuracy on this set; the prompt rule alone was enough for this generator. Off-topic questions such as TCP/UDP or a boiling point can still score high in the reranker, which is why the prompt refusal remains a second guard.
+- **Latency:** every variant is dominated by the hosted LLM call (about 7 s for A, whose retrieval takes well under a second). Reranking on CPU adds roughly 5-6 s (B vs A). C averaged less than B here because the near-zero-score early exit refuses off-topic questions without extra searches.
 
 **Limits, stated plainly**
 
-- 21 answerable and 9 unanswerable questions is small, and I wrote them from the same PDFs. Most are easy, so faithfulness sits at the ceiling and the differences between variants are small except on follow-ups, of which there are only 2.
-- Judge scores come from one small model and are directional. I spot-checked the follow-up answers and the one low score by hand; the rest were not individually read.
-- Latencies are noisy: the evaluation shared the machine with a running web server, browser tests and an earlier Docker build, and the CPU reranker dominates. Treat them as ordering, not benchmarks.
-- Retrieval is scored by gold page (pypdf 0-indexed in the eval files; the app shows 1-indexed PDF pages).
+- 33 answerable and 9 off-topic questions is small, and I wrote them myself from the same sources. Most are easy and well covered, so most differences between variants are within noise.
+- Judge scores come from one small model and are directional. I read the refused answerable questions and the lowest scores by hand; the other answers were not individually read.
+- Latencies are noisy (shared machine, remote LLM). Treat them as ordering, not benchmarks.
+- Retrieval is scored by gold source (pypdf 0-indexed pages for the PDFs, a whole article for Wikipedia); the app shows 1-indexed PDF pages.
+
+#### Earlier run (notes-only index, 30 questions)
+
+Kept for context: before the Wikipedia corpus, the scope prompt and the 0.3 threshold existed, on the lecture notes alone. It does **not** describe the current system.
+
+| Variant | Hit@4 | MRR | Faithfulness | Wrong refusals |
+|---|---|---|---|---|
+| A: Naive | 95% (20/21) | 0.81 | 4.81 (n=21) | 0/21 |
+| B: Hybrid + rerank | 100% (21/21) | 0.93 | 5.00 (n=19) | 2/21 |
+| C: Agentic | 100% (21/21) | 0.95 | 5.00 (n=21) | 0/21 |
+
+On the small notes-only index the reranker clearly helped retrieval (MRR 0.81 → 0.93); on the larger, easier-to-search corpus that advantage disappeared. The agent's clearest benefit in both runs is follow-up questions.
 
 ## Tests
 
